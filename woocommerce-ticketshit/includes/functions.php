@@ -1,8 +1,11 @@
 <?php
 
-if (is_admin()) {
- 	include_once( WOO_TS_PATH . 'includes/admin.php' );
+require('admin_helper.php');
+require('helper.php');
+require('pdf.php');
 
+if (is_admin()) {
+	include_once( WOO_TS_PATH . 'includes/admin.php' );
 	function woo_ts_import_init() {
 		global $wpdb;
 		$wpdb->hide_errors();
@@ -137,7 +140,7 @@ if (is_admin()) {
 
 						
 						$objTicket->set_sku($ticket->sku);
-						$objTicket->set_name($ticket->ticket_title_en);
+						$objTicket->set_name($ticket->ticket_title_en . ' ' . $ticket->ticket_description_en);
 						$objTicket->set_status("publish");
 						$objTicket->set_catalog_visibility('visible');
 						$objTicket->set_description($ticket->ticket_description_en);
@@ -171,25 +174,7 @@ if (is_admin()) {
 		}
 	}
 
-	// Increase memory for AJAX importer process and Product Importer screens
-	function woo_ts_init_memory() {
-
-		$page = $_SERVER['SCRIPT_NAME'];
-		if( isset( $_POST['action'] ) )
-			$action = $_POST['action'];
-		elseif( isset( $_GET['action'] ) )
-			$action = $_GET['action'];
-		else
-			$action = '';
-
-		$allowed_actions = array( 'product_importer', 'finish_import', 'upload_image' );
-
-		if( $page == '/wp-admin/admin-ajax.php' && in_array( $action, $allowed_actions ) )
-			@ini_set( 'memory_limit', WP_MAX_MEMORY_LIMIT );
-
-	}
 	add_action( 'plugins_loaded', 'woo_ts_init_memory' );
-
 }
 
 function woo_ts_error_log( $message = '' ) {
@@ -323,8 +308,13 @@ function woo_ts_i18n() {
 }
 add_action( 'init', 'woo_ts_i18n' );
 
-add_action('woocommerce_order_status_completed', 'mysite_completed', 10, 1);
-function mysite_completed($order_id) {
+add_action( 'woocommerce_payment_complete', 'mysite_woocommerce_payment_complete' );
+function mysite_woocommerce_payment_complete( $order_id ) {
+	error_log("callback fired");
+}
+
+add_action('woocommerce_thankyou', 'request_barcodes_from_ts', 10, 1);
+function request_barcodes_from_ts($order_id) {
 	$data = array(
 		'mode' => woo_ts_get_option('mode', ''),
 		'promoter_email' => woo_ts_get_option('promoter_email', ''),
@@ -335,7 +325,8 @@ function mysite_completed($order_id) {
 	);
 
 	$order = wc_get_order( $order_id );
-	$user = $order->get_user();
+
+	die($order->needs_payment());
 
 	$items = $order->get_items();
 	foreach($items as $item) {
@@ -372,22 +363,29 @@ function mysite_completed($order_id) {
 			return;
 		}
 		//die(var_export($result['body']));
-		die(var_export($user));
-		$result = generate_tickets_from_template($json_response);
+		//$html_tickets_file_paths = generate_tickets_from_html_template($json_response);
+		$tickets_file_paths = generate_pdf_ticket_files($json_response);
+		//die(var_export($pdf_tickets_info_array));
+		$order_info_array = generate_order_info_array($json_response);
+		$order->add_meta_data("html_tickets", $order_info_array);
+		$order->add_meta_data("pdf_tickets", $order_info_array);
 
-		if ($result == 1) {
-			$mail_sent = wp_mail('mrtn.vassilev@gmail.com', 'Your tickets', 'Your tickets are ready to be checkedin!', $headers, $ticket_file_paths);
-			
-			if ($mail_sent) {
-				woo_ts_admin_notice("Tickets sent");
-			}
-		}
+		$order->save();
+
+		send_tickets_by_mail($order->get_billing_email(), $tickets_file_paths);
 	} catch (Exception $ex) {
 		die(var_export($ex));
 	}
 }
 
-function generate_tickets_from_template($json_response) {
+function send_tickets_by_mail($target_user_mail, $tickets_absolute_path) {
+	if (!empty($tickets_absolute_path)) {
+		$headers = array();
+		$mail_sent = wp_mail($target_user_mail, 'Your Grand Conderence tickets are ready!', 'Your Grand Conderence tickets are ready!', $headers, $tickets_absolute_path);
+	}
+}
+
+/*function generate_tickets_from_html_template($json_response) {
 	$public_key = openssl_pkey_get_public(woo_ts_get_option('api_public_key', ''));
 	if (!$public_key) {
 		// TODO: This does not print on the page
@@ -406,19 +404,87 @@ function generate_tickets_from_template($json_response) {
 		$decrypted_ticket = parse_raw_recrypted_ticket($sensitive_decrypted);
 		
 		$html_ticket_template = woo_ts_get_option( 'ticket_html_template', '' );
-		$html_ticket_template = str_replace('{{ barcode }}', base64_encode($sensitive_decoded) 
-															. " | " 
-															. qr_binary_to_html_table(base64_encode($sensitive_decoded)), $html_ticket_template);
+		$html_ticket_template = str_replace('{{ barcode }}', qr_binary_to_html_table(base64_encode($sensitive_decoded)), $html_ticket_template);
 		
 		$html_ticket_template = str_replace('{{ price }}', $decrypted_ticket['price'], $html_ticket_template);
 		$html_ticket_template = str_replace('{{ sensitive_decoded }}', $sensitive_decoded, $html_ticket_template);
 		$html_ticket_template = str_replace('{{ sensitive_decoded_base64_encode }}', base64_encode($sensitive_decoded) , $html_ticket_template);
 		$html_ticket_template = str_replace('{{ title }}', $ticket->title_en, $html_ticket_template);
 		$html_ticket_template = str_replace('{{ description }}', $ticket->description_en, $html_ticket_template);
-		$ticket_file_paths[] = save_ticket_in_fs($html_ticket_template, $ticket->line_item_id);
+
+		//$pdf_ticket = generate_pdf_from_html_template($html_ticket_template, $ticket->line_item_id);
+		$ticket_file_paths[] = save_ticket_in_fs($html_ticket_template, $json_response->order, $ticket->line_item_id);
+	}
+	
+	return $ticket_file_paths;
+}*/
+
+function generate_pdf_ticket_files($json_response) {
+	$public_key = openssl_pkey_get_public(woo_ts_get_option('api_public_key', ''));
+	if (!$public_key) {
+		// TODO: This does not print on the page
+		woo_ts_admin_notice_print("Public key corrupted");
+		return;
 	}
 
-	return 1;
+	wp_mkdir_p(WP_PLUGIN_DIR . '/woocommerce-ticketshit/tickets/' . $json_response->order . '/');
+
+	$ticket_file_paths = array();
+	//$line_items_array = array();
+	//$line_items_array[$json_response->order] = array();
+	
+	$order_ticket = new PDF();
+	foreach ($json_response->tickets as $ticket) {
+		write_log('start generation of pdf at: ' . date("Y-m-d H:i:s"));
+		$sensitive_decoded = base64_decode($ticket->sensitive);
+		$is_decrypted = openssl_public_decrypt($sensitive_decoded, $sensitive_decrypted, $public_key);
+		$decrypted_ticket = parse_raw_recrypted_ticket($sensitive_decrypted);
+
+		// Create separate pdf tickets
+		$pdf_ticket = new PDF();
+		$pdf_ticket->AddPage();
+		$pdf_ticket->set_text($ticket->title_en, $ticket->description_en, $decrypted_ticket['price']);
+		$pdf_ticket->set_qr(qr_binary_to_binary(base64_encode($sensitive_decoded)));
+		$pdf_ticket->set_background();
+		$pdf_ticket->Output('F', WP_PLUGIN_DIR . '/woocommerce-ticketshit/tickets/' . $json_response->order . '/' . $ticket->line_item_id . '.pdf');
+		$ticket_file_paths[] = WP_PLUGIN_DIR . '/woocommerce-ticketshit/tickets/' . $json_response->order . '/' . $ticket->line_item_id . '.pdf';
+
+		// Add page to the order pdf
+		$order_ticket->AddPage();
+		$order_ticket->set_text($ticket->title_en, $ticket->description_en, $decrypted_ticket['price']);
+		$order_ticket->set_qr(qr_binary_to_binary(base64_encode($sensitive_decoded)));
+		$order_ticket->set_background();
+
+		//$line_items_array[$json_response->order][] = $ticket->line_item_id;
+		//$ticket_file_paths[] = WP_PLUGIN_DIR . '/woocommerce-ticketshit/tickets/' . $ticket->line_item_id . '.pdf';
+
+		write_log('end of generation of pdf at: ' . date("Y-m-d H:i:s"));
+	}
+	$order_ticket->Output('F', WP_PLUGIN_DIR . '/woocommerce-ticketshit/tickets/' . $json_response->order . '/' . $json_response->order . '.pdf');
+	$ticket_file_paths[] = WP_PLUGIN_DIR . '/woocommerce-ticketshit/tickets/' . $json_response->order . '/' . $json_response->order . '.pdf';
+	
+	return $ticket_file_paths;
+}
+
+function generate_order_info_array($json_response) {
+	$public_key = openssl_pkey_get_public(woo_ts_get_option('api_public_key', ''));
+	if (!$public_key) {
+		// TODO: This does not print on the page
+		woo_ts_admin_notice_print("Public key corrupted");
+		return;
+	}
+
+	$line_items_array = array();
+	$line_items_array[$json_response->order] = array();
+	
+	foreach ($json_response->tickets as $ticket) {
+		$sensitive_decoded = base64_decode($ticket->sensitive);
+		$is_decrypted = openssl_public_decrypt($sensitive_decoded, $sensitive_decrypted, $public_key);
+		$decrypted_ticket = parse_raw_recrypted_ticket($sensitive_decrypted);
+		$line_items_array[$json_response->order][] = $ticket->line_item_id;
+	}
+	
+	return $line_items_array;
 }
 
 function parse_raw_recrypted_ticket($raw_decrypted_ticket) {
@@ -506,21 +572,22 @@ function parse_raw_recrypted_ticket($raw_decrypted_ticket) {
 	return $result;
 }
 
-function save_ticket_in_fs($html_ticket_template, $line_item_id) {
+/*function save_ticket_in_fs($html_ticket_template, $order_id, $line_item_id) {
 	global $wp_filesystem;
 	if (empty($wp_filesystem)) {
 		require_once (ABSPATH . '/wp-admin/includes/file.php');
 		WP_Filesystem();
 	}
 
-	$context = WP_PLUGIN_DIR . '/woocommerce-ticketshit/tickets/';
+	$context = WP_PLUGIN_DIR . '/woocommerce-ticketshit/tickets/' . $order_id . '/';
+	wp_mkdir_p($context);
 	$target_file = $context . $line_item_id . ".html";
 
 	if (!$wp_filesystem->put_contents($target_file, $html_ticket_template, FS_CHMOD_FILE))
 		return new WP_Error('writing_error', 'Error when writing file');
 	
 	return $target_file;
-}
+}*/
 
 function bin_to_int_data($str) {
 	$result = 0;
@@ -549,6 +616,53 @@ function qr_binary_to_html_table($raw_input) {
 	}
 	$output .= "</tbody></table>";
 	return $output;
+}
+
+function qr_binary_to_binary($raw_input) {
+	return QRcode::text($raw_input);
+}
+
+/*** WooCommerce Order Listing Page Override ***/
+/*add_filter( 'manage_edit-shop_order_columns', 'add_tickets_link' );
+function add_tickets_link( $columns ) {
+	$new_columns = ( is_array( $columns ) ) ? $columns : array();
+  	unset( $new_columns[ 'order_actions' ] );
+	
+  	//edit this for your column(s)
+  	//all of your columns will be added before the actions column
+  	$new_columns['get_tickets_column'] = 'Tickets';
+	
+  	//stop editing
+  	$new_columns[ 'order_actions' ] = $columns[ 'order_actions' ];
+  	return $new_columns;
+}*/
+
+add_action('manage_shop_order_posts_custom_column', 'add_tickets_link_value', 2);
+function add_tickets_link_value($column) {
+	global $the_order;
+
+	if ($column == 'get_tickets_column') {
+		echo (print_r($the_order->get_meta("tickets"), 1));
+	}
+}
+
+/*** WooCommerce Order Details Page Override ***/
+
+add_action( 'woocommerce_admin_order_data_after_order_details', 'edit_order_meta_general' );
+function edit_order_meta_general($order) {
+	print "<br class='clear' />";
+	print "<h4>PDF Tickets</h4>";
+	$pdf_ticket_files = $order->get_meta("html_tickets");
+	if (!empty($pdf_ticket_files)) {
+		$order_id = array_keys($pdf_ticket_files)[0];
+		foreach($pdf_ticket_files[$order_id] as $line_item) {
+			print('<div><a href="' . content_url() . '/plugins/woocommerce-ticketshit/tickets/' . $order_id . '/' . $line_item . '.pdf">Tickets</a></div>');
+		}
+		print "<br class='clear' />";
+		print('<div><a href="' . content_url() . '/plugins/woocommerce-ticketshit/tickets/' . $order_id . '/' . $order_id . '.pdf">All Tickets</a></div>');
+	} else {
+		print('<div>No PDF tickets found for this order</div>');
+	}
 }
 
 ?>
