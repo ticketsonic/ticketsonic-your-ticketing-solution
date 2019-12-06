@@ -56,6 +56,9 @@ if (is_admin()) {
 						$objTicket->set_stock_quantity($ticket->stock);
 						$objTicket->set_stock_status('instock');
 						$objTicket->set_sold_individually(false);
+						$objTicket->set_downloadable(true);
+						$objTicket->set_virtual(true);
+						
 						$woo_ticket_id = $objTicket->save();
 						$importedCount++;
 					} catch (WC_Data_Exception $ex) {
@@ -101,6 +104,8 @@ if (is_admin()) {
 						$objTicket->set_stock_quantity($ticket->stock);
 						$objTicket->set_stock_status('instock');
 						$objTicket->set_sold_individually(false);
+						$objTicket->set_downloadable(true);
+						$objTicket->set_virtual(true);
 
 						$ticketshit_term = get_term_by("slug", "ticketshit", "product_cat");
 						if ($ticketshit_term) {
@@ -152,6 +157,8 @@ if (is_admin()) {
 						$objTicket->set_stock_quantity($ticket->stock);
 						$objTicket->set_stock_status('instock');
 						$objTicket->set_sold_individually(false);
+						$objTicket->set_downloadable(true);
+						$objTicket->set_virtual(true);
 
 						$ticketshit_term = get_term_by("slug", "ticketshit", "product_cat");
 						if ($ticketshit_term) {
