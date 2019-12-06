@@ -394,7 +394,7 @@ function send_tickets_to_email_after_order_completed($order_id) {
 			$pdf_ticket_files_paths[] = WP_PLUGIN_DIR . '/woocommerce-ticketshit/tickets/' . $ts_order_id . '/' . $line_item . '.pdf';
 		}
 		
-		$pdf_ticket_files_paths[] = WP_PLUGIN_DIR . '/woocommerce-ticketshit/tickets/' . $order_id . '/' . $order_id . '.pdf';
+		$pdf_ticket_files_paths[] = WP_PLUGIN_DIR . '/woocommerce-ticketshit/tickets/' . $ts_order_id . '/tickets.pdf';
 		$mail_sent = send_tickets_by_mail($order->get_billing_email(), $order_id, $pdf_ticket_files_paths);
 		if (!$mail_sent)
 			write_log('Could not send mail with tickets');
@@ -490,8 +490,8 @@ function generate_pdf_ticket_files($json_response) {
 
 		write_log('end of generation of pdf at: ' . date("Y-m-d H:i:s"));
 	}
-	$order_ticket->Output('F', WP_PLUGIN_DIR . '/woocommerce-ticketshit/tickets/' . $json_response->order . '/' . $json_response->order . '.pdf');
-	$ticket_file_paths[] = WP_PLUGIN_DIR . '/woocommerce-ticketshit/tickets/' . $json_response->order . '/' . $json_response->order . '.pdf';
+	$order_ticket->Output('F', WP_PLUGIN_DIR . '/woocommerce-ticketshit/tickets/' . $json_response->order . '/tickets.pdf');
+	$ticket_file_paths[] = WP_PLUGIN_DIR . '/woocommerce-ticketshit/tickets/' . $json_response->order . '/tickets.pdf';
 	
 	return $ticket_file_paths;
 }
@@ -689,7 +689,7 @@ function edit_order_meta_general($order) {
 			print('<div><a href="' . content_url() . '/plugins/woocommerce-ticketshit/tickets/' . $order_id . '/' . $line_item . '.pdf">Tickets</a></div>');
 		}
 		print "<br class='clear' />";
-		print('<div><a href="' . content_url() . '/plugins/woocommerce-ticketshit/tickets/' . $order_id . '/' . $order_id . '.pdf">All Tickets</a></div>');
+		print('<div><a href="' . content_url() . '/plugins/woocommerce-ticketshit/tickets/' . $order_id . '/tickets.pdf">All Tickets</a></div>');
 	} else {
 		print('<div>No PDF tickets found for this order</div>');
 	}
