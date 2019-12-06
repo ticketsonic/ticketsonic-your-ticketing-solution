@@ -389,9 +389,9 @@ function send_tickets_to_email_after_order_completed($order_id) {
 	$pdf_ticket_files = $order->get_meta("pdf_tickets");
 
 	if (!empty($pdf_ticket_files)) {
-		$order_id = array_keys($pdf_ticket_files)[0];
-		foreach($pdf_ticket_files[$order_id] as $line_item) {
-			$pdf_ticket_files_paths[] = WP_PLUGIN_DIR . '/woocommerce-ticketshit/tickets/' . $order_id . '/' . $line_item . '.pdf';
+		$ts_order_id = array_keys($pdf_ticket_files)[0];
+		foreach($pdf_ticket_files[$ts_order_id] as $line_item) {
+			$pdf_ticket_files_paths[] = WP_PLUGIN_DIR . '/woocommerce-ticketshit/tickets/' . $ts_order_id . '/' . $line_item . '.pdf';
 		}
 		
 		$pdf_ticket_files_paths[] = WP_PLUGIN_DIR . '/woocommerce-ticketshit/tickets/' . $order_id . '/' . $order_id . '.pdf';
