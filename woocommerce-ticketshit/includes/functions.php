@@ -58,7 +58,7 @@ if (is_admin()) {
 						$objTicket->set_sold_individually(false);
 						$objTicket->set_downloadable(true);
 						$objTicket->set_virtual(true);
-						
+
 						$woo_ticket_id = $objTicket->save();
 						$importedCount++;
 					} catch (WC_Data_Exception $ex) {
@@ -317,11 +317,12 @@ add_action( 'init', 'woo_ts_i18n' );
 
 add_action('woocommerce_payment_complete', 'mysite_woocommerce_payment_complete');
 function mysite_woocommerce_payment_complete($order_id) {
-	error_log("callback fired");
+	write_log('mysite_woocommerce_payment_complete for order ' . $order_id . 'is fired');
 }
 
-add_action('woocommerce_order_status_completed', 'request_barcodes_from_ts', 10, 1);
+add_action('woocommerce_thankyou', 'request_barcodes_from_ts', 10, 1);
 function request_barcodes_from_ts($order_id) {
+	write_log('request_barcodes_from_ts for order ' . $order_id . ' is fired');
 	$data = array(
 		'mode' => woo_ts_get_option('mode', ''),
 		'promoter_email' => woo_ts_get_option('promoter_email', ''),
@@ -331,7 +332,7 @@ function request_barcodes_from_ts($order_id) {
 		'tickets' => array()
 	);
 
-	$order = wc_get_order( $order_id );
+	$order = wc_get_order($order_id);
 
 	$items = $order->get_items();
 	foreach($items as $item) {
@@ -354,11 +355,12 @@ function request_barcodes_from_ts($order_id) {
 		'timeout' => 45,
 	));
 
+	write_log('result from the request to TS for ' . $order_id . ' is received');
+
 	try {
 		if (is_wp_error($result)) {
 			// TODO: This does not print on the page
 			woo_ts_admin_notice_print("Error occured while fetching tickets from TS ", 'error' );
-			//die(var_export($result));
 			return;
 		}
 		$json_response = json_decode($result['body']);
@@ -367,27 +369,50 @@ function request_barcodes_from_ts($order_id) {
 			woo_ts_admin_notice_print("Error occured: " . $result['body']['error'], 'error' );
 			return;
 		}
-		//die(var_export($result['body']));
-		//$html_tickets_file_paths = generate_tickets_from_html_template($json_response);
-		$tickets_file_paths = generate_pdf_ticket_files($json_response);
-		//die(var_export($pdf_tickets_info_array));
+		generate_pdf_ticket_files($json_response);
+		write_log('PDF tickets generation for order ' . $order_id . ' is completed');
+		
 		$order_info_array = generate_order_info_array($json_response);
-		$order->add_meta_data("html_tickets", $order_info_array);
 		$order->add_meta_data("pdf_tickets", $order_info_array);
-
 		$order->save();
-
-		send_tickets_by_mail($order->get_billing_email(), $order_id, $tickets_file_paths);
+		write_log('Order meta for PDF tickets for order ' . $order_id . ' is saved');
 	} catch (Exception $ex) {
 		die(var_export($ex));
 	}
 }
 
+add_action('woocommerce_order_status_completed', 'send_tickets_to_email_after_order_completed', 10, 1);
+function send_tickets_to_email_after_order_completed($order_id) {
+	write_log('send_tickets_to_email_after_order_completed for order ' . $order_id . ' is fired');
+	$order = wc_get_order($order_id);
+	$pdf_ticket_files_paths = array();
+	$pdf_ticket_files = $order->get_meta("pdf_tickets");
+
+	if (!empty($pdf_ticket_files)) {
+		$order_id = array_keys($pdf_ticket_files)[0];
+		foreach($pdf_ticket_files[$order_id] as $line_item) {
+			$pdf_ticket_files_paths[] = WP_PLUGIN_DIR . '/woocommerce-ticketshit/tickets/' . $order_id . '/' . $line_item . '.pdf';
+		}
+		
+		$pdf_ticket_files_paths[] = WP_PLUGIN_DIR . '/woocommerce-ticketshit/tickets/' . $order_id . '/' . $order_id . '.pdf';
+		$mail_sent = send_tickets_by_mail($order->get_billing_email(), $order_id, $pdf_ticket_files_paths);
+		if (!$mail_sent)
+			write_log('Could not send mail with tickets');
+	}
+
+	write_log('PDF tickets for order ' . $order_id . ' are sent via mail to ' . $order->get_billing_email());
+}
+
 function send_tickets_by_mail($target_user_mail, $order_id, $tickets_absolute_path) {
+	write_log('send_tickets_to_email_after_payment_confirmed fired');
 	if (!empty($tickets_absolute_path)) {
 		$headers = array();
 		$mail_sent = wp_mail($target_user_mail, 'Your Grand Conderence tickets for order ' . $order_id . ' are ready!', 'Your Grand Conderence tickets are ready!', $headers, $tickets_absolute_path);
+
+		return $mail_sent;
 	}
+
+	return false;
 }
 
 /*function generate_tickets_from_html_template($json_response) {
@@ -440,7 +465,7 @@ function generate_pdf_ticket_files($json_response) {
 	
 	$order_ticket = new PDF();
 	foreach ($json_response->tickets as $ticket) {
-		write_log('start generation of pdf at: ' . date("Y-m-d H:i:s"));
+		write_log('start generation of pdf');
 		$sensitive_decoded = base64_decode($ticket->sensitive);
 		$is_decrypted = openssl_public_decrypt($sensitive_decoded, $sensitive_decrypted, $public_key);
 		$decrypted_ticket = parse_raw_recrypted_ticket($sensitive_decrypted);
@@ -657,7 +682,7 @@ add_action( 'woocommerce_admin_order_data_after_order_details', 'edit_order_meta
 function edit_order_meta_general($order) {
 	print "<br class='clear' />";
 	print "<h4>PDF Tickets</h4>";
-	$pdf_ticket_files = $order->get_meta("html_tickets");
+	$pdf_ticket_files = $order->get_meta("pdf_tickets");
 	if (!empty($pdf_ticket_files)) {
 		$order_id = array_keys($pdf_ticket_files)[0];
 		foreach($pdf_ticket_files[$order_id] as $line_item) {
