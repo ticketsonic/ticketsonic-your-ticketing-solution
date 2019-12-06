@@ -308,12 +308,12 @@ function woo_ts_i18n() {
 }
 add_action( 'init', 'woo_ts_i18n' );
 
-add_action( 'woocommerce_payment_complete', 'mysite_woocommerce_payment_complete' );
-function mysite_woocommerce_payment_complete( $order_id ) {
+add_action('woocommerce_payment_complete', 'mysite_woocommerce_payment_complete');
+function mysite_woocommerce_payment_complete($order_id) {
 	error_log("callback fired");
 }
 
-add_action('woocommerce_thankyou', 'request_barcodes_from_ts', 10, 1);
+add_action('woocommerce_order_status_completed', 'request_barcodes_from_ts', 10, 1);
 function request_barcodes_from_ts($order_id) {
 	$data = array(
 		'mode' => woo_ts_get_option('mode', ''),
