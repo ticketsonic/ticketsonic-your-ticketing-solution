@@ -288,17 +288,17 @@ if( !function_exists( 'woo_get_action' ) ) {
 }
 
 // Add plugin ticket term
-function woo_ts_add_ticket_term() {
-	wp_insert_term(
-		'Ticket\'s HIT Tickets', // the term 
-		'product_cat', // the taxonomy
+function woo_ts_init() {
+	wp_insert_term('Ticket\'s HIT Tickets','product_cat',
 		array(
 		  'description'=> 'Ticket’s HIT Tickets imported tickets.',
 		  'slug' => 'ticketshit'
 		)
 	  );
+
+	wp_mkdir_p(WP_PLUGIN_DIR . '/woocommerce-ticketshit/tickets/');
 }
-add_action( 'init', 'woo_ts_add_ticket_term' );
+add_action( 'init', 'woo_ts_init' );
 
 // Plugin language support
 function woo_ts_i18n() {
