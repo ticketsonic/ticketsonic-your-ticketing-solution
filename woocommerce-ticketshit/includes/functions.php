@@ -326,8 +326,6 @@ function request_barcodes_from_ts($order_id) {
 
 	$order = wc_get_order( $order_id );
 
-	die($order->needs_payment());
-
 	$items = $order->get_items();
 	foreach($items as $item) {
 		$ticket = new WC_Product_Simple($item['product_id']);
