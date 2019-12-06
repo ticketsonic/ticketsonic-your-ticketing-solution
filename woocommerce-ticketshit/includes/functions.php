@@ -370,16 +370,16 @@ function request_barcodes_from_ts($order_id) {
 
 		$order->save();
 
-		send_tickets_by_mail($order->get_billing_email(), $tickets_file_paths);
+		send_tickets_by_mail($order->get_billing_email(), $order_id, $tickets_file_paths);
 	} catch (Exception $ex) {
 		die(var_export($ex));
 	}
 }
 
-function send_tickets_by_mail($target_user_mail, $tickets_absolute_path) {
+function send_tickets_by_mail($target_user_mail, $order_id, $tickets_absolute_path) {
 	if (!empty($tickets_absolute_path)) {
 		$headers = array();
-		$mail_sent = wp_mail($target_user_mail, 'Your Grand Conderence tickets are ready!', 'Your Grand Conderence tickets are ready!', $headers, $tickets_absolute_path);
+		$mail_sent = wp_mail($target_user_mail, 'Your Grand Conderence tickets for order ' . $order_id . ' are ready!', 'Your Grand Conderence tickets are ready!', $headers, $tickets_absolute_path);
 	}
 }
 
