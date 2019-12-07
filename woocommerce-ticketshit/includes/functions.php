@@ -469,11 +469,12 @@ function generate_pdf_ticket_files($json_response) {
 		$sensitive_decoded = base64_decode($ticket->sensitive);
 		$is_decrypted = openssl_public_decrypt($sensitive_decoded, $sensitive_decrypted, $public_key);
 		$decrypted_ticket = parse_raw_recrypted_ticket($sensitive_decrypted);
+		$formatted_price = floatval($decrypted_ticket['price']) / 100;// . ' €';
 
 		// Create separate pdf tickets
 		$pdf_ticket = new PDF();
 		$pdf_ticket->AddPage();
-		$pdf_ticket->set_text($ticket->title_en, $ticket->description_en, $decrypted_ticket['price']);
+		$pdf_ticket->set_text($ticket->title_en, $ticket->description_en, $formatted_price);
 		$pdf_ticket->set_qr(qr_binary_to_binary(base64_encode($sensitive_decoded)));
 		$pdf_ticket->set_background();
 		$pdf_ticket->Output('F', WP_PLUGIN_DIR . '/woocommerce-ticketshit/tickets/' . $json_response->order . '/' . $ticket->line_item_id . '.pdf');
