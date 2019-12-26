@@ -317,12 +317,14 @@ add_action( 'init', 'woo_ts_i18n' );
 
 add_action('woocommerce_payment_complete', 'mysite_woocommerce_payment_complete');
 function mysite_woocommerce_payment_complete($order_id) {
-	write_log('mysite_woocommerce_payment_complete for order ' . $order_id . 'is fired');
+	write_log('mysite_woocommerce_payment_complete for order ' . $order_id . ' is fired');
 }
 
-add_action('woocommerce_thankyou', 'request_barcodes_from_ts', 10, 1);
-function request_barcodes_from_ts($order_id) {
+// add_action('woocommerce_thankyou', 'request_barcodes_from_ts', 10, 1);
+add_action('woocommerce_order_status_processing', 'set_order_ts_meta_data', 10, 1);
+function set_order_ts_meta_data($order_id) {
 	write_log('request_barcodes_from_ts for order ' . $order_id . ' is fired');
+	$order = wc_get_order($order_id);
 	$data = array(
 		'mode' => woo_ts_get_option('mode', ''),
 		'promoter_email' => woo_ts_get_option('promoter_email', ''),
@@ -331,8 +333,6 @@ function request_barcodes_from_ts($order_id) {
 		'customer_email' => woo_ts_get_option('promoter_email', ''),
 		'tickets' => array()
 	);
-
-	$order = wc_get_order($order_id);
 
 	$items = $order->get_items();
 	foreach($items as $item) {
@@ -356,14 +356,18 @@ function request_barcodes_from_ts($order_id) {
 	));
 
 	write_log('result from the request to TS for ' . $order_id . ' is received');
+        //write_log('result from the request to TS for ' . $order_id . ' is: ' . print_r($result, 1));
 
 	try {
 		if (is_wp_error($result)) {
 			// TODO: This does not print on the page
-			woo_ts_admin_notice_print("Error occured while fetching tickets from TS ", 'error' );
+			write_log('error fetching result for order ' . $order_id);
+			write_log('error is ' . $result->get_error_message());
 			return;
 		}
 		$json_response = json_decode($result['body']);
+		$temp = print_r($json_response, 1);
+		//write_log('$json_response is: ' . $temp);
 		if ($json_response->status == 'error') {
 			// TODO: This does not print on the page
 			woo_ts_admin_notice_print("Error occured: " . $result['body']['error'], 'error' );
@@ -376,6 +380,8 @@ function request_barcodes_from_ts($order_id) {
 		$order->add_meta_data("pdf_tickets", $order_info_array);
 		$order->save();
 		write_log('Order meta for PDF tickets for order ' . $order_id . ' is saved');
+
+		return $order;
 	} catch (Exception $ex) {
 		die(var_export($ex));
 	}
@@ -383,8 +389,15 @@ function request_barcodes_from_ts($order_id) {
 
 add_action('woocommerce_order_status_completed', 'send_tickets_to_email_after_order_completed', 10, 1);
 function send_tickets_to_email_after_order_completed($order_id) {
-	write_log('send_tickets_to_email_after_order_completed for order ' . $order_id . ' is fired');
 	$order = wc_get_order($order_id);
+
+	// paypal does not fire the processing hook
+	if ($order->get_payment_method() == 'paypal')
+	  $order = set_order_ts_meta_data($order_id);
+
+        write_log('woocommerce_order_status_completed');
+	write_log('send_tickets_to_email_after_order_completed for order ' . $order_id . ' is fired');
+
 	$pdf_ticket_files_paths = array();
 	$pdf_ticket_files = $order->get_meta("pdf_tickets");
 
@@ -392,10 +405,13 @@ function send_tickets_to_email_after_order_completed($order_id) {
 		$ts_order_id = array_keys($pdf_ticket_files)[0];
 		foreach($pdf_ticket_files[$ts_order_id] as $line_item) {
 			$pdf_ticket_files_paths[] = WP_PLUGIN_DIR . '/woocommerce-ticketshit/tickets/' . $ts_order_id . '/' . $line_item . '.pdf';
+			write_log('adding: ' . WP_PLUGIN_DIR . '/woocommerce-ticketshit/tickets/' . $ts_order_id . '/' . $line_item . '.pdf');
 		}
 		
 		$pdf_ticket_files_paths[] = WP_PLUGIN_DIR . '/woocommerce-ticketshit/tickets/' . $ts_order_id . '/tickets.pdf';
 		$mail_sent = send_tickets_by_mail($order->get_billing_email(), $order_id, $pdf_ticket_files_paths);
+		write_log('mail status: ' . $mail_sent);
+		write_log('mail attachments: ' . print_r($pdf_ticket_files_paths));
 		if (!$mail_sent)
 			write_log('Could not send mail with tickets');
 	}
@@ -482,7 +498,7 @@ function generate_pdf_ticket_files($json_response) {
 
 		// Add page to the order pdf
 		$order_ticket->AddPage();
-		$order_ticket->set_text($ticket->title_en, $ticket->description_en, $decrypted_ticket['price']);
+		$order_ticket->set_text($ticket->title_en, $ticket->description_en, $formatted_price);
 		$order_ticket->set_qr(qr_binary_to_binary(base64_encode($sensitive_decoded)));
 		$order_ticket->set_background();
 
