@@ -369,10 +369,15 @@ function set_order_ts_meta_data($order_id) {
 		}
 		$json_response = json_decode($result['body']);
 		$temp = print_r($json_response, 1);
-		//write_log('$json_response is: ' . $temp);
+		write_log('$json_response is: ' . $json_response);
+		if (empty($json_response)) {
+			write_log('Error: empty response from endpoint ' . woo_ts_get_option('external_order_endpoint', ''));
+			return;
+		}
+
 		if ($json_response->status == 'error') {
 			// TODO: This does not print on the page
-			woo_ts_admin_notice_print("Error occured: " . $result['body']['error'], 'error' );
+			write_log("Error occured: " . $result['body']['error'], 'error' );
 			return;
 		}
 		generate_pdf_ticket_files($json_response);
