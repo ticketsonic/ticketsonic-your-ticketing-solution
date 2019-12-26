@@ -24,15 +24,21 @@
 
 			<tr>
 				<th>
-					<label for="mode"><?php _e( 'Script mode', 'woo_pi' ); ?></label>
+					<label for="ticket_info_endpoint"><?php _e('Ticket\'S HIT Get Ticket Info Endpoint API', 'woo_ts' ); ?></label>
 				</th>
 				<td>
-					<select id="mode" name="mode">
-						<option value="https://dev.ticketshit.net"<?php selected( $mode, "https://dev.ticketshit.net" ); ?>>dev</option>
-						<option value="https://www.demo.ticketshit.net"<?php selected( $mode, "https://www.demo.ticketshit.net" ); ?>>demo</option>
-						<option value="https://www.ticketshit.net"<?php selected( $mode, "https://www.ticketshit.net" ); ?>>live</option>
-					</select>
-					<p class="description"><?php _e( 'Mode.', 'woo_pi' ); ?></p>
+					<input type="text" size="30" id="ticket_info_endpoint" name="ticket_info_endpoint" value="<?php echo $ticket_info_endpoint; ?>" class="text" />
+					<p class="description"><?php _e( 'Ticket\'S HIT Ticket Endpoint API', 'woo_ts' ); ?>.</p>
+				</td>
+			</tr>
+
+			<tr>
+				<th>
+					<label for="external_order_endpoint"><?php _e('Ticket\'S HIT Order Endpoint API', 'woo_ts' ); ?></label>
+				</th>
+				<td>
+					<input type="text" size="30" id="external_order_endpoint" name="external_order_endpoint" value="<?php echo $external_order_endpoint; ?>" class="text" />
+					<p class="description"><?php _e( 'Ticket\'S HIT Order Endpoint API', 'woo_ts' ); ?>.</p>
 				</td>
 			</tr>
 

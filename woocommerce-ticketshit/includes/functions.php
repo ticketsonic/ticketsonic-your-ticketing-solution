@@ -22,6 +22,8 @@ if (is_admin()) {
 				woo_ts_update_option( 'mode', ( isset( $_POST['mode'] ) ? sanitize_text_field( $_POST['mode'] ) : '' ) );
 				woo_ts_update_option( 'api_key', ( isset( $_POST['api_key'] ) ? sanitize_text_field( $_POST['api_key'] ) : '' ) );
 				woo_ts_update_option( 'promoter_email', ( isset( $_POST['promoter_email'] ) ? sanitize_text_field( $_POST['promoter_email'] ) : '' ) );
+				woo_ts_update_option( 'ticket_info_endpoint', ( isset( $_POST['ticket_info_endpoint'] ) ? sanitize_text_field( $_POST['ticket_info_endpoint'] ) : '' ) );
+				woo_ts_update_option( 'external_order_endpoint', ( isset( $_POST['external_order_endpoint'] ) ? sanitize_text_field( $_POST['external_order_endpoint'] ) : '' ) );
 				woo_ts_update_option( 'ticket_html_template', ( isset( $_POST['ticket_html_template'] ) ? wp_kses($_POST['ticket_html_template'], allowed_html()) : '' ) );
 
 				$message = __( 'Settings saved.', 'woo_ts' );
@@ -221,7 +223,7 @@ function woo_ts_update_option( $option = null, $value = null ) {
 function ts_post_get_my_passes() {
 	//$auth = base64_encode("guest:Gue\$t1");
 	$mode = woo_ts_get_option( 'mode', 0 );
-	$url = 'https://www.demo.ticketshit.net/v1/get_my_passes';
+	$url = woo_ts_get_option('ticket_info_endpoint', '');
 	$response = wp_remote_post($url, array(
 		//'headers'     => array(
 		//	"Authorization" => "Basic $auth",
@@ -342,7 +344,7 @@ function set_order_ts_meta_data($order_id) {
 
 	$auth = base64_encode("guest:Gue\$t1");
 	$mode = woo_ts_get_option('mode', '');
-	$url = 'https://www.demo.ticketshit.net/v1/create.json';
+	$url = woo_ts_get_option('external_order_endpoint', '');
 	
 	$result = wp_remote_post($url, array(
 		'headers'     => array(
