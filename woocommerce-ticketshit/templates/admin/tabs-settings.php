@@ -27,7 +27,7 @@
 					<label for="ticket_info_endpoint"><?php _e('Ticket\'S HIT Get Ticket Info Endpoint API', 'woo_ts' ); ?></label>
 				</th>
 				<td>
-					<input type="text" size="30" id="ticket_info_endpoint" name="ticket_info_endpoint" value="<?php echo $ticket_info_endpoint; ?>" class="text" />
+					<input type="text" size="50" id="ticket_info_endpoint" name="ticket_info_endpoint" value="<?php echo $ticket_info_endpoint; ?>" class="text" />
 					<p class="description"><?php _e( 'Ticket\'S HIT Ticket Endpoint API', 'woo_ts' ); ?>.</p>
 				</td>
 			</tr>
@@ -37,7 +37,7 @@
 					<label for="external_order_endpoint"><?php _e('Ticket\'S HIT Order Endpoint API', 'woo_ts' ); ?></label>
 				</th>
 				<td>
-					<input type="text" size="30" id="external_order_endpoint" name="external_order_endpoint" value="<?php echo $external_order_endpoint; ?>" class="text" />
+					<input type="text" size="50" id="external_order_endpoint" name="external_order_endpoint" value="<?php echo $external_order_endpoint; ?>" class="text" />
 					<p class="description"><?php _e( 'Ticket\'S HIT Order Endpoint API', 'woo_ts' ); ?>.</p>
 				</td>
 			</tr>
