@@ -362,22 +362,21 @@ function set_order_ts_meta_data($order_id) {
 
 	try {
 		if (is_wp_error($result)) {
-			// TODO: This does not print on the page
-			write_log('error fetching result for order ' . $order_id);
-			write_log('error is ' . $result->get_error_message());
+			write_log('Error fetching result for order ' . $order_id . ': '. $result->get_error_message());
+			$order->update_status('failed', 'Error fetching result for order ' . $order_id . ': '. $result->get_error_message());
 			return;
 		}
 		$json_response = json_decode($result['body']);
-		$temp = print_r($json_response, 1);
-		write_log('$json_response is: ' . $json_response);
+		write_log('$json_response is: ' . var_export($json_response));
 		if (empty($json_response)) {
 			write_log('Error: empty response from endpoint ' . woo_ts_get_option('external_order_endpoint', ''));
+			$order->update_status('failed', 'Error: empty response from endpoint ' . woo_ts_get_option('external_order_endpoint', ''));
 			return;
 		}
 
 		if ($json_response->status == 'error') {
-			// TODO: This does not print on the page
-			write_log("Error occured: " . $result['body']['error'], 'error' );
+			write_log('Error response from endpoint: ' . $result['body']);
+			$order->update_status('failed', 'Error response from endpoint: ' . $result['body']);
 			return;
 		}
 		generate_pdf_ticket_files($json_response);
