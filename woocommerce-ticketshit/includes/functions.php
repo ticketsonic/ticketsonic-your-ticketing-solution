@@ -389,7 +389,7 @@ function set_order_ts_meta_data($order_id) {
 
 		return $order;
 	} catch (Exception $ex) {
-		die(var_export($ex));
+		$order->update_status('failed', 'Catch: ' . $ex);
 	}
 }
 
@@ -401,7 +401,7 @@ function send_tickets_to_email_after_order_completed($order_id) {
 	if ($order->get_payment_method() == 'paypal')
 	  $order = set_order_ts_meta_data($order_id);
 
-        write_log('woocommerce_order_status_completed');
+    write_log('woocommerce_order_status_completed');
 	write_log('send_tickets_to_email_after_order_completed for order ' . $order_id . ' is fired');
 
 	$pdf_ticket_files_paths = array();
@@ -474,8 +474,7 @@ function send_tickets_by_mail($target_user_mail, $order_id, $tickets_absolute_pa
 function generate_pdf_ticket_files($json_response) {
 	$public_key = openssl_pkey_get_public(woo_ts_get_option('api_public_key', ''));
 	if (!$public_key) {
-		// TODO: This does not print on the page
-		woo_ts_admin_notice_print("Public key corrupted");
+		write_log("Public key corrupted");
 		return;
 	}
 
@@ -522,8 +521,7 @@ function generate_pdf_ticket_files($json_response) {
 function generate_order_info_array($json_response) {
 	$public_key = openssl_pkey_get_public(woo_ts_get_option('api_public_key', ''));
 	if (!$public_key) {
-		// TODO: This does not print on the page
-		woo_ts_admin_notice_print("Public key corrupted");
+		write_log("Public key corrupted");
 		return;
 	}
 
