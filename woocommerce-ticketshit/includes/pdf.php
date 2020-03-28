@@ -12,9 +12,10 @@ class PDF extends FPDF {
 	}
 
 	function set_background() {
-		$this->SetFillColor(90, 52, 59);
-		$this->Rect(10, 10, 190, 10, 'F');
-		$this->Rect(10, 10, 190, 70, 'D');
+		$uploads_dir = wp_get_upload_dir();
+		$image_path = $uploads_dir['basedir'] . '/woocommerce-ticketshit/pdf_logo.jpg';
+		if (file_exists($image_path))
+			$this->Image($image_path, 0, 0, $this->w, $this->h);
 	}
 
 	function set_text($event_titme, $ticket_title, $ticket_price) {
@@ -27,8 +28,6 @@ class PDF extends FPDF {
 
 		$this->Text(20, 55, 'Price:');
 		$this->Text(40, 55, $ticket_price);
-
-		$this->Image(WP_PLUGIN_DIR . '/woocommerce-ticketshit/includes/logo_black.jpg', 20, 60, 40, 5, 'JPEG');
 	}
 
 	function set_qr($data) {

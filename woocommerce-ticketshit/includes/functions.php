@@ -24,7 +24,8 @@ if (is_admin()) {
 				woo_ts_update_option( 'promoter_email', ( isset( $_POST['promoter_email'] ) ? sanitize_text_field( $_POST['promoter_email'] ) : '' ) );
 				woo_ts_update_option( 'ticket_info_endpoint', ( isset( $_POST['ticket_info_endpoint'] ) ? sanitize_text_field( $_POST['ticket_info_endpoint'] ) : '' ) );
 				woo_ts_update_option( 'external_order_endpoint', ( isset( $_POST['external_order_endpoint'] ) ? sanitize_text_field( $_POST['external_order_endpoint'] ) : '' ) );
-				woo_ts_update_option( 'ticket_html_template', ( isset( $_POST['ticket_html_template'] ) ? wp_kses($_POST['ticket_html_template'], allowed_html()) : '' ) );
+
+				upload_custom_ticket_logo();
 
 				$message = __( 'Settings saved.', 'woo_ts' );
 				woo_ts_admin_notice( $message );
@@ -127,7 +128,13 @@ if (is_admin()) {
 				break;
 
 			case 'sync_with_ts':
-			    $response = ts_post_get_my_passes();
+				$response = ts_post_get_my_passes();
+				
+				if (is_wp_error($response)) {
+					woo_ts_admin_notice($response->get_error_message(), 'error');
+					write_log('Error syncing with TS: '. $response->get_error_message());
+					return;
+				}
 
 				$ticket = array();
 				$importedCount = 0;
@@ -303,9 +310,10 @@ function woo_ts_init() {
 		  'description'=> 'Ticket’s HIT Tickets imported tickets.',
 		  'slug' => 'ticketshit'
 		)
-	  );
+	);
 
 	wp_mkdir_p(WP_PLUGIN_DIR . '/woocommerce-ticketshit/tickets/');
+	wp_mkdir_p(WOO_TS_UPLOADPATH);
 }
 add_action( 'init', 'woo_ts_init' );
 
@@ -484,6 +492,7 @@ function generate_pdf_ticket_files($json_response) {
 	//$line_items_array = array();
 	//$line_items_array[$json_response->order] = array();
 	
+	$starttime = microtime(true);
 	$order_ticket = new PDF();
 	foreach ($json_response->tickets as $ticket) {
 		write_log('start generation of pdf');
@@ -495,23 +504,31 @@ function generate_pdf_ticket_files($json_response) {
 		// Create separate pdf tickets
 		$pdf_ticket = new PDF();
 		$pdf_ticket->AddPage();
+		$pdf_ticket->set_background();
+		
 		$pdf_ticket->set_text($ticket->title_en, $ticket->description_en, $formatted_price);
 		$pdf_ticket->set_qr(qr_binary_to_binary(base64_encode($sensitive_decoded)));
-		$pdf_ticket->set_background();
 		$pdf_ticket->Output('F', WP_PLUGIN_DIR . '/woocommerce-ticketshit/tickets/' . $json_response->order . '/' . $ticket->line_item_id . '.pdf');
 		$ticket_file_paths[] = WP_PLUGIN_DIR . '/woocommerce-ticketshit/tickets/' . $json_response->order . '/' . $ticket->line_item_id . '.pdf';
 
 		// Add page to the order pdf
 		$order_ticket->AddPage();
+		$order_ticket->set_background();
 		$order_ticket->set_text($ticket->title_en, $ticket->description_en, $formatted_price);
 		$order_ticket->set_qr(qr_binary_to_binary(base64_encode($sensitive_decoded)));
-		$order_ticket->set_background();
 
 		//$line_items_array[$json_response->order][] = $ticket->line_item_id;
 		//$ticket_file_paths[] = WP_PLUGIN_DIR . '/woocommerce-ticketshit/tickets/' . $ticket->line_item_id . '.pdf';
 
 		write_log('end of generation of pdf at: ' . date("Y-m-d H:i:s"));
 	}
+
+	$endtime = microtime(true);
+	$temp = $endtime - $starttime;
+	write_log("start: " . $starttime);
+	write_log("end: " . $endtime);
+	write_log("time diff: " . $temp);
+
 	$order_ticket->Output('F', WP_PLUGIN_DIR . '/woocommerce-ticketshit/tickets/' . $json_response->order . '/tickets.pdf');
 	$ticket_file_paths[] = WP_PLUGIN_DIR . '/woocommerce-ticketshit/tickets/' . $json_response->order . '/tickets.pdf';
 	

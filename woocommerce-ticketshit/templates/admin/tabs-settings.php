@@ -60,19 +60,20 @@
 					<p class="description"><?php _e( 'Ticket\'S HIT Promoter API Key', 'woo_ts' ); ?>.</p>
 				</td>
 			</tr>
-
 			<tr>
 				<th>
-					<label for="ticket_html_template"><?php _e( 'Ticket HTML Template', 'woo_ts' ); ?></label>
+					<label for="pdf_logo"><?php _e('PDF Logo', 'woo_ts' ); ?></label>
 				</th>
 				<td>
-					<textarea rows="10" cols="150" id="ticket_html_template" name="ticket_html_template" class="text" ><?php echo $ticket_html_template; ?></textarea>
-					<p class="description"><?php _e( 'Ticket HTML Template', 'woo_ts' ); ?>.</p>
+					<img style="width: 150px;" src="<?php print WOO_TS_UPLOADURLPATH; ?>/pdf_logo.jpg"/>
+					<input type="file" name="fileToUpload" id="fileToUpload">
+					<p class="description"><?php _e( 'PDF Logo', 'woo_ts' ); ?>.</p>
 				</td>
 			</tr>
 		</tbody>
 	</table>
 	<!-- .form-table -->
+	
 	<p class="submit">
 		<input type="submit" name="submit" id="submit" class="button button-primary" value="<?php _e( 'Save Changes', 'woo_ts' ); ?>" />
 	</p>

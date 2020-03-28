@@ -24,6 +24,10 @@ define( 'WOO_TS_PATH', plugin_dir_path( __FILE__ ) );
 define( 'WOO_TS_PREFIX', 'woo_ts' );
 define( 'WOO_TS_PLUGINPATH', WP_PLUGIN_URL . '/' . basename( dirname( __FILE__ ) ) );
 
+$uploads_dir = wp_get_upload_dir();
+define( 'WOO_TS_UPLOADPATH', $uploads_dir['basedir'] . '/' . WOO_TS_DIRNAME );
+define( 'WOO_TS_UPLOADURLPATH', $uploads_dir['baseurl'] . '/' . WOO_TS_DIRNAME );
+
 // Turn this on to enable additional debugging options within the importer
 //f( !defined( 'woo_ts_DEBUG' ) )
 //	define( 'woo_ts_DEBUG', false );
