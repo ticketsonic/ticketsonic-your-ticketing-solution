@@ -25,7 +25,7 @@ function wpse_141088_upload_dir( $dir ) {
     ) + $dir;
 }
 
-function upload_custom_ticket_logo() {
+function upload_custom_ticket_background() {
     add_filter( 'upload_dir', 'wpse_141088_upload_dir' );
     include_once( ABSPATH . 'wp-admin/includes/file.php' );
     include_once(ABSPATH . 'wp-admin/includes/media.php');
@@ -43,6 +43,6 @@ function upload_custom_ticket_logo() {
 }
 
 function filename_renamer($dir, $name, $ext){
-    return 'pdf_logo' . $ext;
+    return 'pdf_background' . $ext;
 }
 ?>

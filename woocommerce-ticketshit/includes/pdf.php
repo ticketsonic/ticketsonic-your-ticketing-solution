@@ -13,7 +13,7 @@ class PDF extends FPDF {
 
 	function set_background() {
 		$uploads_dir = wp_get_upload_dir();
-		$image_path = $uploads_dir['basedir'] . '/woocommerce-ticketshit/pdf_logo.jpg';
+		$image_path = $uploads_dir['basedir'] . '/woocommerce-ticketshit/pdf_background.jpg';
 		if (file_exists($image_path))
 			$this->Image($image_path, 0, 0, $this->w, $this->h);
 	}

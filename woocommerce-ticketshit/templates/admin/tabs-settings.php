@@ -62,12 +62,12 @@
 			</tr>
 			<tr>
 				<th>
-					<label for="pdf_logo"><?php _e('PDF Logo', 'woo_ts' ); ?></label>
+					<label for="pdf_background"><?php _e('PDF Background', 'woo_ts' ); ?></label>
 				</th>
 				<td>
-					<img style="width: 150px;" src="<?php print WOO_TS_UPLOADURLPATH; ?>/pdf_logo.jpg"/>
+					<img style="width: 150px;" src="<?php print WOO_TS_UPLOADURLPATH; ?>/pdf_background.jpg"/>
 					<input type="file" name="fileToUpload" id="fileToUpload">
-					<p class="description"><?php _e( 'PDF Logo', 'woo_ts' ); ?>.</p>
+					<p class="description"><?php _e( 'PDF Background', 'woo_ts' ); ?>.</p>
 				</td>
 			</tr>
 		</tbody>

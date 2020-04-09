@@ -25,7 +25,7 @@ if (is_admin()) {
 				woo_ts_update_option( 'ticket_info_endpoint', ( isset( $_POST['ticket_info_endpoint'] ) ? sanitize_text_field( $_POST['ticket_info_endpoint'] ) : '' ) );
 				woo_ts_update_option( 'external_order_endpoint', ( isset( $_POST['external_order_endpoint'] ) ? sanitize_text_field( $_POST['external_order_endpoint'] ) : '' ) );
 
-				upload_custom_ticket_logo();
+				upload_custom_ticket_background();
 
 				$message = __( 'Settings saved.', 'woo_ts' );
 				woo_ts_admin_notice( $message );
@@ -235,7 +235,9 @@ function ts_post_get_my_passes() {
 		//'headers'     => array(
 		//	"Authorization" => "Basic $auth",
 		//),
+		'sslverify' => false,
 		'method' => 'POST',
+		'timeout'     => 45,
 		'body' => array( 'email' => woo_ts_get_option('promoter_email', ''),)
 		)
 	);
@@ -354,11 +356,13 @@ function set_order_ts_meta_data($order_id) {
 	$mode = woo_ts_get_option('mode', '');
 	$url = woo_ts_get_option('external_order_endpoint', '');
 	
+	write_log('sending req to TS');
 	$result = wp_remote_post($url, array(
 		'headers'     => array(
 			'Content-Type' => 'application/json; charset=utf-8',
 		//	"Authorization" => "Basic $auth",
 		),
+		// 'sslverify' => false,
 		'body'        => json_encode($data),
 		'method'      => 'POST',
 		'data_format' => 'body',
