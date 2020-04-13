@@ -31,101 +31,101 @@ if (is_admin()) {
 				woo_ts_admin_notice( $message );
 				break;
 
-			case 'import_new_tickets':
-				$response = ts_post_get_my_passes();
+			// case 'import_new_tickets':
+			// 	$response = ts_post_get_my_passes();
 				
-				$ticket = array();
-				$importedCount = 0;
-				$ignoredCount = 0;
-				$json_response = json_decode($response['body']);
-				foreach ($json_response->tickets as $key => $ticket) {
-					try {
-						$objTicket = new WC_Product_Simple($ticket->sku);
-						$objTicket->set_name($ticket->ticket_title_en);
-						$objTicket->set_status("publish");
-						$objTicket->set_catalog_visibility('visible');
-						$objTicket->set_description($ticket->ticket_description_en);
+			// 	$ticket = array();
+			// 	$importedCount = 0;
+			// 	$ignoredCount = 0;
+			// 	$json_response = json_decode($response['body']);
+			// 	foreach ($json_response->tickets as $key => $ticket) {
+			// 		try {
+			// 			$objTicket = new WC_Product_Simple($ticket->sku);
+			// 			$objTicket->set_name($ticket->ticket_title_en);
+			// 			$objTicket->set_status("publish");
+			// 			$objTicket->set_catalog_visibility('visible');
+			// 			$objTicket->set_description($ticket->ticket_description_en);
 
-						$ticketshit_term = get_term_by("slug", "ticketshit", "product_cat");
-						if ($ticketshit_term) {
-							$objTicket->set_category_ids(array($ticketshit_term->term_id));
-						}
+			// 			$ticketshit_term = get_term_by("slug", "ticketshit", "product_cat");
+			// 			if ($ticketshit_term) {
+			// 				$objTicket->set_category_ids(array($ticketshit_term->term_id));
+			// 			}
 
-						$objTicket->set_sku($ticket->sku);
-						$price = (int)$ticket->price / 100;
-						$objTicket->set_price($price);
-						$objTicket->set_regular_price($price);
-						$objTicket->set_manage_stock(true);
-						$objTicket->set_stock_quantity($ticket->stock);
-						$objTicket->set_stock_status('instock');
-						$objTicket->set_sold_individually(false);
-						$objTicket->set_downloadable(true);
-						$objTicket->set_virtual(true);
+			// 			$objTicket->set_sku($ticket->sku);
+			// 			$price = (int)$ticket->price / 100;
+			// 			$objTicket->set_price($price);
+			// 			$objTicket->set_regular_price($price);
+			// 			$objTicket->set_manage_stock(true);
+			// 			$objTicket->set_stock_quantity($ticket->stock);
+			// 			$objTicket->set_stock_status('instock');
+			// 			$objTicket->set_sold_individually(false);
+			// 			$objTicket->set_downloadable(true);
+			// 			$objTicket->set_virtual(true);
 
-						$woo_ticket_id = $objTicket->save();
-						$importedCount++;
-					} catch (WC_Data_Exception $ex) {
-						$ignoredCount++;
-					}
-				}
+			// 			$woo_ticket_id = $objTicket->save();
+			// 			$importedCount++;
+			// 		} catch (WC_Data_Exception $ex) {
+			// 			$ignoredCount++;
+			// 		}
+			// 	}
 
-				woo_ts_update_option('api_public_key', "-----BEGIN PUBLIC KEY-----\n" . $json_response->api_public_key . "\n-----END PUBLIC KEY-----");
+			// 	woo_ts_update_option('api_public_key', "-----BEGIN PUBLIC KEY-----\n" . $json_response->api_public_key . "\n-----END PUBLIC KEY-----");
 
-				woo_ts_admin_notice("Total imported: " . $importedCount, 'notice');
-				woo_ts_admin_notice("Already imported: " . $ignoredCount, 'notice');
-				//woo_ts_admin_notice("Public key: " . woo_ts_get_option('api_public_key', ''), 'notice');
-				break;
+			// 	woo_ts_admin_notice("Total imported: " . $importedCount, 'notice');
+			// 	woo_ts_admin_notice("Already imported: " . $ignoredCount, 'notice');
+			// 	//woo_ts_admin_notice("Public key: " . woo_ts_get_option('api_public_key', ''), 'notice');
+			// 	break;
 
-			case 'update_existing_tickets':
-			    $response = ts_post_get_my_passes();
+			// case 'update_existing_tickets':
+			//     $response = ts_post_get_my_passes();
 
-				$ticket = array();
-				$importedCount = 0;
-				$ignoredCount = 0;
+			// 	$ticket = array();
+			// 	$importedCount = 0;
+			// 	$ignoredCount = 0;
 				
-				foreach (json_decode($response['body'])->tickets as $key => $ticket) {
-					try {
-						$woo_product_id = wc_get_product_id_by_sku($ticket->sku);
+			// 	foreach (json_decode($response['body'])->tickets as $key => $ticket) {
+			// 		try {
+			// 			$woo_product_id = wc_get_product_id_by_sku($ticket->sku);
 
-						// Ticket does not exist so we skip
-						if ($woo_product_id == 0) {
-							$ignoredCount++;
-							continue;
-						}
+			// 			// Ticket does not exist so we skip
+			// 			if ($woo_product_id == 0) {
+			// 				$ignoredCount++;
+			// 				continue;
+			// 			}
 
-						$objTicket = new WC_Product_Simple($woo_product_id);
+			// 			$objTicket = new WC_Product_Simple($woo_product_id);
 
-						$objTicket->set_name($ticket->ticket_title_en);
-						$objTicket->set_status("publish");
-						$objTicket->set_catalog_visibility('visible');
-						$objTicket->set_description($ticket->ticket_description_en);
+			// 			$objTicket->set_name($ticket->ticket_title_en);
+			// 			$objTicket->set_status("publish");
+			// 			$objTicket->set_catalog_visibility('visible');
+			// 			$objTicket->set_description($ticket->ticket_description_en);
 						
-						$price = (int)$ticket->price / 100;
-						$objTicket->set_price($price);
-						$objTicket->set_regular_price($price);
-						$objTicket->set_manage_stock(true);
-						$objTicket->set_stock_quantity($ticket->stock);
-						$objTicket->set_stock_status('instock');
-						$objTicket->set_sold_individually(false);
-						$objTicket->set_downloadable(true);
-						$objTicket->set_virtual(true);
+			// 			$price = (int)$ticket->price / 100;
+			// 			$objTicket->set_price($price);
+			// 			$objTicket->set_regular_price($price);
+			// 			$objTicket->set_manage_stock(true);
+			// 			$objTicket->set_stock_quantity($ticket->stock);
+			// 			$objTicket->set_stock_status('instock');
+			// 			$objTicket->set_sold_individually(false);
+			// 			$objTicket->set_downloadable(true);
+			// 			$objTicket->set_virtual(true);
 
-						$ticketshit_term = get_term_by("slug", "ticketshit", "product_cat");
-						if ($ticketshit_term) {
-							$objTicket->set_category_ids(array($ticketshit_term->term_id));
-						}
+			// 			$ticketshit_term = get_term_by("slug", "ticketshit", "product_cat");
+			// 			if ($ticketshit_term) {
+			// 				$objTicket->set_category_ids(array($ticketshit_term->term_id));
+			// 			}
 
-						$woo_ticket_id = $objTicket->save();
-						$importedCount++;
-					} catch (WC_Data_Exception $ex) {
-						$ignoredCount++;
-					}
-				}
+			// 			$woo_ticket_id = $objTicket->save();
+			// 			$importedCount++;
+			// 		} catch (WC_Data_Exception $ex) {
+			// 			$ignoredCount++;
+			// 		}
+			// 	}
 
-				woo_ts_admin_notice("Total imported: " . $importedCount, 'notice');
-				woo_ts_admin_notice("Already imported: " . $ignoredCount, 'notice');
+			// 	woo_ts_admin_notice("Total imported: " . $importedCount, 'notice');
+			// 	woo_ts_admin_notice("Already imported: " . $ignoredCount, 'notice');
 
-				break;
+			// 	break;
 
 			case 'sync_with_ts':
 				$response = ts_post_get_my_passes();
@@ -238,9 +238,11 @@ function ts_post_get_my_passes() {
 		'sslverify' => false,
 		'method' => 'POST',
 		'timeout'     => 45,
-		'body' => array( 'email' => woo_ts_get_option('promoter_email', ''),)
+		'body' => array(
+			'email' => woo_ts_get_option('promoter_email', ''),
+			'api_key' => woo_ts_get_option('api_key', ''),
 		)
-	);
+	));
 
 	return $response;
 }
@@ -500,17 +502,20 @@ function generate_pdf_ticket_files($json_response) {
 	$order_ticket = new PDF();
 	foreach ($json_response->tickets as $ticket) {
 		write_log('start generation of pdf');
-		$sensitive_decoded = base64_decode($ticket->sensitive);
+		$sensitive_decoded = base64_decode($ticket->encrypted_data);
 		$is_decrypted = openssl_public_decrypt($sensitive_decoded, $sensitive_decrypted, $public_key);
 		$decrypted_ticket = parse_raw_recrypted_ticket($sensitive_decrypted);
 		$formatted_price = floatval($decrypted_ticket['price']) / 100;// . ' €';
+
+		$woo_product_id = wc_get_product_id_by_sku($ticket->sku);
+		$woo_product = new WC_Product_Simple($woo_product_id);
 
 		// Create separate pdf tickets
 		$pdf_ticket = new PDF();
 		$pdf_ticket->AddPage();
 		$pdf_ticket->set_background();
 		
-		$pdf_ticket->set_text($ticket->title_en, $ticket->description_en, $formatted_price);
+		$pdf_ticket->set_text($woo_product->name, $woo_product->description, $formatted_price);
 		$pdf_ticket->set_qr(qr_binary_to_binary(base64_encode($sensitive_decoded)));
 		$pdf_ticket->Output('F', WP_PLUGIN_DIR . '/woocommerce-ticketshit/tickets/' . $json_response->order . '/' . $ticket->line_item_id . '.pdf');
 		$ticket_file_paths[] = WP_PLUGIN_DIR . '/woocommerce-ticketshit/tickets/' . $json_response->order . '/' . $ticket->line_item_id . '.pdf';
@@ -518,7 +523,7 @@ function generate_pdf_ticket_files($json_response) {
 		// Add page to the order pdf
 		$order_ticket->AddPage();
 		$order_ticket->set_background();
-		$order_ticket->set_text($ticket->title_en, $ticket->description_en, $formatted_price);
+		$order_ticket->set_text($woo_product->name, $woo_product->description, $formatted_price);
 		$order_ticket->set_qr(qr_binary_to_binary(base64_encode($sensitive_decoded)));
 
 		//$line_items_array[$json_response->order][] = $ticket->line_item_id;
