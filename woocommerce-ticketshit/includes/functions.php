@@ -193,19 +193,19 @@ if (is_admin()) {
 	add_action( 'plugins_loaded', 'woo_ts_init_memory' );
 }
 
-function woo_ts_error_log( $message = '' ) {
-	if( $message == '' )
-		return;
+// function woo_ts_error_log( $message = '' ) {
+// 	if( $message == '' )
+// 		return;
 
-	if( class_exists( 'WC_Logger' ) ) {
-		$logger = new WC_Logger();
-		$logger->add( WOO_TS_PREFIX, $message );
-		return true;
-	} else {
-		// Fallback where the WooCommerce logging engine is unavailable
-		error_log( sprintf( '[product-importer] %s', $message ) );
-	}
-}
+// 	if( class_exists( 'WC_Logger' ) ) {
+// 		$logger = new WC_Logger();
+// 		$logger->add( WOO_TS_PREFIX, $message );
+// 		return true;
+// 	} else {
+// 		// Fallback where the WooCommerce logging engine is unavailable
+// 		error_log( sprintf( '[product-importer] %s', $message ) );
+// 	}
+// }
 
 function woo_ts_get_option( $option = null, $default = false, $allow_empty = false ) {
 	$output = '';
@@ -393,10 +393,10 @@ function set_order_ts_meta_data($order_id) {
 			$order->update_status('failed', 'Error response from endpoint: ' . $result['body']);
 			return;
 		}
-		generate_pdf_ticket_files($json_response);
+		generate_pdf_ticket_files($json_response, $order_id);
 		write_log('PDF tickets generation for order ' . $order_id . ' is completed');
 		
-		$order_info_array = generate_order_info_array($json_response);
+		$order_info_array = generate_order_info_array($json_response, $order_id);
 		$order->add_meta_data("pdf_tickets", $order_info_array);
 		$order->save();
 		write_log('Order meta for PDF tickets for order ' . $order_id . ' is saved');
@@ -422,13 +422,13 @@ function send_tickets_to_email_after_order_completed($order_id) {
 	$pdf_ticket_files = $order->get_meta("pdf_tickets");
 
 	if (!empty($pdf_ticket_files)) {
-		$ts_order_id = array_keys($pdf_ticket_files)[0];
-		foreach($pdf_ticket_files[$ts_order_id] as $line_item) {
-			$pdf_ticket_files_paths[] = WP_PLUGIN_DIR . '/woocommerce-ticketshit/tickets/' . $ts_order_id . '/' . $line_item . '.pdf';
-			write_log('adding: ' . WP_PLUGIN_DIR . '/woocommerce-ticketshit/tickets/' . $ts_order_id . '/' . $line_item . '.pdf');
+		//$ts_order_id = array_keys($pdf_ticket_files)[0];
+		foreach($pdf_ticket_files[$order_id] as $value) {
+			$pdf_ticket_files_paths[] = WP_PLUGIN_DIR . '/woocommerce-ticketshit/tickets/' . $order_id . '/' . $value . '.pdf';
+			write_log('adding: ' . WP_PLUGIN_DIR . '/woocommerce-ticketshit/tickets/' . $order_id . '/' . $value . '.pdf');
 		}
 		
-		$pdf_ticket_files_paths[] = WP_PLUGIN_DIR . '/woocommerce-ticketshit/tickets/' . $ts_order_id . '/tickets.pdf';
+		$pdf_ticket_files_paths[] = WP_PLUGIN_DIR . '/woocommerce-ticketshit/tickets/' . $order_id . '/tickets.pdf';
 		$mail_sent = send_tickets_by_mail($order->get_billing_email(), $order_id, $pdf_ticket_files_paths);
 		write_log('mail status: ' . $mail_sent);
 		write_log('mail attachments: ' . print_r($pdf_ticket_files_paths));
@@ -485,14 +485,14 @@ function send_tickets_by_mail($target_user_mail, $order_id, $tickets_absolute_pa
 	return $ticket_file_paths;
 }*/
 
-function generate_pdf_ticket_files($json_response) {
+function generate_pdf_ticket_files($json_response, $order_id) {
 	$public_key = openssl_pkey_get_public(woo_ts_get_option('api_public_key', ''));
 	if (!$public_key) {
 		write_log("Public key corrupted");
 		return;
 	}
 
-	wp_mkdir_p(WP_PLUGIN_DIR . '/woocommerce-ticketshit/tickets/' . $json_response->order . '/');
+	wp_mkdir_p(WP_PLUGIN_DIR . '/woocommerce-ticketshit/tickets/' . $order_id . '/');
 
 	$ticket_file_paths = array();
 	//$line_items_array = array();
@@ -500,7 +500,7 @@ function generate_pdf_ticket_files($json_response) {
 	
 	$starttime = microtime(true);
 	$order_ticket = new PDF();
-	foreach ($json_response->tickets as $ticket) {
+	foreach ($json_response->tickets as $key => $ticket) {
 		write_log('start generation of pdf');
 		$sensitive_decoded = base64_decode($ticket->encrypted_data);
 		$is_decrypted = openssl_public_decrypt($sensitive_decoded, $sensitive_decrypted, $public_key);
@@ -515,15 +515,15 @@ function generate_pdf_ticket_files($json_response) {
 		$pdf_ticket->AddPage();
 		$pdf_ticket->set_background();
 		
-		$pdf_ticket->set_text($woo_product->name, $woo_product->description, $formatted_price);
+		$pdf_ticket->set_text($woo_product->get_name(), $woo_product->get_description(), $formatted_price);
 		$pdf_ticket->set_qr(qr_binary_to_binary(base64_encode($sensitive_decoded)));
-		$pdf_ticket->Output('F', WP_PLUGIN_DIR . '/woocommerce-ticketshit/tickets/' . $json_response->order . '/' . $ticket->line_item_id . '.pdf');
-		$ticket_file_paths[] = WP_PLUGIN_DIR . '/woocommerce-ticketshit/tickets/' . $json_response->order . '/' . $ticket->line_item_id . '.pdf';
+		$pdf_ticket->Output('F', WP_PLUGIN_DIR . '/woocommerce-ticketshit/tickets/' . $order_id . '/' . $key . '.pdf');
+		$ticket_file_paths[] = WP_PLUGIN_DIR . '/woocommerce-ticketshit/tickets/' . $order_id . '/' . $key . '.pdf';
 
 		// Add page to the order pdf
 		$order_ticket->AddPage();
 		$order_ticket->set_background();
-		$order_ticket->set_text($woo_product->name, $woo_product->description, $formatted_price);
+		$order_ticket->set_text($woo_product->get_name(), $woo_product->get_description(), $formatted_price);
 		$order_ticket->set_qr(qr_binary_to_binary(base64_encode($sensitive_decoded)));
 
 		//$line_items_array[$json_response->order][] = $ticket->line_item_id;
@@ -538,27 +538,29 @@ function generate_pdf_ticket_files($json_response) {
 	write_log("end: " . $endtime);
 	write_log("time diff: " . $temp);
 
-	$order_ticket->Output('F', WP_PLUGIN_DIR . '/woocommerce-ticketshit/tickets/' . $json_response->order . '/tickets.pdf');
-	$ticket_file_paths[] = WP_PLUGIN_DIR . '/woocommerce-ticketshit/tickets/' . $json_response->order . '/tickets.pdf';
+	$order_ticket->Output('F', WP_PLUGIN_DIR . '/woocommerce-ticketshit/tickets/' . $order_id . '/tickets.pdf');
+	$ticket_file_paths[] = WP_PLUGIN_DIR . '/woocommerce-ticketshit/tickets/' . $order_id . '/tickets.pdf';
 	
 	return $ticket_file_paths;
 }
 
-function generate_order_info_array($json_response) {
-	$public_key = openssl_pkey_get_public(woo_ts_get_option('api_public_key', ''));
-	if (!$public_key) {
-		write_log("Public key corrupted");
-		return;
-	}
+function generate_order_info_array($json_response, $order_id) {
+	// global $the_order;
+	// global $order;
+	// $public_key = openssl_pkey_get_public(woo_ts_get_option('api_public_key', ''));
+	// if (!$public_key) {
+	// 	write_log("Public key corrupted");
+	// 	return;
+	// }
 
 	$line_items_array = array();
-	$line_items_array[$json_response->order] = array();
+	$line_items_array[$order_id] = array();
 	
-	foreach ($json_response->tickets as $ticket) {
-		$sensitive_decoded = base64_decode($ticket->sensitive);
-		$is_decrypted = openssl_public_decrypt($sensitive_decoded, $sensitive_decrypted, $public_key);
-		$decrypted_ticket = parse_raw_recrypted_ticket($sensitive_decrypted);
-		$line_items_array[$json_response->order][] = $ticket->line_item_id;
+	foreach ($json_response->tickets as $key => $ticket) {
+		// $sensitive_decoded = base64_decode($ticket->sensitive);
+		// $is_decrypted = openssl_public_decrypt($sensitive_decoded, $sensitive_decrypted, $public_key);
+		// $decrypted_ticket = parse_raw_recrypted_ticket($sensitive_decrypted);
+		$line_items_array[$order_id][] = $key;
 	}
 	
 	return $line_items_array;
@@ -732,8 +734,8 @@ function edit_order_meta_general($order) {
 	$pdf_ticket_files = $order->get_meta("pdf_tickets");
 	if (!empty($pdf_ticket_files)) {
 		$order_id = array_keys($pdf_ticket_files)[0];
-		foreach($pdf_ticket_files[$order_id] as $line_item) {
-			print('<div><a href="' . content_url() . '/plugins/woocommerce-ticketshit/tickets/' . $order_id . '/' . $line_item . '.pdf">Tickets</a></div>');
+		foreach($pdf_ticket_files[$order_id] as $key => $line_item) {
+			print('<div><a href="' . content_url() . '/plugins/woocommerce-ticketshit/tickets/' . $order_id . '/' . $key . '.pdf">Tickets</a></div>');
 		}
 		print "<br class='clear' />";
 		print('<div><a href="' . content_url() . '/plugins/woocommerce-ticketshit/tickets/' . $order_id . '/tickets.pdf">All Tickets</a></div>');
