@@ -207,26 +207,6 @@ if (is_admin()) {
 // 	}
 // }
 
-function woo_ts_get_option( $option = null, $default = false, $allow_empty = false ) {
-	$output = '';
-	if( isset( $option ) ) {
-		$separator = '_';
-		$output = get_option( WOO_TS_PREFIX . $separator . $option, $default );
-		if( $allow_empty == false && $output != 0 && ( $output == false || $output == '' ) )
-			$output = $default;
-	}
-	return $output;
-}
-
-function woo_ts_update_option( $option = null, $value = null ) {
-	$output = false;
-	if( isset( $option ) && isset( $value ) ) {
-		$separator = '_';
-		$output = update_option( WOO_TS_PREFIX . $separator . $option, $value );
-	}
-	return $output;
-}
-
 function ts_post_get_my_passes() {
 	//$auth = base64_encode("guest:Gue\$t1");
 	$mode = woo_ts_get_option( 'mode', 0 );
@@ -245,51 +225,6 @@ function ts_post_get_my_passes() {
 	));
 
 	return $response;
-}
-
-function allowed_html() {
-	return array (
-		'html' => array (
-			'href' => array(),
-			'class' => array(),
-		),
-		'body' => array (
-			'href' => array(),
-			'class' => array(),
-		),
-		'style' => array (
-			'href' => array(),
-			'class' => array(),
-		),
-		'table' => array (
-			'href' => array(),
-			'class' => array(),
-		),
-		'tbody' => array (
-			'href' => array(),
-			'class' => array(),
-		),
-		'th' => array (
-			'href' => array(),
-			'class' => array(),
-		),
-		'tr' => array (
-			'href' => array(),
-			'class' => array(),
-		),
-		'div' => array (
-			'href' => array(),
-			'class' => array(),
-		),
-		'p' => array (
-			'href' => array(),
-			'class' => array(),
-		),
-		'h1' => array (
-			'href' => array(),
-			'class' => array(),
-		),
-	);
 }
 
 if( !function_exists( 'woo_get_action' ) ) {

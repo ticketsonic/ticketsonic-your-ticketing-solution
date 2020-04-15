@@ -11,6 +11,26 @@ if (!function_exists('write_log')) {
     }
 }
 
+function woo_ts_get_option( $option = null, $default = false, $allow_empty = false ) {
+	$output = '';
+	if( isset( $option ) ) {
+		$separator = '_';
+		$output = get_option( WOO_TS_PREFIX . $separator . $option, $default );
+		if( $allow_empty == false && $output != 0 && ( $output == false || $output == '' ) )
+			$output = $default;
+	}
+	return $output;
+}
+
+function woo_ts_update_option( $option = null, $value = null ) {
+	$output = false;
+	if( isset( $option ) && isset( $value ) ) {
+		$separator = '_';
+		$output = update_option( WOO_TS_PREFIX . $separator . $option, $value );
+	}
+	return $output;
+}
+
 /**
  * Override the default upload path.
  * 
@@ -44,5 +64,50 @@ function upload_custom_ticket_background() {
 
 function filename_renamer($dir, $name, $ext){
     return 'pdf_background' . $ext;
+}
+
+function allowed_html() {
+	return array (
+		'html' => array (
+			'href' => array(),
+			'class' => array(),
+		),
+		'body' => array (
+			'href' => array(),
+			'class' => array(),
+		),
+		'style' => array (
+			'href' => array(),
+			'class' => array(),
+		),
+		'table' => array (
+			'href' => array(),
+			'class' => array(),
+		),
+		'tbody' => array (
+			'href' => array(),
+			'class' => array(),
+		),
+		'th' => array (
+			'href' => array(),
+			'class' => array(),
+		),
+		'tr' => array (
+			'href' => array(),
+			'class' => array(),
+		),
+		'div' => array (
+			'href' => array(),
+			'class' => array(),
+		),
+		'p' => array (
+			'href' => array(),
+			'class' => array(),
+		),
+		'h1' => array (
+			'href' => array(),
+			'class' => array(),
+		),
+	);
 }
 ?>
