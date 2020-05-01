@@ -1,5 +1,4 @@
 <?php
-require("connection.php");
 
 include_once 'helper.inc';
 $http = new Swoole\HTTP\Server("127.0.0.1", 9501);
