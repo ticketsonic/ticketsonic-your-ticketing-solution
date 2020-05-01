@@ -1,7 +1,7 @@
 <?php
 
 include_once 'helper.inc';
-$http = new Swoole\HTTP\Server("127.0.0.1", 9501);
+$http = new Swoole\HTTP\Server("127.0.0.1", 9507);
 
 function onRequest($request, $response) {
     require("connection.php");
@@ -14,8 +14,8 @@ function onRequest($request, $response) {
     $rows = $stmt->rowCount();
     if ($rows > 0) {
         $response->header("Content-Type", "text/plain");
-        //$response->end("<h1>Hash already used</h1>");
-        //return;
+        $response->end("<h1>Hash already used</h1>");
+        return;
     }
 
     // Promoter email
@@ -108,20 +108,7 @@ function onRequest($request, $response) {
 
     // Insert order hash
     $stmt = $dbConnection->prepare('INSERT INTO order_unique_hash (`hash`) VALUES (:hash1)');
-    //stmt->execute(['hash1' => $body->order_hash]);
-
-    // $payload = array('request_body' => $body, 'tickets_arr' => $tickets_arr);
-    // $url = 'http://ticketshit.local/en/v1/enqueue_tickets';
-    // $ch = curl_init($url);
-    // curl_setopt_array($ch, array(
-    //     CURLOPT_POST => TRUE,
-    //     CURLOPT_RETURNTRANSFER => TRUE,
-    //     CURLOPT_HTTPHEADER => array('Content-Type: application/json'),
-    //     CURLOPT_POSTFIELDS => json_encode($payload)
-    // ));
-
-    // Send the request
-    // $resp = curl_exec($ch);
+    $stmt->execute(['hash1' => $body->order_hash]);
 
     $payload = array(array('request_body' => $body, 'tickets_arr' => $tickets_arr));
     $stmt = $dbConnection->prepare('INSERT INTO queue (`name`, `data`, `expire`, `created`) VALUES ("tickets_order_generator_queue", :blob_data, 0, :created)');

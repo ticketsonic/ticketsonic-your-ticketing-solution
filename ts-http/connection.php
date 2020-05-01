@@ -1,6 +1,6 @@
 <?php
     if (file_exists("settings.local.php")) {
-        require_once("settings.local.php");
+        require("settings.local.php");
     }
     else {
         exit("Missing settings.local.php");
