@@ -12,11 +12,11 @@ function onRequest($request, $response) {
     $stmt = $dbConnection->prepare('SELECT * FROM order_unique_hash WHERE `hash` = :hash1');
     $stmt->execute(['hash1' => $body->order_hash]);
     $rows = $stmt->rowCount();
-    if ($rows > 0) {
-        $response->header("Content-Type", "text/plain");
-        $response->end("<h1>Hash already used</h1>");
-        return;
-    }
+    // if ($rows > 0) {
+    //     $response->header("Content-Type", "text/plain");
+    //     $response->end("<h1>Hash already used</h1>");
+    //     return;
+    // }
 
     // Promoter email
     $stmt = $dbConnection->prepare('SELECT u.uid FROM users u
@@ -108,7 +108,7 @@ function onRequest($request, $response) {
 
     // Insert order hash
     $stmt = $dbConnection->prepare('INSERT INTO order_unique_hash (`hash`) VALUES (:hash1)');
-    $stmt->execute(['hash1' => $body->order_hash]);
+    //$stmt->execute(['hash1' => $body->order_hash]);
 
     $payload = array(array('request_body' => $body, 'tickets_arr' => $tickets_arr));
     $stmt = $dbConnection->prepare('INSERT INTO queue (`name`, `data`, `expire`, `created`) VALUES ("tickets_order_generator_queue", :blob_data, 0, :created)');
