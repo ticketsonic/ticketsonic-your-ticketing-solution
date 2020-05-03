@@ -64,11 +64,13 @@ class MysqlConnection implements ConnectionInterface {
 }
 
 include_once 'helper.inc';
-$http = new Swoole\HTTP\Server(HTTP_SERVER_IP, HTTP_SERVER_PORT);
+$http = new Swoole\HTTP\Server(HTTP_SERVER_IP, HTTP_SERVER_PORT, SWOOLE_PROCESS, SWOOLE_SOCK_TCP | SWOOLE_SSL);
 $http->set([
     'worker_num' => swoole_cpu_num() * 2,
     'log_file' => 'swoole.log',
-    ]);
+    'ssl_cert_file' => __DIR__ . '/ssl.crt',
+    'ssl_key_file' => __DIR__ . '/ssl.key',
+  ]);
 
 $http->on('request', function (Swoole\Http\Request $request, Swoole\Http\Response $response) {
     static $Pool;
