@@ -1,8 +1,8 @@
 <?php
 error_reporting(E_ALL);
 
-if (file_exists("settings.local.php")) {
-  require("settings.local.php");
+if (file_exists(dirname(__FILE__) . "/settings.local.php")) {
+  require(dirname(__FILE__) . "/settings.local.php");
 }
 else {
   exit("Missing settings.local.php");
@@ -67,7 +67,7 @@ include_once 'helper.inc';
 $http = new Swoole\HTTP\Server(HTTP_SERVER_IP, HTTP_SERVER_PORT, SWOOLE_PROCESS, SWOOLE_SOCK_TCP | SWOOLE_SSL);
 $http->set([
     'worker_num' => swoole_cpu_num() * 2,
-    'log_file' => 'swoole.log',
+    //'log_file' => 'swoole.log',
     'ssl_cert_file' => __DIR__ . '/ssl.crt',
     'ssl_key_file' => __DIR__ . '/ssl.key',
   ]);
