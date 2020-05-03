@@ -80,27 +80,23 @@ $http->on('request', function (Swoole\Http\Request $request, Swoole\Http\Respons
 
     $body = json_decode($request->rawcontent());
 
-    // Order hash
+    // Validate order hash
     $stmt = $dbConnection->prepare('SELECT * FROM order_unique_hash WHERE `hash` = ?');
-    //$stmt->execute(['hash1' => $body->order_hash]);
     $rows = $stmt->execute([$body->order_hash]);
-    // $rows = $stmt->rowCount();
-//    if (empty($rows)) {
-//        $response->header("Content-Type", "text/plain");
-//        $response->end("<h1>Hash already used</h1>");
-//        return;
-//    }
+    if (!empty($rows)) {
+        $response->header("Content-Type", "text/plain");
+        $response->end("Duplicated order");
+        return;
+    }
 
-    // Promoter email
+    // Validate promoter email
     $stmt = $dbConnection->prepare('SELECT u.uid FROM users u
                                     LEFT JOIN users_roles ur ON u.uid = ur.uid
                                     LEFT JOIN role r ON ur.rid = r.rid
                                     WHERE `mail` = ? AND r.name = "promoter"');
     $data = $stmt->execute([$body->promoter_email]);
-    //$rows = $stmt->rowCount();
     if (empty($data)) {
-        print "!!!";
-        $response->end("<h1>Unknown promoter</h1>");
+        $response->end("Unknown promoter");
         $Pool->free_connection($dbConnection);
         return;
     }
@@ -109,13 +105,12 @@ $http->on('request', function (Swoole\Http\Request $request, Swoole\Http\Respons
         $uid = $row['uid'];
     }
 
-    // Valid key
+    // Validate promoter api key
     $stmt = $dbConnection->prepare('SELECT field_promoter_api_key_value FROM field_data_field_promoter_api_key WHERE `field_promoter_api_key_value` = ?');
     $data = $stmt->execute([$body->promoter_api_key]);
     //$rows = $stmt->rowCount();
     if (empty($data)) {
-        print "!!!!!!";
-        $response->end("<h1>Unknown promoter key</h1>");
+        $response->end("Unknown promoter key");
         $Pool->free_connection($dbConnection);
         return;
     }
@@ -128,15 +123,13 @@ $http->on('request', function (Swoole\Http\Request $request, Swoole\Http\Respons
         //$rows = $stmt->rowCount();
         //$data = $stmt->fetch();
         if (empty($data)) {
-            print "!!!!!!!!";
-            $response->end("<h1>Unknown promoter sku: " . $ticket->sku . "</h1>");
+            $response->end("Unknown promoter sku: " . $ticket->sku . "");
             $Pool->free_connection($dbConnection);
             return;
         }
 
         if ($data[0]['commerce_stock_value'] < $ticket->stock) {
-            print "!!!!!!!!";
-            $response->end("<h1>Insuffiecint stock: " . $ticket->stock . " for sku: " . $ticket->sku . "</h1>");
+            $response->end("Insuffiecint stock: " . $ticket->stock . " for sku: " . $ticket->sku);
             $Pool->free_connection($dbConnection);
             return;
         }
@@ -197,8 +190,8 @@ $http->on('request', function (Swoole\Http\Request $request, Swoole\Http\Respons
     $response->end(json_encode($user_response));
 
     // Insert order hash
-    //$stmt = $dbConnection->prepare('INSERT INTO order_unique_hash (`hash`) VALUES (:hash1)');
-    //$stmt->execute(['hash1' => $body->order_hash]);
+    $stmt = $dbConnection->prepare('INSERT INTO order_unique_hash (`hash`) VALUES (?)');
+    $stmt->execute([$body->order_hash]);
 
     $payload = array(array('request_body' => $body, 'tickets_arr' => $tickets_arr));
     $stmt4 = $dbConnection->prepare('INSERT INTO queue (`name`, `data`, `expire`, `created`) VALUES ("tickets_order_generator_queue", ?, 0, ?)');
