@@ -3,3 +3,6 @@ We use elysia so an example would be:
 * * * * * wget -O - -q -t 1 https://www.stage.ticketshit.net/sites/all/modules/elysia_cron/cron.php?cron_key=rnLrSn4T9bAV2jaZdMr1497WoIe1CmUqgqgS5iYv0SA
 
 To make the barcode http server a service create a symlink in /etc/systemd/system/ with barcodehttp.service or follow https://medium.com/@benmorel/creating-a-linux-service-with-systemd-611b5c8b91d6
+For status:    sudo systemctl status barcodehttp.service
+To start:      sudo systemctl start barcodehttp.service
+To stop:       sudo systemctl sttop barcodehttp.service
