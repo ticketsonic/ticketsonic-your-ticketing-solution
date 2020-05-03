@@ -1,0 +1,14 @@
+[Unit]
+Description=barcode generator service
+After=mysqld.service
+StartLimitBurst=2
+StartLimitIntervalSec=5
+[Service]
+Type=simple
+Restart=always
+RestartSec=1
+User=www-data
+ExecStart=/usr/bin/env php /opt/private/ticketshit-plugins/barcode-http/barcode-http.php
+
+[Install]
+WantedBy=multi-user.target
