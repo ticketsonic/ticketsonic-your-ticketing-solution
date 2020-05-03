@@ -6,3 +6,5 @@ To make the barcode http server a service create a symlink in /etc/systemd/syste
 For status:    sudo systemctl status barcodehttp.service
 To start:      sudo systemctl start barcodehttp.service
 To stop:       sudo systemctl sttop barcodehttp.service
+
+sudo service barcodehttp status/start/stop work as well.
