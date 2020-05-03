@@ -1,6 +1,13 @@
 <?php
 error_reporting(E_ALL);
 
+if (file_exists("settings.local.php")) {
+  require("settings.local.php");
+}
+else {
+  exit("Missing settings.local.php");
+}
+
 class Pool {
     public const MAX_CONNECTIONS = 5;//this is multiplied by the number of workers which is 12 cpu cores * 2 = 24 (so there are 24 * 5 = 120 connections)
     protected $available_connections = [];
@@ -33,11 +40,11 @@ interface ConnectionInterface { }
 
 class MysqlConnection implements ConnectionInterface {
     private const CONNECTION_SETTINGS = [
-        'host' => "localhost",
-        'port' => "3306",
-        'user' => "ticketshitlocal",
-        'password' => "CbLhsa7AcxQJhuSU",
-        'database' => "ticketshitlocal",
+        'host' => HOST,
+        'port' => PORT,
+        'user' => USER,
+        'password' => PASSWORD,
+        'database' => DB,
     ];
     
     private $SwooleMysql;
@@ -57,7 +64,7 @@ class MysqlConnection implements ConnectionInterface {
 }
 
 include_once 'helper.inc';
-$http = new Swoole\HTTP\Server("127.0.0.1", 9507);
+$http = new Swoole\HTTP\Server(HTTP_SERVER_IP, HTTP_SERVER_PORT);
 $http->set([
     'worker_num' => swoole_cpu_num() * 2,
     'log_file' => 'swoole.log',
