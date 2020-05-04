@@ -82,13 +82,15 @@ $http->on('request', function (Swoole\Http\Request $request, Swoole\Http\Respons
 
     $body = json_decode($request->rawcontent());
 
-    // Validate order hash
-    $stmt = $dbConnection->prepare('SELECT * FROM order_unique_hash WHERE `hash` = ?');
-    $rows = $stmt->execute([$body->order_hash]);
-    if (!empty($rows)) {
-        $response->header("Content-Type", "text/plain");
-        $response->end("Duplicated order");
-        return;
+    // Validate order hash if not in debug mode
+    if (DEBUG == FALSE) {
+        $stmt = $dbConnection->prepare('SELECT * FROM order_unique_hash WHERE `hash` = ?');
+        $rows = $stmt->execute([$body->order_hash]);
+        if (!empty($rows)) {
+            $response->header("Content-Type", "text/plain");
+            $response->end("Duplicated order");
+            return;
+        }
     }
 
     // Validate promoter email
@@ -191,9 +193,11 @@ $http->on('request', function (Swoole\Http\Request $request, Swoole\Http\Respons
     $user_response = array('status' => 'success', 'tickets' => $tickets_arr);
     $response->end(json_encode($user_response));
 
-    // Insert order hash
-    $stmt = $dbConnection->prepare('INSERT INTO order_unique_hash (`hash`) VALUES (?)');
-    $stmt->execute([$body->order_hash]);
+    // Insert order hash if not in debug
+    if (DEBUG == FALSE) {
+        $stmt = $dbConnection->prepare('INSERT INTO order_unique_hash (`hash`) VALUES (?)');
+        $stmt->execute([$body->order_hash]);
+    }
 
     $payload = array(array('request_body' => $body, 'tickets_arr' => $tickets_arr));
     $stmt4 = $dbConnection->prepare('INSERT INTO queue (`name`, `data`, `expire`, `created`) VALUES ("tickets_order_generator_queue", ?, 0, ?)');
