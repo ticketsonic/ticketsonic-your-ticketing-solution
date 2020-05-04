@@ -68,8 +68,8 @@ $http = new Swoole\HTTP\Server(HTTP_SERVER_IP, HTTP_SERVER_PORT, SWOOLE_PROCESS,
 $http->set([
     'worker_num' => swoole_cpu_num() * 2,
     //'log_file' => 'swoole.log',
-    'ssl_cert_file' => __DIR__ . '/ssl.crt',
-    'ssl_key_file' => __DIR__ . '/ssl.key',
+    'ssl_cert_file' => dirname(__FILE__) . '/ssl.crt',
+    'ssl_key_file' => dirname(__FILE__) . '/ssl.key',
   ]);
 
 $http->on('request', function (Swoole\Http\Request $request, Swoole\Http\Response $response) {
