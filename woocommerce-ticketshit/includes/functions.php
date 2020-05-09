@@ -299,7 +299,7 @@ function set_order_ts_meta_data($order_id) {
 			'Content-Type' => 'application/json; charset=utf-8',
 		//	"Authorization" => "Basic $auth",
 		),
-		// 'sslverify' => false,
+		'sslverify' => false,
 		'body'        => json_encode($data),
 		'method'      => 'POST',
 		'data_format' => 'body',
