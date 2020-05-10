@@ -39,7 +39,6 @@ class PDF extends FPDF {
 					$this->Cell(1,1,'',0, 0, '', true);
 				else
 					$this->Cell(1,1,'',0, 0, '', false);
-			//}
 			$this->Ln();
 		}
 	}

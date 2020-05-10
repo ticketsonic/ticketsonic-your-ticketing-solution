@@ -133,27 +133,6 @@ function woo_ts_tab_template( $tab = '' ) {
 			break;
 
 		case 'import':
-			/*$upload_dir = wp_upload_dir();
-			$max_upload = absint( ini_get( 'upload_max_filesize' ) );
-			$max_post = absint( ini_get( 'post_max_size' ) );
-			$memory_limit = absint( ini_get( 'memory_limit' ) );
-			$wp_upload_limit = round( wp_max_upload_size() / 1024 / 1024, 2 );
-			$upload_mb = min( $max_upload, $max_post, $memory_limit, $wp_upload_limit );
-			$file_path = $upload_dir['basedir'] . '/';
-			$file_path_relative = 'imports/store-a.csv';
-			$file_url = 'http://www.domain.com/wp-content/uploads/imports/store-a.jpg';
-			$file_ftp_host = 'ftp.domain.com';
-			$file_ftp_user = 'user';
-			$file_ftp_pass = 'password';
-			$file_ftp_port = '';
-			$file_ftp_path = 'wp-content/uploads/imports/store-a.jpg';
-			$file_ftp_timeout = '';
-			if( isset( $_POST['csv_file_path'] ) )
-				$file_path_relative = $_POST['csv_file_path'];
-
-			$csv_sample_link = 'http://www.visser.com.au/woocommerce/plugins/product-importer-deluxe/#sample-csv';
-			$csv_template_link = 'http://www.visser.com.au/woocommerce/plugins/product-importer-deluxe/#blank-csv';*/
-
 			if( isset( $_GET['import'] ) && $_GET['import'] == WOO_TS_PREFIX )
 				$url = 'import';
 			if( isset( $_GET['page'] ) && $_GET['page'] == WOO_TS_PREFIX )
@@ -170,22 +149,8 @@ function woo_ts_tab_template( $tab = '' ) {
 
 }
 	if( $tab ) {
-		if( file_exists( WOO_TS_PATH . 'templates/admin/tabs-' . $tab . '.php' ) ) //{
+		if( file_exists( WOO_TS_PATH . 'templates/admin/tabs-' . $tab . '.php' ) )
 			include_once( WOO_TS_PATH . 'templates/admin/tabs-' . $tab . '.php' );
-		/*} else {
-			$message = sprintf( __( 'We couldn\'t load the import template file <code>%s</code> within <code>%s</code>, this file should be present.', 'woo_ts' ), 'tabs-' . $tab . '.php', WOO_TS_PATH . 'templates/admin/...' );
-			woo_ts_admin_notice_html( $message, 'error' );
-			ob_start(); ?>
-<p><?php _e( 'You can see this error for one of a few common reasons', 'woo_ts' ); ?>:</p>
-<ul class="ul-disc">
-	<li><?php _e( 'WordPress was unable to create this file when the Plugin was installed or updated', 'woo_ts' ); ?></li>
-	<li><?php _e( 'The Plugin files have been recently changed and there has been a file conflict', 'woo_ts' ); ?></li>
-	<li><?php _e( 'The Plugin file has been locked and cannot be opened by WordPress', 'woo_ts' ); ?></li>
-</ul>
-<p><?php _e( 'Jump onto our website and download a fresh copy of this Plugin as it might be enough to fix this issue. If this persists get in touch with us.', 'woo_ts' ); ?></p>
-<?php
-			ob_end_flush();
-		}*/
 	}
 
 }

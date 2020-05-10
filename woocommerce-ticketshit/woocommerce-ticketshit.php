@@ -47,22 +47,6 @@ if( is_admin() ) {
 		if( current_user_can( 'manage_woocommerce' ) == false )
 			return;
 
-		// Check if Product Importer should run
-		/*$product_importer = false;
-		if( isset( $_GET['import'] ) || isset( $_GET['page'] ) ) {
-			if( isset( $_GET['import'] ) ) {
-				if( $_GET['import'] == WOO_TS_PREFIX )
-					$product_importer = true;
-			}
-			if( isset( $_GET['page'] ) ) {
-				if( $_GET['page'] == WOO_TS_PREFIX )
-					$product_importer = true;
-			}
-		}
-		if( $product_importer !== true )
-			return;
-
-		@ini_set( 'memory_limit', WP_MAX_MEMORY_LIMIT );*/
 		woo_ts_import_init();
 
 	}
@@ -79,15 +63,6 @@ if( is_admin() ) {
 
 		$action = ( function_exists( 'woo_get_action' ) ? woo_get_action() : false );
 		$title = __( 'Product Importer', 'woo_ts' );
-		/*if( in_array( $action, array( 'upload', 'save' ) ) && !$import->cancel_import ) {
-			if( $file = woo_ts_get_option( 'csv' ) )
-				$title .= ': <em>' . basename( $file ) . '</em>';
-		}
-
-		$troubleshooting_url = 'http://www.visser.com.au/woocommerce/documentation/plugins/product-importer-deluxe/usage/';
-
-		$woo_pd_url = 'http://www.visser.com.au/woocommerce/plugins/product-importer-deluxe/';
-		$woo_pd_link = sprintf( '<a href="%s" target="_blank">' . __( 'Product Importer Deluxe', 'woo_ts' ) . '</a>', $woo_pd_url );*/
 
 		woo_ts_template_header( $title );
 		switch( $action ) {
