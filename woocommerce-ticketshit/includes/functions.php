@@ -55,7 +55,6 @@ if (is_admin()) {
 							$objTicket = new WC_Product_Simple($woo_product_id);
 						}
 
-						
 						$objTicket->set_sku($ticket->sku);
 						$objTicket->set_name($ticket->ticket_title_en . ' ' . $ticket->ticket_description_en);
 						$objTicket->set_status("publish");
