@@ -162,7 +162,7 @@ function set_order_ts_meta_data($order_id) {
 		'promoter_api_key' => woo_ts_get_option('api_key', ''),
 		'order_hash' => bin2hex(openssl_random_pseudo_bytes(16)),
 		'order_details' => array(
-			'customer_shipping_name' => get_customer_name($order)
+			'customer_billing_name' => get_customer_name($order)
 		),
 		'tickets' => array()
 	);
