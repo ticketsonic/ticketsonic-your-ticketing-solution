@@ -110,4 +110,8 @@ function allowed_html() {
 		),
 	);
 }
+
+function get_customer_name($order) {
+	return $order->get_billing_first_name() . ' ' . $order->get_billing_last_name();
+}
 ?>

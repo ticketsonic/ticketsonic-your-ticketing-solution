@@ -161,7 +161,9 @@ function set_order_ts_meta_data($order_id) {
 		'promoter_email' => woo_ts_get_option('promoter_email', ''),
 		'promoter_api_key' => woo_ts_get_option('api_key', ''),
 		'order_hash' => bin2hex(openssl_random_pseudo_bytes(16)),
-		'customer_email' => woo_ts_get_option('promoter_email', ''),
+		'order_details' => array(
+			'customer_shipping_name' => get_customer_name($order)
+		),
 		'tickets' => array()
 	);
 
