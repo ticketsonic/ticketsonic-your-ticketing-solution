@@ -21,6 +21,8 @@ if (is_admin()) {
 				woo_ts_update_option( 'mode', ( isset( $_POST['mode'] ) ? sanitize_text_field( $_POST['mode'] ) : '' ) );
 				woo_ts_update_option( 'api_key', ( isset( $_POST['api_key'] ) ? sanitize_text_field( $_POST['api_key'] ) : '' ) );
 				woo_ts_update_option( 'promoter_email', ( isset( $_POST['promoter_email'] ) ? sanitize_text_field( $_POST['promoter_email'] ) : '' ) );
+				woo_ts_update_option( 'email_subject', ( isset( $_POST['email_subject'] ) ? sanitize_text_field( $_POST['email_subject'] ) : '' ) );
+				woo_ts_update_option( 'email_body', ( isset( $_POST['email_body'] ) ? wp_kses($_POST['email_body'], allowed_html()) : '' ) );
 				woo_ts_update_option( 'ticket_info_endpoint', ( isset( $_POST['ticket_info_endpoint'] ) ? sanitize_text_field( $_POST['ticket_info_endpoint'] ) : '' ) );
 				woo_ts_update_option( 'external_order_endpoint', ( isset( $_POST['external_order_endpoint'] ) ? sanitize_text_field( $_POST['external_order_endpoint'] ) : '' ) );
 
@@ -99,7 +101,7 @@ function ts_post_get_my_passes() {
 	$response = wp_remote_post($url, array(
 		'sslverify' => false,
 		'method' => 'POST',
-		'timeout'     => 45,
+		'timeout' => 45,
 		'body' => array(
 			'email' => woo_ts_get_option('promoter_email', ''),
 			'api_key' => woo_ts_get_option('api_key', ''),
@@ -133,6 +135,7 @@ function woo_ts_init() {
 		)
 	);
 
+	// TODO: Add catch handler
 	wp_mkdir_p(WP_PLUGIN_DIR . '/woocommerce-ticketshit/tickets/');
 	wp_mkdir_p(WOO_TS_UPLOADPATH);
 }
@@ -142,16 +145,15 @@ add_action( 'init', 'woo_ts_init' );
 function woo_ts_i18n() {
 	$locale = apply_filters( 'plugin_locale', get_locale(), 'woocommerce-product-importer' );
 	load_plugin_textdomain( 'woocommerce-product-importer', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
-
 }
 add_action( 'init', 'woo_ts_i18n' );
 
+// TODO: Is this needed?
 add_action('woocommerce_payment_complete', 'mysite_woocommerce_payment_complete');
 function mysite_woocommerce_payment_complete($order_id) {
 	write_log('mysite_woocommerce_payment_complete for order ' . $order_id . ' is fired');
 }
 
-// add_action('woocommerce_thankyou', 'request_barcodes_from_ts', 10, 1);
 add_action('woocommerce_order_status_processing', 'set_order_ts_meta_data', 10, 1);
 function set_order_ts_meta_data($order_id) {
 	write_log('request_barcodes_from_ts for order ' . $order_id . ' is fired');
@@ -238,12 +240,13 @@ function send_tickets_to_email_after_order_completed($order_id) {
 	$pdf_ticket_files = $order->get_meta("pdf_tickets");
 
 	if (!empty($pdf_ticket_files)) {
-		//$ts_order_id = array_keys($pdf_ticket_files)[0];
 		foreach($pdf_ticket_files[$order_id] as $value) {
+			// TODO: Check if there are files generated
 			$pdf_ticket_files_paths[] = WP_PLUGIN_DIR . '/woocommerce-ticketshit/tickets/' . $order_id . '/' . $value . '.pdf';
 			write_log('adding: ' . WP_PLUGIN_DIR . '/woocommerce-ticketshit/tickets/' . $order_id . '/' . $value . '.pdf');
 		}
 		
+		// TODO: Check if there are files generated
 		$pdf_ticket_files_paths[] = WP_PLUGIN_DIR . '/woocommerce-ticketshit/tickets/' . $order_id . '/tickets.pdf';
 		$mail_sent = send_tickets_by_mail($order->get_billing_email(), $order_id, $pdf_ticket_files_paths);
 		write_log('mail status: ' . $mail_sent);
@@ -258,8 +261,8 @@ function send_tickets_to_email_after_order_completed($order_id) {
 function send_tickets_by_mail($target_user_mail, $order_id, $tickets_absolute_path) {
 	write_log('send_tickets_to_email_after_payment_confirmed fired');
 	if (!empty($tickets_absolute_path)) {
-		$headers = array();
-		$mail_sent = wp_mail($target_user_mail, 'Your Grand Conderence tickets for order ' . $order_id . ' are ready!', 'Your Grand Conderence tickets are ready!', $headers, $tickets_absolute_path);
+		$headers = array('Content-Type: text/html; charset=UTF-8');
+		$mail_sent = wp_mail($target_user_mail, woo_ts_get_option('email_subject', ''), woo_ts_get_option('email_body', ''), $headers, $tickets_absolute_path);
 
 		return $mail_sent;
 	}
@@ -274,6 +277,7 @@ function generate_pdf_ticket_files($json_response, $order_id) {
 		return;
 	}
 
+	// TODO: Add a check if is writable
 	wp_mkdir_p(WP_PLUGIN_DIR . '/woocommerce-ticketshit/tickets/' . $order_id . '/');
 
 	$ticket_file_paths = array();
@@ -297,6 +301,7 @@ function generate_pdf_ticket_files($json_response, $order_id) {
 		
 		$pdf_ticket->set_text($woo_product->get_name(), $woo_product->get_description(), $formatted_price);
 		$pdf_ticket->set_qr(qr_binary_to_binary(base64_encode($sensitive_decoded)));
+		// TODO: Check if it is writable
 		$pdf_ticket->Output('F', WP_PLUGIN_DIR . '/woocommerce-ticketshit/tickets/' . $order_id . '/' . $key . '.pdf');
 		$ticket_file_paths[] = WP_PLUGIN_DIR . '/woocommerce-ticketshit/tickets/' . $order_id . '/' . $key . '.pdf';
 
@@ -315,6 +320,7 @@ function generate_pdf_ticket_files($json_response, $order_id) {
 	write_log("end: " . $endtime);
 	write_log("time diff: " . $temp);
 
+	// TODO: Check if it is writable
 	$order_ticket->Output('F', WP_PLUGIN_DIR . '/woocommerce-ticketshit/tickets/' . $order_id . '/tickets.pdf');
 	$ticket_file_paths[] = WP_PLUGIN_DIR . '/woocommerce-ticketshit/tickets/' . $order_id . '/tickets.pdf';
 	

@@ -70,6 +70,24 @@
 					<p class="description"><?php _e( 'PDF Background', 'woo_ts' ); ?>.</p>
 				</td>
 			</tr>
+			<tr>
+				<th>
+					<label for="email_subject"><?php _e('Ticket\'S HIT E-mail Subject', 'woo_ts' ); ?></label>
+				</th>
+				<td>
+					<input type="text" size="30" id="email_subject" name="email_subject" value="<?php echo $email_subject; ?>" class="text" />
+					<p class="description"><?php _e( 'Ticket\'S HIT E-mail Subject', 'woo_ts' ); ?>.</p>
+				</td>
+			</tr>
+			<tr>
+				<th>
+					<label for="email_body"><?php _e('Ticket\'S HIT E-mail Body', 'woo_ts' ); ?></label>
+				</th>
+				<td>
+					<textarea id="email_body" name="email_body" rows="5" cols="50"><?php echo $email_body; ?></textarea>
+					<p class="description"><?php _e( 'Ticket\'S HIT E-mail Body', 'woo_ts' ); ?>.</p>
+				</td>
+			</tr>
 		</tbody>
 	</table>
 	<!-- .form-table -->

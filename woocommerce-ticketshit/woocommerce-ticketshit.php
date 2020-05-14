@@ -1,11 +1,11 @@
 <?php
 /*
 Plugin Name: WooCommerce - Ticket Importer
-Plugin URI: http://www.visser.com.au/woocommerce/plugins/product-importer/
-Description: Import new Products into your WooCommerce store from simple formatted files (e.g. CSV, TXT, etc.).
-Version: 1.3.1
-Author: Visser Labs
-Author URI: http://www.visser.com.au/about/
+Plugin URI: https://github.com/vgvassilev/ticketshit-plugins/tree/master/woocommerce-ticketshit
+Description: Import Tickets (products) into your WooCommerce store from Ticket's HIT system
+Version: 0.1
+Author: Martin Vassilev
+Author URI: https://github.com/mvassilev/
 License: GPL2
 
 Text Domain: woocommerce-product-importer
@@ -27,10 +27,6 @@ define( 'WOO_TS_PLUGINPATH', WP_PLUGIN_URL . '/' . basename( dirname( __FILE__ )
 $uploads_dir = wp_get_upload_dir();
 define( 'WOO_TS_UPLOADPATH', $uploads_dir['basedir'] . '/' . WOO_TS_DIRNAME );
 define( 'WOO_TS_UPLOADURLPATH', $uploads_dir['baseurl'] . '/' . WOO_TS_DIRNAME );
-
-// Turn this on to enable additional debugging options within the importer
-//f( !defined( 'woo_ts_DEBUG' ) )
-//	define( 'woo_ts_DEBUG', false );
 
 include_once( WOO_TS_PATH . 'includes/functions.php' );
 include_once( WOO_TS_PATH . 'includes/phpqrcode/qrlib.php' );
@@ -54,9 +50,7 @@ if( is_admin() ) {
 
 	// HTML templates and form processor for Product Importer screen
 	function woo_ts_html_page() {
-
 		global $import;
-
 		// Check the User has the manage_woocommerce capability
 		if( current_user_can( 'manage_woocommerce' ) == false )
 			return;
@@ -66,7 +60,6 @@ if( is_admin() ) {
 
 		woo_ts_template_header( $title );
 		switch( $action ) {
-
 			case 'save':
 				// Display the opening Import tab if the import fails
 				if( $import->cancel_import == false ) {
