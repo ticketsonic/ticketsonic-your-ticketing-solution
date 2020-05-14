@@ -84,7 +84,7 @@
 					<label for="email_body"><?php _e('Ticket\'S HIT E-mail Body', 'woo_ts' ); ?></label>
 				</th>
 				<td>
-					<textarea id="email_body" name="email_body" rows="5" cols="50"><?php echo $email_body; ?></textarea>
+					<textarea id="email_body" name="email_body" rows="5" cols="150"><?php echo $email_body; ?></textarea>
 					<p class="description"><?php _e( 'Ticket\'S HIT E-mail Body', 'woo_ts' ); ?>.</p>
 				</td>
 			</tr>
