@@ -18,7 +18,7 @@
 			<tr id="csv-settings">
 				<td colspan="2" style="padding:0;">
 					<hr />
-					<h3><div class="dashicons dashicons-media-spreadsheet"></div>&nbsp;<?php _e( 'CSV Settings', 'woo_ts' ); ?></h3>
+					<h3><div class="dashicons dashicons-media-spreadsheet"></div>&nbsp;<?php _e( 'Settings', 'woo_ts' ); ?></h3>
 				</td>
 			</tr>
 
