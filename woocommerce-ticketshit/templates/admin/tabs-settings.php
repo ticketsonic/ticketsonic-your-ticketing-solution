@@ -24,40 +24,40 @@
 
 			<tr>
 				<th>
-					<label for="ticket_info_endpoint"><?php _e('Ticket\'S HIT Get Ticket Info Endpoint API', 'woo_ts' ); ?></label>
+					<label for="ticket_info_endpoint"><?php _e('Ticket\'s HIT Get Ticket Info Endpoint API', 'woo_ts' ); ?></label>
 				</th>
 				<td>
 					<input type="text" size="50" id="ticket_info_endpoint" name="ticket_info_endpoint" value="<?php echo $ticket_info_endpoint; ?>" class="text" />
-					<p class="description"><?php _e( 'Ticket\'S HIT Ticket Endpoint API', 'woo_ts' ); ?>.</p>
+					<p class="description"><?php _e( 'Ticket\'s HIT Ticket Endpoint API', 'woo_ts' ); ?>.</p>
 				</td>
 			</tr>
 
 			<tr>
 				<th>
-					<label for="external_order_endpoint"><?php _e('Ticket\'S HIT Order Endpoint API', 'woo_ts' ); ?></label>
+					<label for="external_order_endpoint"><?php _e('Ticket\'s HIT Order Endpoint API', 'woo_ts' ); ?></label>
 				</th>
 				<td>
 					<input type="text" size="50" id="external_order_endpoint" name="external_order_endpoint" value="<?php echo $external_order_endpoint; ?>" class="text" />
-					<p class="description"><?php _e( 'Ticket\'S HIT Order Endpoint API', 'woo_ts' ); ?>.</p>
+					<p class="description"><?php _e( 'Ticket\'s HIT Order Endpoint API', 'woo_ts' ); ?>.</p>
 				</td>
 			</tr>
 
 			<tr>
 				<th>
-					<label for="promoter_email"><?php _e('Ticket\'S HIT Promoter E-mail', 'woo_ts' ); ?></label>
+					<label for="promoter_email"><?php _e('Ticket\'s HIT Promoter E-mail', 'woo_ts' ); ?></label>
 				</th>
 				<td>
 					<input type="text" size="30" id="promoter_email" name="promoter_email" value="<?php echo $promoter_email; ?>" class="text" />
-					<p class="description"><?php _e( 'Ticket\'S HIT Promoter E-mail', 'woo_ts' ); ?>.</p>
+					<p class="description"><?php _e( 'Ticket\'s HIT Promoter E-mail', 'woo_ts' ); ?>.</p>
 				</td>
 			</tr>
 			<tr>
 				<th>
-					<label for="api_key"><?php _e('Ticket\'S HIT Promoter API Key', 'woo_ts' ); ?></label>
+					<label for="api_key"><?php _e('Ticket\'s HIT Promoter API Key', 'woo_ts' ); ?></label>
 				</th>
 				<td>
 					<input type="text" size="30" id="api_key" name="api_key" value="<?php echo $api_key; ?>" class="text" />
-					<p class="description"><?php _e( 'Ticket\'S HIT Promoter API Key', 'woo_ts' ); ?>.</p>
+					<p class="description"><?php _e( 'Ticket\'s HIT Promoter API Key', 'woo_ts' ); ?>.</p>
 				</td>
 			</tr>
 			<tr>
@@ -72,20 +72,20 @@
 			</tr>
 			<tr>
 				<th>
-					<label for="email_subject"><?php _e('Ticket\'S HIT E-mail Subject', 'woo_ts' ); ?></label>
+					<label for="email_subject"><?php _e('Ticket\'s HIT E-mail Subject', 'woo_ts' ); ?></label>
 				</th>
 				<td>
 					<input type="text" size="30" id="email_subject" name="email_subject" value="<?php echo $email_subject; ?>" class="text" />
-					<p class="description"><?php _e( 'Ticket\'S HIT E-mail Subject', 'woo_ts' ); ?>.</p>
+					<p class="description"><?php _e( 'Ticket\'s HIT E-mail Subject', 'woo_ts' ); ?>.</p>
 				</td>
 			</tr>
 			<tr>
 				<th>
-					<label for="email_body"><?php _e('Ticket\'S HIT E-mail Body', 'woo_ts' ); ?></label>
+					<label for="email_body"><?php _e('Ticket\'s HIT E-mail Body', 'woo_ts' ); ?></label>
 				</th>
 				<td>
 					<textarea id="email_body" name="email_body" rows="5" cols="150"><?php echo $email_body; ?></textarea>
-					<p class="description"><?php _e( 'Ticket\'S HIT E-mail Body', 'woo_ts' ); ?>.</p>
+					<p class="description"><?php _e( 'Ticket\'s HIT E-mail Body', 'woo_ts' ); ?>.</p>
 				</td>
 			</tr>
 		</tbody>
