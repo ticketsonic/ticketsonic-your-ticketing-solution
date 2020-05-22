@@ -140,7 +140,6 @@ function woo_ts_tab_template( $tab = '' ) {
 			break;
 
 		case 'settings':
-			$mode = woo_ts_get_option( 'mode', '' );
 			$api_key = woo_ts_get_option( 'api_key', ',' );
 			$promoter_email = woo_ts_get_option( 'promoter_email', '');
 			$email_subject = woo_ts_get_option( 'email_subject', '');
@@ -155,34 +154,6 @@ function woo_ts_tab_template( $tab = '' ) {
 			include_once( WOO_TS_PATH . 'templates/admin/tabs-' . $tab . '.php' );
 	}
 
-}
-
-function woo_ts_modules_status_class( $status = 'inactive' ) {
-	$output = '';
-	switch( $status ) {
-		case 'active':
-			$output = 'green';
-			break;
-
-		case 'inactive':
-			$output = 'yellow';
-			break;
-	}
-	echo $output;
-}
-
-function woo_ts_modules_status_label( $status = 'inactive' ) {
-	$output = '';
-	switch( $status ) {
-		case 'active':
-			$output = __( 'OK', 'woo_ts' );
-			break;
-
-		case 'inactive':
-			$output = __( 'Install', 'woo_ts' );
-			break;
-	}
-	echo $output;
 }
 
 ?>

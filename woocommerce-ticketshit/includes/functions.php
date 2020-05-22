@@ -1,6 +1,8 @@
 <?php
 
 require('helper.php');
+require('cryptography.php');
+require('bridge.php');
 require('pdf.php');
 
 if (is_admin()) {
@@ -10,11 +12,7 @@ if (is_admin()) {
 		$wpdb->hide_errors();
 		@ob_start();
 
-		$mode = "demo";
-		if( isset( $_POST['mode'] ) )
-			$mode = sanitize_text_field( $_POST['mode'] );
-
-		$action = ( function_exists( 'woo_get_action' ) ? woo_get_action() : false );
+		$action = woo_ts_get_action();
 		switch( $action ) {
 			case 'save-settings':
 				woo_ts_update_option( 'delete_file', ( isset( $_POST['delete_file'] ) ? absint( $_POST['delete_file'] ) : 0 ) );
@@ -33,7 +31,7 @@ if (is_admin()) {
 				break;
 
 			case 'sync_with_ts':
-				$response = ts_post_get_my_passes();
+				$response = get_ticket_data_from_origin();
 				
 				if (is_wp_error($response)) {
 					woo_ts_admin_notice($response->get_error_message(), 'error');
@@ -93,65 +91,25 @@ if (is_admin()) {
 				break;
 		}
 	}
-}
 
-function ts_post_get_my_passes() {
-	$mode = woo_ts_get_option( 'mode', 0 );
-	$url = woo_ts_get_option('ticket_info_endpoint', '');
-	$response = wp_remote_post($url, array(
-		'sslverify' => false,
-		'method' => 'POST',
-		'timeout' => 45,
-		'body' => array(
-			'email' => woo_ts_get_option('promoter_email', ''),
-			'api_key' => woo_ts_get_option('api_key', ''),
-		)
-	));
+	// Add plugin ticket term
+	function woo_ts_structure_init() {
+		wp_insert_term('Ticket\'s HIT Tickets','product_cat',
+			array(
+			'description'=> 'Ticket’s HIT Tickets imported tickets.',
+			'slug' => 'ticketshit'
+			)
+		);
 
-	return $response;
-}
-
-if( !function_exists( 'woo_get_action' ) ) {
-	function woo_get_action( $prefer_get = false ) {
-		if ( isset( $_GET['action'] ) && $prefer_get )
-			return sanitize_text_field( $_GET['action'] );
-
-		if ( isset( $_POST['action'] ) )
-			return sanitize_text_field( $_POST['action'] );
-
-		if ( isset( $_GET['action'] ) )
-			return sanitize_text_field( $_GET['action'] );
-
-		return false;
+		// TODO: Add catch handler
+		wp_mkdir_p(WP_PLUGIN_DIR . '/woocommerce-ticketshit/tickets/');
+		wp_mkdir_p(WOO_TS_UPLOADPATH);
 	}
 }
 
-// Add plugin ticket term
-function woo_ts_init() {
-	wp_insert_term('Ticket\'s HIT Tickets','product_cat',
-		array(
-		  'description'=> 'Ticket’s HIT Tickets imported tickets.',
-		  'slug' => 'ticketshit'
-		)
-	);
-
-	// TODO: Add catch handler
-	wp_mkdir_p(WP_PLUGIN_DIR . '/woocommerce-ticketshit/tickets/');
-	wp_mkdir_p(WOO_TS_UPLOADPATH);
-}
-add_action( 'init', 'woo_ts_init' );
-
-// Plugin language support
-function woo_ts_i18n() {
-	$locale = apply_filters( 'plugin_locale', get_locale(), 'woocommerce-product-importer' );
-	load_plugin_textdomain( 'woocommerce-product-importer', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
-}
-add_action( 'init', 'woo_ts_i18n' );
-
-// TODO: Is this needed?
 add_action('woocommerce_payment_complete', 'mysite_woocommerce_payment_complete');
 function mysite_woocommerce_payment_complete($order_id) {
-	write_log('mysite_woocommerce_payment_complete for order ' . $order_id . ' is fired');
+	// write_log('mysite_woocommerce_payment_complete for order ' . $order_id . ' is fired');
 }
 
 add_action('woocommerce_order_status_processing', 'set_order_ts_meta_data', 10, 1);
@@ -175,7 +133,6 @@ function set_order_ts_meta_data($order_id) {
 		$data['tickets'][] = array('sku' => $ticket->get_sku(), 'stock' => $item['quantity']);
 	}
 
-	$mode = woo_ts_get_option('mode', '');
 	$url = woo_ts_get_option('external_order_endpoint', '');
 	
 	write_log('sending req to TS');
@@ -187,7 +144,7 @@ function set_order_ts_meta_data($order_id) {
 		'body'        => json_encode($data),
 		'method'      => 'POST',
 		'data_format' => 'body',
-		'timeout' => 45,
+		'timeout' => 10,
 	));
 
 	write_log('result from the request to TS for ' . $order_id . ' is received');
@@ -256,6 +213,65 @@ function send_tickets_to_email_after_order_completed($order_id) {
 	}
 
 	write_log('PDF tickets for order ' . $order_id . ' are sent via mail to ' . $order->get_billing_email());
+}
+
+add_action('manage_shop_order_posts_custom_column', 'add_tickets_link_value', 2);
+function add_tickets_link_value($column) {
+	global $the_order;
+
+	if ($column == 'get_tickets_column') {
+		echo (print_r($the_order->get_meta("tickets"), 1));
+	}
+}
+
+add_action( 'woocommerce_admin_order_data_after_order_details', 'edit_order_meta_general' );
+function edit_order_meta_general($order) {
+	print "<br class='clear' />";
+	print "<h4>PDF Tickets</h4>";
+	$pdf_ticket_files = $order->get_meta("pdf_tickets");
+	if (!empty($pdf_ticket_files)) {
+		$order_id = array_keys($pdf_ticket_files)[0];
+		foreach($pdf_ticket_files[$order_id] as $key => $line_item) {
+			print('<div><a href="' . content_url() . '/plugins/woocommerce-ticketshit/tickets/' . $order_id . '/' . $key . '.pdf">Tickets</a></div>');
+		}
+		print "<br class='clear' />";
+		print('<div><a href="' . content_url() . '/plugins/woocommerce-ticketshit/tickets/' . $order_id . '/tickets.pdf">All Tickets</a></div>');
+	} else {
+		print('<div>No PDF tickets found for this order</div>');
+	}
+}
+
+function woo_ts_get_action( $prefer_get = false ) {
+	if ( isset( $_GET['action'] ) && $prefer_get )
+		return sanitize_text_field( $_GET['action'] );
+
+	if ( isset( $_POST['action'] ) )
+		return sanitize_text_field( $_POST['action'] );
+
+	if ( isset( $_GET['action'] ) )
+		return sanitize_text_field( $_GET['action'] );
+
+	return false;
+}
+
+function woo_ts_get_option( $option = null, $default = false, $allow_empty = false ) {
+	$output = '';
+	if( isset( $option ) ) {
+		$separator = '_';
+		$output = get_option( WOO_TS_PREFIX . $separator . $option, $default );
+		if( $allow_empty == false && $output != 0 && ( $output == false || $output == '' ) )
+			$output = $default;
+	}
+	return $output;
+}
+
+function woo_ts_update_option( $option = null, $value = null ) {
+	$output = false;
+	if( isset( $option ) && isset( $value ) ) {
+		$separator = '_';
+		$output = update_option( WOO_TS_PREFIX . $separator . $option, $value );
+	}
+	return $output;
 }
 
 function send_tickets_by_mail($target_user_mail, $order_id, $tickets_absolute_path) {
@@ -338,147 +354,97 @@ function generate_order_info_array($json_response, $order_id) {
 	return $line_items_array;
 }
 
-function parse_raw_recrypted_ticket($raw_decrypted_ticket) {
-	$result = array();
-	$checksum = 0;
-	$checksumpos = 0;
-	$i = 0;
-	try {
-		while ($i < strlen($raw_decrypted_ticket)) {
-			$label = $raw_decrypted_ticket[$i++];
-			$len = ord($raw_decrypted_ticket[$i++]);
-			switch ($label) {
-				case 'V':
-					$result['version'] = bin_to_int_data(substr($raw_decrypted_ticket, $i, $len));
-					break;
-
-				case 'H':
-					$result['barcode'] = substr($raw_decrypted_ticket, $i, $len);
-					break;
-
-				case '$':
-					$result['price'] = bin_to_int_data(substr($raw_decrypted_ticket, $i, $len));
-					break;
-
-				case 'E':
-					$result['event_id'] = bin_to_int_data(substr($raw_decrypted_ticket, $i, $len));
-					break;
-
-				case 'S':
-					$result['segment1'] = bin_to_int_data(substr($raw_decrypted_ticket, $i, $len));
-					break;
-
-				case 'B':
-					$result['segment2'] = bin_to_int_data(substr($raw_decrypted_ticket, $i, $len));
-					break;
-
-				case 'R':
-					$result['segment3'] = bin_to_int_data(substr($raw_decrypted_ticket, $i, $len));
-					break;
-
-				case 'P':
-					$result['segment4'] = bin_to_int_data(substr($raw_decrypted_ticket, $i, $len));
-					break;
-
-				// TODO: we do not really have event like this to implement this feature
-				case 'T':
-					$result['expiry'] = bin_to_int_data(substr($raw_decrypted_ticket, $i, $len));
-					break;
-
-				case 'X':
-					$temp = substr($raw_decrypted_ticket, $i, $len);
-					$delimiter_pos = strpos($temp, '=');
-
-					$result['extension.' . substr($temp, 0, $delimiter_pos)] = substr($temp, $delimiter_pos + 1);
-					break;
-
-				case 'C':
-					$checksumpos = $i - 2;
-					$checksum = bin_to_int_data(substr($raw_decrypted_ticket, $i, $len));
-					break;
-				
-				default:
-					$result[$label] = substr($raw_decrypted_ticket, $i, $len);
-					$result['warning'] = "Unrecognized label";
-					break;
-			}
-			$i += $len;
-		}
-	} catch (Exception $e) {
-		$result["error"] = 1;
-	}
-
-	if ($checksumpos > 0) {
-		$c = 0;
-		for ($i = 0; $i < $checksumpos; $i++) {
-			$c = ($c + ord($raw_decrypted_ticket[$i])) & 0xFFFF;
-		}
-		
-		if ($c != $checksum) {
-			$result["error"] = 1;
-		}
-	}
-
-	return $result;
+function wpse_141088_upload_dir( $dir ) {
+    return array(
+        'path'   => WOO_TS_UPLOADPATH,
+        'url'    => WOO_TS_UPLOADPATH,
+        'subdir' => '/' . WOO_TS_DIRNAME,
+    ) + $dir;
 }
 
-function bin_to_int_data($str) {
-	$result = 0;
-	for ($i = strlen($str) - 1; $i >= 0; $i--) {
-		$result = ($result << 8) | ord($str[$i]);
-	}
+function upload_custom_ticket_background() {
+    add_filter( 'upload_dir', 'wpse_141088_upload_dir' );
+    include_once( ABSPATH . 'wp-admin/includes/file.php' );
+    include_once(ABSPATH . 'wp-admin/includes/media.php');
+    
+    $allowed_file_types = array('jpg' =>'image/jpeg','jpeg' =>'image/jpeg', 'gif' => 'image/gif', 'png' => 'image/png');
+    $upload_overrides = array( 'test_form' => false, 'unique_filename_callback' => 'filename_renamer', 'mimes' => $allowed_file_types);
+    $uploadedfile = $_FILES['fileToUpload'];
 
-	return $result;
+    $movefile = wp_handle_upload($uploadedfile, $upload_overrides);
+    if (!$movefile || isset($movefile['error']) ) {
+        woo_ts_admin_notice($movefile['error'], 'error');
+    }
+
+    remove_filter( 'upload_dir', 'wpse_141088_upload_dir' );
 }
 
-function qr_binary_to_html_table($raw_input) {
-	$binary_input = QRcode::text($raw_input);
-	$output = "<table><tbody>";
-	foreach($binary_input as $line) {
-		//die(gettype($line));
-		$output .= "<tr>";
-		$patterns = array();
-		$patterns[0] = '/0/';
-		$patterns[1] = '/1/';
-		$replacements = array();
-		$replacements[1] = '<td></td>';
-		$replacements[0] = '<th></th>';
-		
-		$output .= preg_replace($patterns, $replacements, $line);
-		$output .= "</tr>";
-	}
-	$output .= "</tbody></table>";
-	return $output;
+function filename_renamer($dir, $name, $ext){
+    return 'pdf_background' . $ext;
 }
 
-function qr_binary_to_binary($raw_input) {
-	return QRcode::text($raw_input);
+function allowed_html() {
+	return array (
+		'html' => array (
+			'href' => array(),
+			'class' => array(),
+			'style' => array(),
+		),
+		'body' => array (
+			'href' => array(),
+			'class' => array(),
+			'style' => array(),
+		),
+		'style' => array (
+			'href' => array(),
+			'class' => array(),
+			'style' => array(),
+		),
+		'table' => array (
+			'href' => array(),
+			'class' => array(),
+			'style' => array(),
+		),
+		'tbody' => array (
+			'href' => array(),
+			'class' => array(),
+			'style' => array(),
+		),
+		'th' => array (
+			'href' => array(),
+			'class' => array(),
+			'style' => array(),
+		),
+		'tr' => array (
+			'href' => array(),
+			'class' => array(),
+			'style' => array(),
+		),
+		'td' => array (
+			'href' => array(),
+			'class' => array(),
+			'style' => array(),
+		),
+		'div' => array (
+			'href' => array(),
+			'class' => array(),
+			'style' => array(),
+		),
+		'p' => array (
+			'href' => array(),
+			'class' => array(),
+			'style' => array(),
+		),
+		'h1' => array (
+			'href' => array(),
+			'class' => array(),
+			'style' => array(),
+		),
+	);
 }
 
-add_action('manage_shop_order_posts_custom_column', 'add_tickets_link_value', 2);
-function add_tickets_link_value($column) {
-	global $the_order;
-
-	if ($column == 'get_tickets_column') {
-		echo (print_r($the_order->get_meta("tickets"), 1));
-	}
-}
-
-add_action( 'woocommerce_admin_order_data_after_order_details', 'edit_order_meta_general' );
-function edit_order_meta_general($order) {
-	print "<br class='clear' />";
-	print "<h4>PDF Tickets</h4>";
-	$pdf_ticket_files = $order->get_meta("pdf_tickets");
-	if (!empty($pdf_ticket_files)) {
-		$order_id = array_keys($pdf_ticket_files)[0];
-		foreach($pdf_ticket_files[$order_id] as $key => $line_item) {
-			print('<div><a href="' . content_url() . '/plugins/woocommerce-ticketshit/tickets/' . $order_id . '/' . $key . '.pdf">Tickets</a></div>');
-		}
-		print "<br class='clear' />";
-		print('<div><a href="' . content_url() . '/plugins/woocommerce-ticketshit/tickets/' . $order_id . '/tickets.pdf">All Tickets</a></div>');
-	} else {
-		print('<div>No PDF tickets found for this order</div>');
-	}
+function get_customer_name($order) {
+	return $order->get_billing_first_name() . ' ' . $order->get_billing_last_name();
 }
 
 ?>

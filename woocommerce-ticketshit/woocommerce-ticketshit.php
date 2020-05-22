@@ -44,39 +44,22 @@ if( is_admin() ) {
 			return;
 
 		woo_ts_import_init();
+		woo_ts_structure_init();
 
 	}
 	add_action( 'admin_init', 'woo_ts_admin_init' );
 
 	// HTML templates and form processor for Product Importer screen
 	function woo_ts_html_page() {
-		global $import;
 		// Check the User has the manage_woocommerce capability
 		if( current_user_can( 'manage_woocommerce' ) == false )
 			return;
 
-		$action = ( function_exists( 'woo_get_action' ) ? woo_get_action() : false );
 		$title = __( 'Product Importer', 'woo_ts' );
 
 		woo_ts_template_header( $title );
-		switch( $action ) {
-			case 'save':
-				// Display the opening Import tab if the import fails
-				if( $import->cancel_import == false ) {
-					include_once( WOO_TS_PATH . 'templates/admin/import_save.php' );
-				} else {
-					woo_ts_manage_form();
-					return;
-				}
-				break;
-
-			default:
-				woo_ts_manage_form();
-				break;
-
-		}
+		woo_ts_manage_form();
 		woo_ts_template_footer();
-
 	}
 
 	// HTML template for Import screen
