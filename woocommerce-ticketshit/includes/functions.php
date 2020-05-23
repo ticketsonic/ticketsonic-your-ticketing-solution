@@ -102,7 +102,7 @@ if (is_admin()) {
 		);
 
 		// TODO: Add catch handler
-		wp_mkdir_p(WP_PLUGIN_DIR . '/woocommerce-ticketshit/tickets/');
+		wp_mkdir_p(WOO_TS_TICKETSDIR);
 		wp_mkdir_p(WOO_TS_UPLOADPATH);
 	}
 }
@@ -240,6 +240,25 @@ function edit_order_meta_general($order) {
 		print('<div>No PDF tickets found for this order</div>');
 	}
 }
+
+add_action( 'admin_notices', 'ticketsdir_writable_error_message' );
+function ticketsdir_writable_error_message() {
+    if (!is_writable(WOO_TS_TICKETSDIR)) {
+		print '<div class="error notice">';
+		print    '<p>Ensure ' . WOO_TS_TICKETSDIR . ' is writable</p>';
+		print '</div>';
+	}
+}
+
+add_action( 'admin_notices', 'uploadpath_writable_error_message' );
+function uploadpath_writable_error_message() {
+    if (!is_writable(WOO_TS_UPLOADPATH)) {
+		print '<div class="error notice">';
+		print    '<p>Ensure ' . WOO_TS_UPLOADPATH . ' is writable</p>';
+		print '</div>';
+	}
+}
+
 
 function woo_ts_get_action( $prefer_get = false ) {
 	if ( isset( $_GET['action'] ) && $prefer_get )
