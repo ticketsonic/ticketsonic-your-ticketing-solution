@@ -122,7 +122,8 @@ function set_order_ts_meta_data($order_id) {
 		'promoter_api_key' => woo_ts_get_option('api_key', ''),
 		'order_hash' => bin2hex(openssl_random_pseudo_bytes(16)),
 		'order_details' => array(
-			'customer_billing_name' => get_customer_name($order)
+			'customer_billing_name' => get_customer_name($order),
+			'customer_billing_company' => get_customer_company($order)
 		),
 		'tickets' => array()
 	);
@@ -464,6 +465,10 @@ function allowed_html() {
 
 function get_customer_name($order) {
 	return $order->get_billing_first_name() . ' ' . $order->get_billing_last_name();
+}
+
+function get_customer_company($order) {
+	return $order->get_billing_company();;
 }
 
 ?>
