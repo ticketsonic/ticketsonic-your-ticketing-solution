@@ -187,9 +187,11 @@ add_action('woocommerce_order_status_completed', 'send_tickets_to_email_after_or
 function send_tickets_to_email_after_order_completed($order_id) {
 	$order = wc_get_order($order_id);
 
-	// paypal does not fire the processing hook
-	if ($order->get_payment_method() == 'paypal')
-	  $order = set_order_ts_meta_data($order_id);
+        // Checking if there is a order meta data with the generated tickets
+        // Online payment methods skip the woocommerce_order_status_processing event
+        // We need to make sure we got the meta data for them too.
+        if (empty($order->get_meta("pdf_tickets")))
+          $order = set_order_ts_meta_data($order_id);
 
     write_log('woocommerce_order_status_completed');
 	write_log('send_tickets_to_email_after_order_completed for order ' . $order_id . ' is fired');
