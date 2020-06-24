@@ -327,7 +327,7 @@ function generate_pdf_ticket_files($json_response, $order_id) {
 		$sensitive_decoded = base64_decode($ticket->encrypted_data);
 		$is_decrypted = openssl_public_decrypt($sensitive_decoded, $sensitive_decrypted, $public_key);
 		$decrypted_ticket = parse_raw_recrypted_ticket($sensitive_decrypted);
-		$formatted_price = floatval($decrypted_ticket['price']) / 100;// . ' €';
+		$formatted_price = floatval($decrypted_ticket['price']) / 100 . ' ' . currency_to_ascii(get_woocommerce_currency());
 
 		$woo_product_id = wc_get_product_id_by_sku($ticket->sku);
 		$woo_product = new WC_Product_Simple($woo_product_id);
