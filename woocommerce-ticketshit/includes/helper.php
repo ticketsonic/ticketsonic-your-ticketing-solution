@@ -14,7 +14,7 @@ if (!function_exists('write_log')) {
 
 function currency_to_ascii($currency_code) {
     $currencies = array(
-        'BGN' => 'лв.',
+        'BGN' => 'BGN',
         'USD' => chr(36),
         'EUR' => chr(128),
         'GBP' => chr(163)
