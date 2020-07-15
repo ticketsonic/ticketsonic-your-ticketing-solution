@@ -85,6 +85,7 @@ if (is_admin()) {
 				}
 
 				woo_ts_admin_notice("Synced tickets: " . $importedCount, 'notice');
+				woo_ts_admin_notice("Public key: " . $json_response->api_public_key, 'notice');
 				// woo_ts_admin_notice("Already imported: " . $ignoredCount, 'notice');
 				woo_ts_update_option('api_public_key', "-----BEGIN PUBLIC KEY-----\n" . $json_response->api_public_key . "\n-----END PUBLIC KEY-----");
 
