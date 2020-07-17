@@ -1,8 +1,8 @@
 <?php
 
 require('helper.php');
+require('eventhome.php');
 require('cryptography.php');
-require('bridge.php');
 require('pdf.php');
 
 if (is_admin()) {
@@ -31,63 +31,15 @@ if (is_admin()) {
 				break;
 
 			case 'sync_with_ts':
-				$response = get_ticket_data_from_origin();
+				$url = woo_ts_get_option('ticket_info_endpoint', '');
+				$email = woo_ts_get_option('promoter_email', '');
+				$key = woo_ts_get_option('api_key', '');
 				
-				if (is_wp_error($response)) {
-					woo_ts_admin_notice($response->get_error_message(), 'error');
-					write_log('Error syncing with TS: '. $response->get_error_message());
-					return;
-				}
+				$result = Helper::sync_tickets($url, $email, $key);
 
-				$ticket = array();
-				$importedCount = 0;
-				$ignoredCount = 0;
-				
-				$json_response = json_decode($response['body']);
-				foreach ($json_response->tickets as $key => $ticket) {
-					try {
-						$woo_product_id = wc_get_product_id_by_sku($ticket->sku);
-
-						$objTicket = new WC_Product_Simple();
-
-						// Ticket does not exist so we skip
-						if ($woo_product_id != 0) {
-							$objTicket = new WC_Product_Simple($woo_product_id);
-						}
-
-						$objTicket->set_sku($ticket->sku);
-						$objTicket->set_name($ticket->ticket_title_en . ' ' . $ticket->ticket_description_en);
-						$objTicket->set_status("publish");
-						$objTicket->set_catalog_visibility('visible');
-						$objTicket->set_description($ticket->ticket_description_en);
-						
-						$price = (int)$ticket->price / 100;
-						$objTicket->set_price($price);
-						$objTicket->set_regular_price($price);
-						$objTicket->set_manage_stock(true);
-						$objTicket->set_stock_quantity($ticket->stock);
-						$objTicket->set_stock_status('instock');
-						$objTicket->set_sold_individually(false);
-						$objTicket->set_downloadable(true);
-						$objTicket->set_virtual(true);
-
-						$ticketshit_term = get_term_by("slug", "ticketshit", "product_cat");
-						if ($ticketshit_term) {
-							$objTicket->set_category_ids(array($ticketshit_term->term_id));
-						}
-
-						$woo_ticket_id = $objTicket->save();
-
-						$importedCount++;
-					} catch (WC_Data_Exception $ex) {
-						$ignoredCount++;
-					}
-				}
-
-				woo_ts_admin_notice("Synced tickets: " . $importedCount, 'notice');
-				woo_ts_admin_notice("Public key: " . $json_response->api_public_key, 'notice');
-				// woo_ts_admin_notice("Already imported: " . $ignoredCount, 'notice');
-				woo_ts_update_option('api_public_key', "-----BEGIN PUBLIC KEY-----\n" . $json_response->api_public_key . "\n-----END PUBLIC KEY-----");
+				woo_ts_admin_notice("Synced tickets: " . $result['imported_count'], 'notice');
+				woo_ts_admin_notice("Public key: " . $result['api_public_key'], 'notice');
+				woo_ts_update_option('api_public_key', "-----BEGIN PUBLIC KEY-----\n" . $result['api_public_key'] . "\n-----END PUBLIC KEY-----");
 
 				break;
 		}
@@ -251,6 +203,10 @@ function ticketsdir_writable_error_message() {
 		print '<div class="error notice">';
 		print    '<p>Ensure ' . WOO_TS_TICKETSDIR . ' is writable</p>';
 		print '</div>';
+	} else {
+		print '<div class="error notice">';
+		print    '<p>' . WOO_TS_TICKETSDIR . ' is writable</p>';
+		print '</div>';
 	}
 }
 
@@ -260,7 +216,15 @@ function uploadpath_writable_error_message() {
 		print '<div class="error notice">';
 		print    '<p>Ensure ' . WOO_TS_UPLOADPATH . ' is writable</p>';
 		print '</div>';
+	} else {
+		print '<div class="error notice">';
+		print    '<p>' . WOO_TS_UPLOADPATH . ' is writable</p>';
+		print '</div>';
 	}
+
+	print '<div class="error notice">';
+	print    '<p>WOO_TS_UPLOADURLPATH is ' . WOO_TS_UPLOADURLPATH . '</p>';
+	print '</div>';
 }
 
 
@@ -370,7 +334,7 @@ function generate_order_info_array($json_response, $order_id) {
 	$line_items_array = array();
 	$line_items_array[$order_id] = array();
 	
-	foreach ($json_response->tickets as $key => $ticket) {
+	foreach ($json_response['tickets'] as $key => $ticket) {
 		$line_items_array[$order_id][] = $key;
 	}
 	
