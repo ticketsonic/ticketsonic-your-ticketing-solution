@@ -317,7 +317,7 @@ function generate_pdf_ticket_files($json_response, $order_id) {
 	}
 
 	// TODO: Add a check if is writable
-	wp_mkdir_p(WOO_TS_UPLOADURLPATH . '/' . $order_id . '/');
+	wp_mkdir_p(WOO_TS_UPLOADPATH . '/' . $order_id . '/');
 
 	$ticket_file_paths = array();
 	
@@ -341,8 +341,8 @@ function generate_pdf_ticket_files($json_response, $order_id) {
 		$pdf_ticket->set_text($woo_product->get_name(), $woo_product->get_description(), $formatted_price);
 		$pdf_ticket->set_qr(qr_binary_to_binary(base64_encode($sensitive_decoded)));
 		// TODO: Check if it is writable
-		$pdf_ticket->Output('F', WOO_TS_UPLOADURLPATH . '/' . $order_id . '/' . $key . '.pdf');
-		$ticket_file_paths[] = WOO_TS_UPLOADURLPATH . '/' . $order_id . '/' . $key . '.pdf';
+		$pdf_ticket->Output('F', WOO_TS_UPLOADPATH . '/' . $order_id . '/' . $key . '.pdf');
+		$ticket_file_paths[] = WOO_TS_UPLOADPATH . '/' . $order_id . '/' . $key . '.pdf';
 
 		// Add page to the order pdf
 		$order_ticket->AddPage();
@@ -360,8 +360,8 @@ function generate_pdf_ticket_files($json_response, $order_id) {
 	write_log("time diff: " . $temp);
 
 	// TODO: Check if it is writable
-	$order_ticket->Output('F', WOO_TS_UPLOADURLPATH . '/' . $order_id . '/tickets.pdf');
-	$ticket_file_paths[] = WOO_TS_UPLOADURLPATH . '/' . $order_id . '/tickets.pdf';
+	$order_ticket->Output('F', WOO_TS_UPLOADPATH . '/' . $order_id . '/tickets.pdf');
+	$ticket_file_paths[] = WOO_TS_UPLOADPATH . '/' . $order_id . '/tickets.pdf';
 	
 	return $ticket_file_paths;
 }
