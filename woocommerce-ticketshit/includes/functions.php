@@ -203,7 +203,7 @@ function send_tickets_to_email_after_order_completed($order_id) {
 	if (!empty($pdf_ticket_files)) {
 		foreach($pdf_ticket_files[$order_id] as $value) {
 			// TODO: Check if there are files generated
-			$pdf_ticket_files_paths[] = WP_PLUGIN_DIR . '/woocommerce-ticketshit/tickets/' . $order_id . '/' . $value . '.pdf';
+			$pdf_ticket_files_paths[] = WOO_TS_UPLOADPATH .'/' . $order_id . '/' . $value . '.pdf';
 			write_log('adding: ' . WP_PLUGIN_DIR . '/woocommerce-ticketshit/tickets/' . $order_id . '/' . $value . '.pdf');
 		}
 		
@@ -236,10 +236,10 @@ function edit_order_meta_general($order) {
 	if (!empty($pdf_ticket_files)) {
 		$order_id = array_keys($pdf_ticket_files)[0];
 		foreach($pdf_ticket_files[$order_id] as $key => $line_item) {
-			print('<div><a href="' . content_url() . '/plugins/woocommerce-ticketshit/tickets/' . $order_id . '/' . $key . '.pdf">Tickets</a></div>');
+			print('<div><a href="' . WOO_TS_UPLOADURLPATH . '/' . $order_id . '/' . $key . '.pdf">Tickets</a></div>');
 		}
 		print "<br class='clear' />";
-		print('<div><a href="' . content_url() . '/plugins/woocommerce-ticketshit/tickets/' . $order_id . '/tickets.pdf">All Tickets</a></div>');
+		print('<div><a href="' . WOO_TS_UPLOADURLPATH . '/' . $order_id . '/tickets.pdf">All Tickets</a></div>');
 	} else {
 		print('<div>No PDF tickets found for this order</div>');
 	}
@@ -317,7 +317,7 @@ function generate_pdf_ticket_files($json_response, $order_id) {
 	}
 
 	// TODO: Add a check if is writable
-	wp_mkdir_p(WP_PLUGIN_DIR . '/woocommerce-ticketshit/tickets/' . $order_id . '/');
+	wp_mkdir_p(WOO_TS_UPLOADURLPATH . '/' . $order_id . '/');
 
 	$ticket_file_paths = array();
 	
@@ -341,8 +341,8 @@ function generate_pdf_ticket_files($json_response, $order_id) {
 		$pdf_ticket->set_text($woo_product->get_name(), $woo_product->get_description(), $formatted_price);
 		$pdf_ticket->set_qr(qr_binary_to_binary(base64_encode($sensitive_decoded)));
 		// TODO: Check if it is writable
-		$pdf_ticket->Output('F', WP_PLUGIN_DIR . '/woocommerce-ticketshit/tickets/' . $order_id . '/' . $key . '.pdf');
-		$ticket_file_paths[] = WP_PLUGIN_DIR . '/woocommerce-ticketshit/tickets/' . $order_id . '/' . $key . '.pdf';
+		$pdf_ticket->Output('F', WOO_TS_UPLOADURLPATH . '/' . $order_id . '/' . $key . '.pdf');
+		$ticket_file_paths[] = WOO_TS_UPLOADURLPATH . '/' . $order_id . '/' . $key . '.pdf';
 
 		// Add page to the order pdf
 		$order_ticket->AddPage();
@@ -360,8 +360,8 @@ function generate_pdf_ticket_files($json_response, $order_id) {
 	write_log("time diff: " . $temp);
 
 	// TODO: Check if it is writable
-	$order_ticket->Output('F', WP_PLUGIN_DIR . '/woocommerce-ticketshit/tickets/' . $order_id . '/tickets.pdf');
-	$ticket_file_paths[] = WP_PLUGIN_DIR . '/woocommerce-ticketshit/tickets/' . $order_id . '/tickets.pdf';
+	$order_ticket->Output('F', WOO_TS_UPLOADURLPATH . '/' . $order_id . '/tickets.pdf');
+	$ticket_file_paths[] = WOO_TS_UPLOADURLPATH . '/' . $order_id . '/tickets.pdf';
 	
 	return $ticket_file_paths;
 }
