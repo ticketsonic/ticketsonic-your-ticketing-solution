@@ -3,23 +3,23 @@ require( dirname( __FILE__ ) . '/../vendor/autoload.php');
 use GuzzleHttp\Client;
 
 class EventHome {
-    private static $http;
+    private $http;
 
-    public static function get_ticket_data($url, $email, $key) {
-        $response = self::fetch_ticket_data($url, $email, $key);
+    public function get_sync_ticket_data($url, $email, $key) {
+        $response = $this->get_remote($url, $email, $key);
 
-        if ($response['status'] !== "success")
+        if ($response['status'] !== 'success')
             return null;
 
         return $response;
     }
 
-    private static function fetch_ticket_data($url, $email, $key) {
-        self::$http = new GuzzleHttp\Client(['base_uri' => $url]);
-        $response = self::$http->request('GET', '/v1', [
-            'query' => [
-                'promoter_email' => $email,
-                'promoter_api_key' => $key
+    public function get_remote($url, $email, $key) {
+        $this->http = new GuzzleHttp\Client(['base_uri' => $url]);
+        $response = $this->http->request('GET', $url, [
+            'headers' => [
+                'x-api-userid' => $email,
+                'x-api-key' => $key
             ]
         ]);
     
@@ -27,7 +27,30 @@ class EventHome {
         return $response;
     }
 
-    public static function currency_to_ascii($currency_code) {
+    public function order_tickets_in_remote($url, $data) {
+        $response = $this->post_remote($url, $data);
+
+        if ($response['status'] !== 'success')
+            return null;
+
+        return $response;
+    }
+
+    private function post_remote($url, $data) {
+        $this->http = new GuzzleHttp\Client(['base_uri' => $url]);
+        $response = $this->http->request('POST', $url, [
+            'headers' => [
+                'x-api-userid' => $data['headers']['api_userid'],
+                'x-api-key' => $data['headers']['api_key']
+            ],
+            'body' => json_encode($data['payload'])
+        ]);
+    
+        $response = json_decode($response->getBody(), true);
+        return $response;
+    }
+
+    public function currency_to_ascii($currency_code) {
         $currencies = array(
             'BGN' => 'BGN',
             'USD' => chr(36),

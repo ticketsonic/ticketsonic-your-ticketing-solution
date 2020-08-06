@@ -44,10 +44,10 @@
 
 			<tr>
 				<th>
-					<label for="promoter_email"><?php _e('Ticket\'s HIT Promoter E-mail', 'woo_ts' ); ?></label>
+					<label for="api_userid"><?php _e('Ticket\'s HIT Promoter E-mail', 'woo_ts' ); ?></label>
 				</th>
 				<td>
-					<input type="text" size="30" id="promoter_email" name="promoter_email" value="<?php echo $promoter_email; ?>" class="text" />
+					<input type="text" size="30" id="api_userid" name="api_userid" value="<?php echo $api_userid; ?>" class="text" />
 					<p class="description"><?php _e( 'Ticket\'s HIT Promoter E-mail', 'woo_ts' ); ?>.</p>
 				</td>
 			</tr>

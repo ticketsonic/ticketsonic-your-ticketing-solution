@@ -141,7 +141,7 @@ function woo_ts_tab_template( $tab = '' ) {
 
 		case 'settings':
 			$api_key = woo_ts_get_option( 'api_key', ',' );
-			$promoter_email = woo_ts_get_option( 'promoter_email', '');
+			$api_userid = woo_ts_get_option( 'api_userid', '');
 			$email_subject = woo_ts_get_option( 'email_subject', '');
 			$email_body = woo_ts_get_option( 'email_body', '');
 			$ticket_info_endpoint = woo_ts_get_option( 'ticket_info_endpoint', '');
