@@ -51,14 +51,15 @@ class MPDF_Generator {
 
 	function SetQR($data) {
 		$this->mpdf->SetFillColor(0,0,0);
+		
 		foreach($data as $key => $row) {
 			$this->mpdf->SetXY(150, 30 + $key);
-			for($i = 0; $i < strlen($row); $i++)
+			for($i = 0; $i < $row->count(); $i++)
 				if ($row[$i] == 1)
-					$this->mpdf->WriteCell(1,1,'',0, 0, '', true);
+					$this->mpdf->Cell(1,1,'',0, 0, '', true);
 				else
-					$this->mpdf->WriteCell(1,1,'',0, 0, '', false);
-			$this->mpdf->WriteCell("U+200B");
+					$this->mpdf->Cell(1,1,'',0, 0, '', false);
+			$this->mpdf->Ln();
 		}
 	}
 
