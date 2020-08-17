@@ -37,7 +37,7 @@ if (is_admin()) {
 
 				woo_ts_admin_notice('Synced tickets: ' . $result['imported_count'], 'notice');
 				woo_ts_admin_notice('Public key: ' . $result['user_public_key'], 'notice');
-				woo_ts_update_option('user_public_key', '-----BEGIN PUBLIC KEY-----\n' . $result['user_public_key'] . '\n-----END PUBLIC KEY-----');
+				woo_ts_update_option('user_public_key', "-----BEGIN PUBLIC KEY-----\n" . $result['user_public_key'] . "\n-----END PUBLIC KEY-----");
 
 				break;
 		}
