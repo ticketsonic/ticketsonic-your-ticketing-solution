@@ -30,7 +30,6 @@ define( 'WOO_TS_TICKETSDIR', WP_PLUGIN_DIR . '/woocommerce-ticketshit/tickets/' 
 define( 'WOO_TS_UPLOADURLPATH', $uploads_dir['baseurl'] . '/' . WOO_TS_DIRNAME );
 
 include_once( WOO_TS_PATH . 'includes/functions.php' );
-include_once( WOO_TS_PATH . 'includes/phpqrcode/qrlib.php' );
 
 if( is_admin() ) {
 	function woo_ts_register_importer() {
