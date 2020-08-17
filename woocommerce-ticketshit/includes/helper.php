@@ -74,27 +74,28 @@ class Helper {
         }
         write_log('$json_response is: ' . print_r($response, 1));
 
-        $ticket_file_paths = $this->generate_pdf_ticket_files($response, $order_id);
-        write_log('PDF tickets generation for order ' . $order_id . ' is completed');
+        $ticket_file_paths = $this->generate_ticket_files($response, $order_id);
+        write_log('File tickets generation for order ' . $order_id . ' is completed');
         
         $order->add_meta_data('ticket_file_paths', $ticket_file_paths);
         $order->save();
-        write_log('Order meta for PDF tickets for order ' . $order_id . ' is saved');
+        write_log('Order meta for ticket files for order ' . $order_id . ' is saved');
 
         return $order;
     }
 
     public function display_ticket_links_in_order_details($order) {
         print '<br class="clear" />';
-        print '<h4>PDF Tickets</h4>';
+        print '<h4>Ticket Files</h4>';
         $ticket_file_paths = $order->get_meta('ticket_file_paths');
-        if (!empty($ticket_file_paths)) {
-            foreach($ticket_file_paths as $key => $ticket_file_path) {
-                print('<div><a href="' . $ticket_file_path['ticket_file_url_path'] . '">Tickets</a></div>');
+        $ticket_files_url_path = $ticket_file_paths['ticket_file_url_path'];
+        if (!empty($ticket_files_url_path)) {
+            foreach($ticket_files_url_path as $key => $ticket_file_path) {
+                print('<div><a href="' . $ticket_file_path . '">Tickets</a></div>');
             }
             print '<br class="clear" />';
         } else {
-            print('<div>No PDF tickets found for this order</div>');
+            print('<div>No ticket files found for this order</div>');
         }
     }
 
@@ -124,7 +125,7 @@ class Helper {
         return $data;
     }
 
-    private function generate_pdf_ticket_files($response, $order_id) {
+    private function generate_ticket_files($response, $order_id) {
         // TODO: Add a check if is writable
         wp_mkdir_p(WOO_TS_UPLOADPATH . '/' . $order_id . '/');
     
@@ -132,7 +133,7 @@ class Helper {
         
         $starttime = microtime(true);
         foreach ($response['tickets'] as $key => $ticket) {
-            write_log('start generation of pdf');
+            write_log('start generation of ticket file');
             $decoded = $this->decode_barcode($ticket['encrypted_data']);
             if ($decoded == null)
                 return null;
@@ -140,10 +141,11 @@ class Helper {
             $woo_product_id = wc_get_product_id_by_sku($ticket['sku']);
             $woo_product = new WC_Product_Simple($woo_product_id);
     
-            // Create separate pdf tickets
-            $ticket_file_paths[] = $this->generate_pdf($woo_product->get_name(), $woo_product->get_description(), $decoded['formatted_price'], $decoded['sensitive_decoded'], $order_id, $key);
-    
-            write_log('end of generation of pdf at: ' . date('Y-m-d H:i:s'));
+            // Create separate ticket files
+            $temp = $this->generate_file($woo_product->get_name(), $woo_product->get_description(), $decoded['formatted_price'], $decoded['sensitive_decoded'], $order_id, $key);
+            $ticket_file_paths['ticket_file_abs_path'][] = $temp['ticket_file_abs_path'];
+            $ticket_file_paths['ticket_file_url_path'][] = $temp['ticket_file_url_path'];
+            write_log('end of generation of ticket file at: ' . date('Y-m-d H:i:s'));
         }
     
         $endtime = microtime(true);
@@ -155,13 +157,13 @@ class Helper {
         return $ticket_file_paths;
     }
 
-    public function generate_pdf($name, $description, $price, $sensitive_decoded, $order_id, $key) {
-        $ticket_file_abs_path = WOO_TS_UPLOADPATH . '/' . $order_id . '/' . $key . '.pdf';
-        
-        $pdf_generator = new MPDF_Generator();
-        $pdf_generator->generate_ticket($name, $description, $price, $sensitive_decoded, $ticket_file_abs_path);
+    public function generate_file($name, $description, $price, $sensitive_decoded, $order_id, $key) {
+        $file_generator = new MPDF_Generator();
 
-        $ticket_file_url_path = WOO_TS_UPLOADURLPATH . '/' . $order_id . '/' . $key . '.pdf';
+        $ticket_file_abs_path = WOO_TS_UPLOADPATH . '/' . $order_id . '/' . $key . '.' . $file_generator->extension; // file extension will be appended by the generator
+        $ticket_file_url_path = WOO_TS_UPLOADURLPATH . '/' . $order_id . '/' . $key . '.' . $file_generator->extension;; // file extension will be appended by the generator
+        $file_generator->generate_ticket($name, $description, $price, $sensitive_decoded, $ticket_file_abs_path);
+        
         $ticket_file_paths = array('ticket_file_url_path' => $ticket_file_url_path, 'ticket_file_abs_path' => $ticket_file_abs_path);
         return $ticket_file_paths;
     }
@@ -194,32 +196,27 @@ class Helper {
         write_log('woocommerce_order_status_completed');
         write_log('send_tickets_to_email_after_order_completed for order ' . $order_id . ' is fired');
 
-        $pdf_ticket_abs_paths = array();
-        $pdf_ticket_files = $order->get_meta('ticket_file_paths');
-
-        if (!empty($pdf_ticket_files)) {
-            foreach($pdf_ticket_files as $key => $pdf_ticket_file) {
-                // TODO: Check if there are files generated
-                $pdf_ticket_abs_paths[] = $pdf_ticket_file['ticket_file_abs_path'];
-                write_log('adding: ' . $pdf_ticket_file['ticket_file_abs_path']);
-            }
+        $ticket_files = $order->get_meta('ticket_file_paths');
+        
+        if (!empty($ticket_files)) {
+            $ticket_file_abs_paths = $ticket_files['ticket_file_abs_path'];
             
             // TODO: Check if there are files generated
-            $mail_sent = $this->send_tickets_by_mail($order->get_billing_email(), $order_id, $pdf_ticket_abs_paths);
+            $mail_sent = $this->send_tickets_by_mail($order->get_billing_email(), $order_id, $ticket_file_abs_paths);
             write_log('mail status: ' . $mail_sent);
-            write_log('mail attachments: ' . print_r($pdf_ticket_abs_paths));
+            write_log('mail attachments: ' . print_r($ticket_file_abs_paths));
             if (!$mail_sent)
                 write_log('Could not send mail with tickets');
         }
 
-        write_log('PDF tickets for order ' . $order_id . ' are sent via mail to ' . $order->get_billing_email());
+        write_log('Tickets files for order ' . $order_id . ' are sent via mail to ' . $order->get_billing_email());
     }
 
-    private function send_tickets_by_mail($target_user_mail, $order_id, $pdf_ticket_abs_paths) {
+    private function send_tickets_by_mail($target_user_mail, $order_id, $ticket_file_abs_paths) {
         write_log('send_tickets_to_email_after_payment_confirmed fired');
-        if (!empty($pdf_ticket_abs_paths)) {
+        if (!empty($ticket_file_abs_paths)) {
             $headers = array('Content-Type: text/html; charset=UTF-8');
-            $mail_sent = wp_mail($target_user_mail, woo_ts_get_option('email_subject', ''), woo_ts_get_option('email_body', ''), $headers, $pdf_ticket_abs_paths);
+            $mail_sent = wp_mail($target_user_mail, woo_ts_get_option('email_subject', ''), woo_ts_get_option('email_body', ''), $headers, $ticket_file_abs_paths);
     
             return $mail_sent;
         }

@@ -3,6 +3,7 @@ require_once WOO_TS_PATH . '/vendor/autoload.php';
 
 class MPDF_Generator {
 	private $mpdf;
+	public $extension = 'pdf';
 	private $w = 210;
 	private $h = 90;
 
