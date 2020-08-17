@@ -1,6 +1,5 @@
 <?php
 
-require('pdf_generator.php');
 require('mpdf_generator.php');
 
 class Helper {
@@ -73,7 +72,7 @@ class Helper {
             $order->update_status('failed', 'Error fetching result for order ' . $order_id . ': '. $response['message']);
             return;
         }
-        write_log('$json_response is: ' . var_dump($response));
+        write_log('$json_response is: ' . print_r($response, 1));
 
         $ticket_file_paths = $this->generate_pdf_ticket_files($response, $order_id);
         write_log('PDF tickets generation for order ' . $order_id . ' is completed');
