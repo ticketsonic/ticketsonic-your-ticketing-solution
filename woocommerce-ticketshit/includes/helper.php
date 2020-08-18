@@ -67,7 +67,7 @@ class Helper {
         write_log('result from the request to TS for ' . $order_id . ' is received');
     
         $order = wc_get_order($order_id);
-        if ($response['status'] == 'failure') {
+        if ($response['status'] != 'success') {
             write_log('Error fetching result for order ' . $order_id . ': '. $response['message']);
             $order->update_status('failed', 'Error fetching result for order ' . $order_id . ': '. $response['message']);
             return;
@@ -190,7 +190,7 @@ class Helper {
         // Checking if there is a order meta data with the generated tickets
         // Online payment methods skip the woocommerce_order_status_processing event
         // We need to make sure we got the meta data containing ticket locations in fs for them too.
-        if (empty($order->get_meta('ticket_file_paths')))
+        if (!isset($order) && empty($order->get_meta("ticket_file_paths")))
             $order = order_tickets_in_remote($order_id, $url, $email, $key);
 
         write_log('woocommerce_order_status_completed');
