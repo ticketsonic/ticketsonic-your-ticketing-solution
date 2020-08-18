@@ -63,13 +63,35 @@ function mysite_woocommerce_payment_complete($order_id) {
 	// write_log('mysite_woocommerce_payment_complete for order ' . $order_id . ' is fired');
 }
 
-add_action('woocommerce_order_status_processing', 'order_tickets_in_remote', 10, 1);
-function order_tickets_in_remote($order_id) {
+// add_action('woocommerce_order_status_processing', 'order_tickets_in_remote', 10, 1);
+// function order_tickets_in_remote($order_id) {
+// 	$endpoint_url = woo_ts_get_option('external_order_endpoint', '');
+// 	$api_userid = woo_ts_get_option('api_userid', '');
+// 	$promoter_api_key = woo_ts_get_option('api_key', '');
+// 	$helper = new Helper();
+// 	$helper->order_tickets_in_remote($order_id, $endpoint_url, $api_userid, $promoter_api_key);
+// }
+
+/**
+ * Add a custom action to order actions select box on edit order page
+ * Ability to manually generate ticket files
+ *
+ * @param array $actions order actions array to display
+ * @return array - updated actions
+ */
+add_action( 'woocommerce_order_actions', 'manual_ticket_generation_order_action' );
+function manual_ticket_generation_order_action($actions) {
+    global $theorder;
+
+    $order_id = $theorder->id;
 	$endpoint_url = woo_ts_get_option('external_order_endpoint', '');
 	$api_userid = woo_ts_get_option('api_userid', '');
 	$promoter_api_key = woo_ts_get_option('api_key', '');
 	$helper = new Helper();
 	$helper->order_tickets_in_remote($order_id, $endpoint_url, $api_userid, $promoter_api_key);
+
+    $actions['wc_manual_ticket_generation_order_action'] = __( 'Generate tickets', 'generate-tickets' );
+    return $actions;
 }
 
 add_action('woocommerce_order_status_completed', 'send_tickets_to_customer_after_order_completed', 10, 1);
