@@ -146,6 +146,7 @@ function woo_ts_tab_template( $tab = '' ) {
 			$email_body = woo_ts_get_option( 'email_body', '');
 			$ticket_info_endpoint = woo_ts_get_option( 'ticket_info_endpoint', '');
 			$external_order_endpoint = woo_ts_get_option( 'external_order_endpoint', '');
+			$event_id = woo_ts_get_option( 'event_id', '');
 			break;
 
 }

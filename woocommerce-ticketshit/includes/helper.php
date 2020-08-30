@@ -9,8 +9,8 @@ class Helper {
         $this->eventhome = new EventHome();
     }
 
-    public function sync_tickets_with_remote($url, $email, $key) {
-        $response = $this->eventhome->get_sync_ticket_data($url, $email, $key);
+    public function sync_tickets_with_remote($url, $email, $key, $event_id) {
+        $response = $this->eventhome->get_sync_ticket_data($url, $email, $key, $event_id);
 
         if ($response == null) {
             woo_ts_admin_notice('Error syncing tickets' , 'error');

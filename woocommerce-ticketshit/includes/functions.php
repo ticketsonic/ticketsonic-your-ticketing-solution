@@ -21,6 +21,7 @@ if (is_admin()) {
 				woo_ts_update_option( 'email_body', ( isset( $_POST['email_body'] ) ? wp_kses($_POST['email_body'], allowed_html()) : '' ) );
 				woo_ts_update_option( 'ticket_info_endpoint', ( isset( $_POST['ticket_info_endpoint'] ) ? sanitize_text_field( $_POST['ticket_info_endpoint'] ) : '' ) );
 				woo_ts_update_option( 'external_order_endpoint', ( isset( $_POST['external_order_endpoint'] ) ? sanitize_text_field( $_POST['external_order_endpoint'] ) : '' ) );
+				woo_ts_update_option( 'event_id', ( isset( $_POST['event_id'] ) ? sanitize_text_field( $_POST['event_id'] ) : '' ) );
 
 				upload_custom_ticket_background();
 
@@ -32,8 +33,9 @@ if (is_admin()) {
 				$url = woo_ts_get_option('ticket_info_endpoint', '');
 				$email = woo_ts_get_option('api_userid', '');
 				$key = woo_ts_get_option('api_key', '');
+				$event_id = woo_ts_get_option('event_id', '');
 				$helper = new Helper();
-				$result = $helper->sync_tickets_with_remote($url, $email, $key);
+				$result = $helper->sync_tickets_with_remote($url, $email, $key, $event_id);
 
 				woo_ts_admin_notice('Synced tickets: ' . $result['imported_count'], 'notice');
 				woo_ts_admin_notice('Public key: ' . $result['user_public_key'], 'notice');

@@ -44,6 +44,16 @@
 
 			<tr>
 				<th>
+					<label for="event_id"><?php _e('Ticket\'s HIT Event ID', 'woo_ts' ); ?></label>
+				</th>
+				<td>
+					<input type="text" size="50" id="event_id" name="event_id" value="<?php echo $event_id; ?>" class="text" />
+					<p class="description"><?php _e( 'Ticket\'s HIT Event ID', 'woo_ts' ); ?>.</p>
+				</td>
+			</tr>
+
+			<tr>
+				<th>
 					<label for="api_userid"><?php _e('Ticket\'s HIT Promoter E-mail', 'woo_ts' ); ?></label>
 				</th>
 				<td>

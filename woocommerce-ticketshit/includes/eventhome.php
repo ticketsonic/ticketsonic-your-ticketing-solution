@@ -5,8 +5,8 @@ use GuzzleHttp\Client;
 class EventHome {
     private $http;
 
-    public function get_sync_ticket_data($url, $email, $key) {
-        $response = $this->get_remote($url, $email, $key);
+    public function get_sync_ticket_data($url, $email, $key, $event_id) {
+        $response = $this->get_remote($url, $email, $key, $event_id);
 
         if ($response['status'] !== 'success')
             return null;
@@ -14,12 +14,13 @@ class EventHome {
         return $response;
     }
 
-    public function get_remote($url, $email, $key) {
+    public function get_remote($url, $email, $key, $event_id) {
         $this->http = new GuzzleHttp\Client(['base_uri' => $url]);
         $response = $this->http->request('GET', $url, [
             'headers' => [
                 'x-api-userid' => $email,
-                'x-api-key' => $key
+                'x-api-key' => $key,
+                'x-api-eventid' => $event_id
             ]
         ]);
     
