@@ -15,7 +15,7 @@ class EventHome {
     }
 
     public function get_remote($url, $email, $key, $event_id) {
-        $this->http = new GuzzleHttp\Client(['base_uri' => $url]);
+        $this->http = new GuzzleHttp\Client(['base_uri' => $url, 'verify' => false]);
         $response = $this->http->request('GET', $url, [
             'headers' => [
                 'x-api-userid' => $email,
@@ -38,7 +38,7 @@ class EventHome {
     }
 
     private function post_remote($url, $data) {
-        $this->http = new GuzzleHttp\Client(['base_uri' => $url]);
+        $this->http = new GuzzleHttp\Client(['base_uri' => $url, 'verify' => false]);
         $response = $this->http->request('POST', $url, [
             'headers' => [
                 'x-api-userid' => $data['headers']['api_userid'],
