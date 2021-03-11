@@ -58,11 +58,11 @@ class Helper {
         return $result;
     }
 
-    public function order_tickets_in_remote($order_id, $url, $email, $key) {
+    public function order_tickets_in_remote($order_id, $url, $email, $key, $data) {
         write_log('request_barcodes_from_ts for order ' . $order_id . ' is fired');
         write_log('sending req to TS');
-        $data = $this->prepare_request_body($order_id, $email, $key);
-        $response = $this->eventhome->order_tickets_in_remote($url, $data);
+        $body = $this->prepare_request_body($order_id, $email, $key, $data);
+        $response = $this->eventhome->order_tickets_in_remote($url, $body);
     
         write_log('result from the request to TS for ' . $order_id . ' is received');
     
@@ -99,9 +99,9 @@ class Helper {
         }
     }
 
-    private function prepare_request_body($order_id, $email, $key) {
+    private function prepare_request_body($order_id, $email, $key, $data) {
         $order = wc_get_order($order_id);
-        $data = array(
+        $body = array(
             'headers' => array(
                 'api_userid' => $email,
                 'api_key' => $key,
@@ -119,10 +119,15 @@ class Helper {
         $items = $order->get_items();
         foreach($items as $item) {
             $ticket = new WC_Product_Simple($item['product_id']);
-            $data['payload']['tickets'][] = array('sku' => $ticket->get_sku(), 'stock' => $item['quantity']);
+            $body['payload']['tickets'][] = array(
+                'sku' => $ticket->get_sku(),
+                'stock' => $item['quantity'],
+                'starttime' => $data["from"],
+                'endtime' => $data["to"]
+            );
         }
 
-        return $data;
+        return $body;
     }
 
     private function generate_ticket_files($response, $order_id) {

@@ -65,14 +65,39 @@ function mysite_woocommerce_payment_complete($order_id) {
 	// write_log('mysite_woocommerce_payment_complete for order ' . $order_id . ' is fired');
 }
 
-// add_action('woocommerce_order_status_processing', 'order_tickets_in_remote', 10, 1);
-// function order_tickets_in_remote($order_id) {
-// 	$endpoint_url = woo_ts_get_option('external_order_endpoint', '');
-// 	$api_userid = woo_ts_get_option('api_userid', '');
-// 	$promoter_api_key = woo_ts_get_option('api_key', '');
-// 	$helper = new Helper();
-// 	$helper->order_tickets_in_remote($order_id, $endpoint_url, $api_userid, $promoter_api_key);
-// }
+add_action('woocommerce_order_status_processing', 'order_tickets_in_remote', 10, 1);
+function order_tickets_in_remote($order_id) {
+	$order = wc_get_order($order_id);
+	$endpoint_url = woo_ts_get_option('external_order_endpoint', '');
+	$api_userid = woo_ts_get_option('api_userid', '');
+	$promoter_api_key = woo_ts_get_option('api_key', '');
+
+	$data = array(
+		"from" => null,
+		"to" => null,
+		"group" => null
+	);
+
+	try {
+		$appointment_id = $order->get_meta('_booked_wc_order_appointments');
+		$appointment = Booked_WC_Appointment::get($appointment_id[0]);
+		$from_to_arr = explode("-", $appointment->timeslot);
+		$from_date = date_create_from_format('Hi', $from_to_arr[0]);
+		$to_date = date_create_from_format('Hi', $from_to_arr[1]);
+		$interval = date_diff($to_date, $from_date);
+		$minutes_diff = $interval->d * 24 * 60;
+		$minutes_diff += $interval->h * 60;
+		$minutes_diff += $interval->i;
+
+		$data["from"] = $appointment->timestamp;
+		$data["to"] = intval($appointment->timestamp) + $minutes_diff * 60;
+	} catch (Exception $e) {
+		$appointment = false;
+	}
+
+	$helper = new Helper();
+	$helper->order_tickets_in_remote($order_id, $endpoint_url, $api_userid, $promoter_api_key, $data);
+}
 
 /**
  * Add a custom action to order actions select box on edit order page
