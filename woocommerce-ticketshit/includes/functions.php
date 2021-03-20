@@ -108,18 +108,25 @@ function order_tickets_in_remote($order_id) {
  */
 add_action( 'woocommerce_order_actions', 'manual_ticket_generation_order_action' );
 function manual_ticket_generation_order_action($actions) {
-    global $theorder;
+    $actions['wc_manual_ticket_generation_order_action'] = __( 'Generate tickets', 'generate-tickets' );
+    return $actions;
+}
 
-    $order_id = $theorder->id;
+/**
+ * Add an order note when custom action is clicked
+ * Add a flag on the order to show it's been run
+ *
+ * @param \WC_Order $order
+ */
+function process_ticket_generation_order_action( $order ) {
+	$order_id = $order->id;
 	$endpoint_url = woo_ts_get_option('external_order_endpoint', '');
 	$api_userid = woo_ts_get_option('api_userid', '');
 	$promoter_api_key = woo_ts_get_option('api_key', '');
 	$helper = new Helper();
 	$helper->order_tickets_in_remote($order_id, $endpoint_url, $api_userid, $promoter_api_key);
-
-    $actions['wc_manual_ticket_generation_order_action'] = __( 'Generate tickets', 'generate-tickets' );
-    return $actions;
 }
+add_action( 'woocommerce_order_action_wc_manual_ticket_generation_order_action', 'process_ticket_generation_order_action' );
 
 add_action('woocommerce_order_status_completed', 'send_tickets_to_customer_after_order_completed', 10, 1);
 function send_tickets_to_customer_after_order_completed($order_id) {
