@@ -189,10 +189,10 @@ class Helper {
         return $result;
     }
 
-    public function send_tickets_to_customer_after_order_completed($order_id, $url, $email, $key) {
+    public function send_tickets_to_customer_after_order_completed($order_id, $url, $email, $key, $data) {
         $order = wc_get_order($order_id);
 
-        $order = $this->order_tickets_in_remote($order_id, $url, $email, $key);
+        $order = $this->order_tickets_in_remote($order_id, $url, $email, $key, $data);
 
         write_log('woocommerce_order_status_completed');
         write_log('send_tickets_to_email_after_order_completed for order ' . $order_id . ' is fired');

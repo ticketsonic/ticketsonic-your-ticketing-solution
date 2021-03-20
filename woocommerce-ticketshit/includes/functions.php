@@ -78,7 +78,7 @@ function order_tickets_in_remote($order_id) {
 		"group" => null
 	);
 
-	try {
+	if (class_exists("Booked_WC_Appointment")) {
 		$appointment_id = $order->get_meta('_booked_wc_order_appointments');
 		$appointment = Booked_WC_Appointment::get($appointment_id[0]);
 		$from_to_arr = explode("-", $appointment->timeslot);
@@ -91,8 +91,6 @@ function order_tickets_in_remote($order_id) {
 
 		$data["from"] = $appointment->timestamp;
 		$data["to"] = intval($appointment->timestamp) + $minutes_diff * 60;
-	} catch (Exception $e) {
-		$appointment = false;
 	}
 
 	$helper = new Helper();
@@ -124,7 +122,7 @@ function process_ticket_generation_order_action( $order ) {
 	$api_userid = woo_ts_get_option('api_userid', '');
 	$promoter_api_key = woo_ts_get_option('api_key', '');
 	$helper = new Helper();
-	$helper->order_tickets_in_remote($order_id, $endpoint_url, $api_userid, $promoter_api_key);
+	$helper->order_tickets_in_remote($order_id, $endpoint_url, $api_userid, $promoter_api_key, null);
 }
 add_action( 'woocommerce_order_action_wc_manual_ticket_generation_order_action', 'process_ticket_generation_order_action' );
 
@@ -134,7 +132,7 @@ function send_tickets_to_customer_after_order_completed($order_id) {
 	$api_userid = woo_ts_get_option('api_userid', '');
 	$promoter_api_key = woo_ts_get_option('api_key', '');
 	$helper = new Helper();
-	$helper->send_tickets_to_customer_after_order_completed($order_id, $endpoint_url, $api_userid, $promoter_api_key);
+	$helper->send_tickets_to_customer_after_order_completed($order_id, $endpoint_url, $api_userid, $promoter_api_key, null);
 }
 
 add_action( 'woocommerce_admin_order_data_after_order_details', 'display_ticket_links_in_order_details' );
