@@ -78,7 +78,7 @@ function order_tickets_in_remote($order_id) {
 		"group" => null
 	);
 
-	try {
+	if (class_exists("Booked_WC_Appointment")) {
 		$appointment_id = $order->get_meta('_booked_wc_order_appointments');
 		$appointment = Booked_WC_Appointment::get($appointment_id[0]);
 		$from_to_arr = explode("-", $appointment->timeslot);
@@ -91,8 +91,6 @@ function order_tickets_in_remote($order_id) {
 
 		$data["start_time"] = strval(intval($appointment->timestamp));
 		$data["end_time"] = strval(intval($appointment->timestamp) + $minutes_diff * 60);
-	} catch (Exception $e) {
-		$appointment = false;
 	}
 
 	$helper = new Helper();
@@ -122,7 +120,7 @@ function manual_ticket_generation_order_action($actions) {
 		"group" => null
 	);
 
-	try {
+	if (class_exists("Booked_WC_Appointment")) {
 		$order = wc_get_order($order_id);
 		$appointment_id = $order->get_meta('_booked_wc_order_appointments');
 		$appointment = Booked_WC_Appointment::get($appointment_id[0]);
@@ -136,8 +134,6 @@ function manual_ticket_generation_order_action($actions) {
 
 		$data["start_time"] = intval($appointment->timestamp);
 		$data["end_time"] = intval($appointment->timestamp) + $minutes_diff * 60;
-	} catch (Exception $e) {
-		$appointment = false;
 	}
 
 	//FIXME: check if arguments are not. Causes failure in WP if $endpoint_url, $api_userid, $promoter_api_key are null

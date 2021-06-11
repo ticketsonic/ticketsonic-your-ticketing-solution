@@ -198,7 +198,7 @@ class Helper {
             "group" => null
         );
     
-        try {
+        if (class_exists("Booked_WC_Appointment")) {
             $appointment_id = $order->get_meta('_booked_wc_order_appointments');
             $appointment = Booked_WC_Appointment::get($appointment_id[0]);
             $from_to_arr = explode("-", $appointment->timeslot);
@@ -211,8 +211,6 @@ class Helper {
     
             $data["start_time"] = $appointment->timestamp;
             $data["end_time"] = intval($appointment->timestamp) + $minutes_diff * 60;
-        } catch (Exception $e) {
-            $appointment = false;
         }
 
         $order = $this->order_tickets_in_remote($order_id, $url, $email, $key, $data);
