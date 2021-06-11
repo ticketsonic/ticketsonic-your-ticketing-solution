@@ -46,9 +46,12 @@ function parse_raw_recrypted_ticket($raw_decrypted_ticket) {
 					$result['segment4'] = bin_to_int_data(substr($raw_decrypted_ticket, $i, $len));
 					break;
 
-				// TODO: we do not really have event like this to implement this feature
 				case 'T':
-					$result['expiry'] = bin_to_int_data(substr($raw_decrypted_ticket, $i, $len));
+					$result['start_time'] = bin_to_int_data(substr($raw_decrypted_ticket, $i, $len));
+					break;
+
+				case 'F':
+					$result['end_time'] = bin_to_int_data(substr($raw_decrypted_ticket, $i, $len));
 					break;
 
 				case 'X':
