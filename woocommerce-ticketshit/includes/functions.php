@@ -73,12 +73,12 @@ function order_tickets_in_remote($order_id) {
 	$promoter_api_key = woo_ts_get_option('api_key', '');
 
 	$data = array(
-		"from" => null,
-		"to" => null,
+		"start_time" => null,
+		"end_time" => null,
 		"group" => null
 	);
 
-	if (class_exists("Booked_WC_Appointment")) {
+	try {
 		$appointment_id = $order->get_meta('_booked_wc_order_appointments');
 		$appointment = Booked_WC_Appointment::get($appointment_id[0]);
 		$from_to_arr = explode("-", $appointment->timeslot);
@@ -89,8 +89,10 @@ function order_tickets_in_remote($order_id) {
 		$minutes_diff += $interval->h * 60;
 		$minutes_diff += $interval->i;
 
-		$data["from"] = $appointment->timestamp;
-		$data["to"] = intval($appointment->timestamp) + $minutes_diff * 60;
+		$data["start_time"] = strval(intval($appointment->timestamp));
+		$data["end_time"] = strval(intval($appointment->timestamp) + $minutes_diff * 60);
+	} catch (Exception $e) {
+		$appointment = false;
 	}
 
 	$helper = new Helper();
@@ -106,25 +108,44 @@ function order_tickets_in_remote($order_id) {
  */
 add_action( 'woocommerce_order_actions', 'manual_ticket_generation_order_action' );
 function manual_ticket_generation_order_action($actions) {
-    $actions['wc_manual_ticket_generation_order_action'] = __( 'Generate tickets', 'generate-tickets' );
-    return $actions;
-}
+	global $theorder;
 
-/**
- * Add an order note when custom action is clicked
- * Add a flag on the order to show it's been run
- *
- * @param \WC_Order $order
- */
-function process_ticket_generation_order_action( $order ) {
-	$order_id = $order->id;
+    $order_id = $theorder->id;
 	$endpoint_url = woo_ts_get_option('external_order_endpoint', '');
 	$api_userid = woo_ts_get_option('api_userid', '');
 	$promoter_api_key = woo_ts_get_option('api_key', '');
 	$helper = new Helper();
-	$helper->order_tickets_in_remote($order_id, $endpoint_url, $api_userid, $promoter_api_key, null);
+
+	$data = array(
+		"start_time" => null,
+		"end_time" => null,
+		"group" => null
+	);
+
+	try {
+		$order = wc_get_order($order_id);
+		$appointment_id = $order->get_meta('_booked_wc_order_appointments');
+		$appointment = Booked_WC_Appointment::get($appointment_id[0]);
+		$from_to_arr = explode("-", $appointment->timeslot);
+		$from_date = date_create_from_format('Hi', $from_to_arr[0]);
+		$to_date = date_create_from_format('Hi', $from_to_arr[1]);
+		$interval = date_diff($to_date, $from_date);
+		$minutes_diff = $interval->d * 24 * 60;
+		$minutes_diff += $interval->h * 60;
+		$minutes_diff += $interval->i;
+
+		$data["start_time"] = intval($appointment->timestamp);
+		$data["end_time"] = intval($appointment->timestamp) + $minutes_diff * 60;
+	} catch (Exception $e) {
+		$appointment = false;
+	}
+
+	//FIXME: check if arguments are not. Causes failure in WP if $endpoint_url, $api_userid, $promoter_api_key are null
+	// $helper->order_tickets_in_remote($order_id, $endpoint_url, $api_userid, $promoter_api_key, $data);
+
+    $actions['wc_manual_ticket_generation_order_action'] = __( 'Generate tickets', 'generate-tickets' );
+    return $actions;
 }
-add_action( 'woocommerce_order_action_wc_manual_ticket_generation_order_action', 'process_ticket_generation_order_action' );
 
 add_action('woocommerce_order_status_completed', 'send_tickets_to_customer_after_order_completed', 10, 1);
 function send_tickets_to_customer_after_order_completed($order_id) {
@@ -132,7 +153,7 @@ function send_tickets_to_customer_after_order_completed($order_id) {
 	$api_userid = woo_ts_get_option('api_userid', '');
 	$promoter_api_key = woo_ts_get_option('api_key', '');
 	$helper = new Helper();
-	$helper->send_tickets_to_customer_after_order_completed($order_id, $endpoint_url, $api_userid, $promoter_api_key, null);
+	$helper->send_tickets_to_customer_after_order_completed($order_id, $endpoint_url, $api_userid, $promoter_api_key);
 }
 
 add_action( 'woocommerce_admin_order_data_after_order_details', 'display_ticket_links_in_order_details' );

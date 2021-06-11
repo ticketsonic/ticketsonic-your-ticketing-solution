@@ -122,8 +122,8 @@ class Helper {
             $body['payload']['tickets'][] = array(
                 'sku' => $ticket->get_sku(),
                 'stock' => $item['quantity'],
-                'starttime' => $data["from"],
-                'endtime' => $data["to"]
+                'start_time' => $data["start_time"],
+                'end_time' => $data["end_time"]
             );
         }
 
@@ -189,8 +189,31 @@ class Helper {
         return $result;
     }
 
-    public function send_tickets_to_customer_after_order_completed($order_id, $url, $email, $key, $data) {
+    public function send_tickets_to_customer_after_order_completed($order_id, $url, $email, $key) {
         $order = wc_get_order($order_id);
+
+        $data = array(
+            "start_time" => null,
+            "end_time" => null,
+            "group" => null
+        );
+    
+        try {
+            $appointment_id = $order->get_meta('_booked_wc_order_appointments');
+            $appointment = Booked_WC_Appointment::get($appointment_id[0]);
+            $from_to_arr = explode("-", $appointment->timeslot);
+            $from_date = date_create_from_format('Hi', $from_to_arr[0]);
+            $to_date = date_create_from_format('Hi', $from_to_arr[1]);
+            $interval = date_diff($to_date, $from_date);
+            $minutes_diff = $interval->d * 24 * 60;
+            $minutes_diff += $interval->h * 60;
+            $minutes_diff += $interval->i;
+    
+            $data["start_time"] = $appointment->timestamp;
+            $data["end_time"] = intval($appointment->timestamp) + $minutes_diff * 60;
+        } catch (Exception $e) {
+            $appointment = false;
+        }
 
         $order = $this->order_tickets_in_remote($order_id, $url, $email, $key, $data);
 
