@@ -24,21 +24,31 @@
 
 			<tr>
 				<th>
-					<label for="ticket_info_endpoint"><?php _e('Ticket\'s HIT Get Ticket Info Endpoint API', 'woo_ts' ); ?></label>
+					<label for="ticket_info_endpoint"><?php _e('Ticket\'s HIT Get Ticket Info Endpoint', 'woo_ts' ); ?></label>
 				</th>
 				<td>
 					<input type="text" size="50" id="ticket_info_endpoint" name="ticket_info_endpoint" value="<?php echo $ticket_info_endpoint; ?>" class="text" />
-					<p class="description"><?php _e( 'Ticket\'s HIT Ticket Endpoint API', 'woo_ts' ); ?>.</p>
+					<p class="description"><?php _e( 'Ticket\'s HIT Ticket Endpoint', 'woo_ts' ); ?>.</p>
 				</td>
 			</tr>
 
 			<tr>
 				<th>
-					<label for="external_order_endpoint"><?php _e('Ticket\'s HIT Order Endpoint API', 'woo_ts' ); ?></label>
+					<label for="new_event_endpoint"><?php _e('Ticket\'s HIT New Event Endpoint', 'woo_ts' ); ?></label>
+				</th>
+				<td>
+					<input type="text" size="50" id="new_event_endpoint" name="new_event_endpoint" value="<?php echo $new_event_endpoint; ?>" class="text" />
+					<p class="description"><?php _e( 'Ticket\'s HIT Ticket Endpoint', 'woo_ts' ); ?>.</p>
+				</td>
+			</tr>
+
+			<tr>
+				<th>
+					<label for="external_order_endpoint"><?php _e('Ticket\'s HIT Order Endpoint', 'woo_ts' ); ?></label>
 				</th>
 				<td>
 					<input type="text" size="50" id="external_order_endpoint" name="external_order_endpoint" value="<?php echo $external_order_endpoint; ?>" class="text" />
-					<p class="description"><?php _e( 'Ticket\'s HIT Order Endpoint API', 'woo_ts' ); ?>.</p>
+					<p class="description"><?php _e( 'Ticket\'s HIT Order Endpoint', 'woo_ts' ); ?>.</p>
 				</td>
 			</tr>
 

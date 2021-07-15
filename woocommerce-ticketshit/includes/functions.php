@@ -20,6 +20,7 @@ if (is_admin()) {
 				woo_ts_update_option( 'email_subject', ( isset( $_POST['email_subject'] ) ? sanitize_text_field( $_POST['email_subject'] ) : '' ) );
 				woo_ts_update_option( 'email_body', ( isset( $_POST['email_body'] ) ? wp_kses($_POST['email_body'], allowed_html()) : '' ) );
 				woo_ts_update_option( 'ticket_info_endpoint', ( isset( $_POST['ticket_info_endpoint'] ) ? sanitize_text_field( $_POST['ticket_info_endpoint'] ) : '' ) );
+				woo_ts_update_option( 'new_event_endpoint', ( isset( $_POST['new_event_endpoint'] ) ? sanitize_text_field( $_POST['new_event_endpoint'] ) : '' ) );
 				woo_ts_update_option( 'external_order_endpoint', ( isset( $_POST['external_order_endpoint'] ) ? sanitize_text_field( $_POST['external_order_endpoint'] ) : '' ) );
 				woo_ts_update_option( 'event_id', ( isset( $_POST['event_id'] ) ? sanitize_text_field( $_POST['event_id'] ) : '' ) );
 
@@ -36,6 +37,29 @@ if (is_admin()) {
 				$event_id = woo_ts_get_option('event_id', '');
 				$helper = new Helper();
 				$result = $helper->sync_tickets_with_remote($url, $email, $key, $event_id);
+
+				if ($result != null) {
+					woo_ts_admin_notice('Synced tickets: ' . $result['imported_count'], 'notice');
+					woo_ts_admin_notice('Public key: ' . $result['user_public_key'], 'notice');
+					woo_ts_update_option('user_public_key', "-----BEGIN PUBLIC KEY-----\n" . $result['user_public_key'] . "\n-----END PUBLIC KEY-----");
+				}
+
+				break;
+
+			case 'create-event':
+				$url = woo_ts_get_option('new_event_endpoint', '');
+				$email = woo_ts_get_option('api_userid', '');
+				$key = woo_ts_get_option('api_key', '');
+
+				$event_title = $_POST['event_title'];
+				$event_description = $_POST['event_description'];
+				$event_datetime = $_POST['event_datetime'];
+				$event_location = $_POST['event_location'];
+				
+				$tickets_data = $_POST['ticket'];
+
+				$helper = new Helper();
+				$result = $helper->create_new_event($url, $email, $key, $event_title, $event_description, $event_datetime, $event_location, $tickets_data);
 
 				woo_ts_admin_notice('Synced tickets: ' . $result['imported_count'], 'notice');
 				woo_ts_admin_notice('Public key: ' . $result['user_public_key'], 'notice');

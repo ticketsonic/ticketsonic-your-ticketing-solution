@@ -8,27 +8,40 @@ class EventHome {
     public function get_sync_ticket_data($url, $email, $key, $event_id) {
         $response = $this->get_remote($url, $email, $key, $event_id);
 
+        return $response;
+    }
+
+    public function get_remote($url, $email, $key, $event_id) {
+        $this->http = new GuzzleHttp\Client(['base_uri' => $url, 'verify' => false]);
+        $response = array();
+        try {
+            $response = $this->http->request('GET', $url, [
+                'headers' => [
+                    'x-api-userid' => $email,
+                    'x-api-key' => $key,
+                    'x-api-eventid' => $event_id
+                ]
+            ]);
+        
+            $response = json_decode($response->getBody(), true);
+        } catch (Exception $ex) {
+            $response['status'] = 'error';
+            $response['message'] = $ex->getMessage();
+        }
+
+        return $response;
+    }
+
+    public function request_tickets_in_remote($url, $data) {
+        $response = $this->post_remote($url, $data);
+
         if ($response['status'] !== 'success')
             return null;
 
         return $response;
     }
 
-    public function get_remote($url, $email, $key, $event_id) {
-        $this->http = new GuzzleHttp\Client(['base_uri' => $url, 'verify' => false]);
-        $response = $this->http->request('GET', $url, [
-            'headers' => [
-                'x-api-userid' => $email,
-                'x-api-key' => $key,
-                'x-api-eventid' => $event_id
-            ]
-        ]);
-    
-        $response = json_decode($response->getBody(), true);
-        return $response;
-    }
-
-    public function request_tickets_in_remote($url, $data) {
+    public function request_new_event_in_remote($url, $data) {
         $response = $this->post_remote($url, $data);
 
         if ($response['status'] !== 'success')

@@ -9,11 +9,23 @@ class Helper {
         $this->eventhome = new EventHome();
     }
 
+    public function create_new_event($url, $email, $key, $event_title, $event_description, $event_datetime, $event_location, $tickets_data) {
+        write_log('creating new event is fired');
+        write_log('sending req to TS');
+        $body = $this->prepare_create_new_event_body($email, $key, $event_title, $event_description, $event_datetime, $event_location, $tickets_data);
+        $response = $this->eventhome->request_new_event_in_remote($url, $body);
+
+        if ($response == null) {
+            woo_ts_admin_notice('Error sending new event request' , 'error');
+            return;
+        }
+    }
+
     public function sync_tickets_with_remote($url, $email, $key, $event_id) {
         $response = $this->eventhome->get_sync_ticket_data($url, $email, $key, $event_id);
 
-        if ($response == null) {
-            woo_ts_admin_notice('Error syncing tickets' , 'error');
+        if ($response["status"] == "error") {
+            woo_ts_admin_notice('Error syncing tickets: ' . $response["message"] , 'error');
             return;
         }
 
@@ -97,6 +109,25 @@ class Helper {
         } else {
             print('<div>No ticket files found for this order</div>');
         }
+    }
+
+    private function prepare_create_new_event_body($email, $key, $event_title, $event_description, $event_datetime, $event_location, $tickets_data) {
+        $body = array(
+            'headers' => array(
+                'api_userid' => $email,
+                'api_key' => $key,
+            ),
+            'payload' => array(
+                'title' => $event_title,
+                'description' => $event_description,
+                'datetime' => $event_datetime,
+                'location' => $event_location,
+                'tickets' => $tickets_data,
+                'request_hash' => bin2hex(openssl_random_pseudo_bytes(16))
+            )
+        );
+
+        return $body;
     }
 
     private function prepare_request_body($order_id, $email, $key, $data) {
