@@ -62,7 +62,7 @@ class Helper {
         write_log('request_barcodes_from_ts for order ' . $order_id . ' is fired');
         write_log('sending req to TS');
         $body = $this->prepare_request_body($order_id, $email, $key, $data);
-        $response = $this->eventhome->order_tickets_in_remote($url, $body);
+        $response = $this->eventhome->request_tickets_in_remote($url, $body);
     
         write_log('result from the request to TS for ' . $order_id . ' is received');
     
@@ -214,6 +214,10 @@ class Helper {
         }
 
         $order = $this->order_tickets_in_remote($order_id, $url, $email, $key, $data);
+
+        if ($order == null) {
+            return;
+        }
 
         write_log('woocommerce_order_status_completed');
         write_log('send_tickets_to_email_after_order_completed for order ' . $order_id . ' is fired');
