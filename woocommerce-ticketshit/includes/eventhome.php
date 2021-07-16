@@ -44,9 +44,6 @@ class EventHome {
     public function request_new_event_in_remote($url, $data) {
         $response = $this->post_remote($url, $data);
 
-        if ($response['status'] !== 'success')
-            return null;
-
         return $response;
     }
 
