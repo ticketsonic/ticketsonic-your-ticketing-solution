@@ -15,10 +15,12 @@ class Helper {
         $body = $this->prepare_create_new_event_body($email, $key, $event_title, $event_description, $event_datetime, $event_location, $tickets_data);
         $response = $this->eventhome->request_new_event_in_remote($url, $body);
 
-        if ($response == null) {
-            woo_ts_admin_notice('Error sending new event request' , 'error');
+        if ($response["status"] == "error") {
+            woo_ts_admin_notice('Error sending new event request: ' . $response["message"] , 'error');
             return;
         }
+
+        return $response;
     }
 
     public function sync_tickets_with_remote($url, $email, $key, $event_id) {
