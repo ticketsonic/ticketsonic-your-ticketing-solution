@@ -48,22 +48,74 @@ if (is_admin()) {
 
 			case 'create-event':
 				$url = woo_ts_get_option('new_event_endpoint', '');
+				if (empty($url)) {
+					woo_ts_admin_notice("New Event Endpoint have to set in Settings", "error");
+					return;
+				}
+				
 				$email = woo_ts_get_option('api_userid', '');
+				if (empty($email)) {
+					woo_ts_admin_notice("Partner E-mail have to set in Settings", "error");
+					return;
+				}
+
 				$key = woo_ts_get_option('api_key', '');
+				if (empty($key)) {
+					woo_ts_admin_notice("Partner API Key have to set in Settings", "error");
+					return;
+				}
 
 				$event_title = $_POST['event_title'];
+				if (empty($event_title)) {
+					woo_ts_admin_notice("Event title field have to set", "error");
+					return;
+				}
+
 				$event_description = $_POST['event_description'];
 				$event_datetime = $_POST['event_datetime'];
 				$event_location = $_POST['event_location'];
 				
 				$tickets_data = $_POST['ticket'];
+				foreach ($tickets_data as $value) {
+					if (empty($value["title"])) {
+						woo_ts_admin_notice("Ticket title must be set", "error");
+
+						return;
+					}
+
+					if (empty($value["price"])) {
+						woo_ts_admin_notice("Ticket price must be set", "error");
+
+						return;
+					}
+
+					if (!is_int(intval($value["price"]))) {
+						woo_ts_admin_notice("Ticket price must be an integer number", "error");
+
+						return;
+					}
+
+					if (empty($value["stock"])) {
+						woo_ts_admin_notice("Ticket stock must be set", "error");
+
+						return;
+					}
+
+					if (empty($value["currency"])) {
+						woo_ts_admin_notice("Ticket currency must be set", "error");
+
+						return;
+					}
+				}
 
 				$helper = new Helper();
 				$result = $helper->create_new_event($url, $email, $key, $event_title, $event_description, $event_datetime, $event_location, $tickets_data);
 
-				woo_ts_admin_notice('Synced tickets: ' . $result['imported_count'], 'notice');
-				woo_ts_admin_notice('Public key: ' . $result['user_public_key'], 'notice');
-				woo_ts_update_option('user_public_key', "-----BEGIN PUBLIC KEY-----\n" . $result['user_public_key'] . "\n-----END PUBLIC KEY-----");
+				if ($result["status"] == "success") {
+					woo_ts_admin_notice("Status: success<br>Event ID: " . $result["event_id"] . " successfully sent for processing. You will receive an email when it is processed.", "notice");
+				} else {
+					woo_ts_admin_notice("Failed to request new event: " . $result["message"], "error");
+				}
 
 				break;
 		}
