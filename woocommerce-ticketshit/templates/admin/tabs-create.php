@@ -90,7 +90,11 @@
 					<label for="ticket_currency1"><?php _e('Ticket currency', 'woo_ts' ); ?></label>
 				</th>
 				<td>
-					<input type="text" size="50" id="ticket_currency1" name="ticket[0][currency]" value="BGN" class="text" />
+					<select name="ticket[0][currency]" id="ticket_currency1">
+						<option value="BGN">BGN</option>
+						<option value="EUR">EUR</option>
+						<option value="USD">USD</option>
+					</select>
 				</td>
 			</tr>
 
