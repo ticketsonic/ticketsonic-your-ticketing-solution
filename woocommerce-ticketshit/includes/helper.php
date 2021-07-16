@@ -114,6 +114,10 @@ class Helper {
     }
 
     private function prepare_create_new_event_body($email, $key, $event_title, $event_description, $event_datetime, $event_location, $tickets_data) {
+        foreach ($tickets_data as $k => $value) {
+            $tickets_data[$k]["price"] = intval($value["price"]) * 100;
+        }
+
         $body = array(
             'headers' => array(
                 'api_userid' => $email,
