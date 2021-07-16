@@ -35,15 +35,6 @@
 
 			<tr>
 				<th>
-					<label for="event_datetime"><?php _e('Event start date time', 'woo_ts' ); ?></label>
-				</th>
-				<td>
-					<input type="text" size="50" id="event_datetime" name="event_datetime" value="1598987456" class="text" />
-				</td>
-			</tr>
-
-			<tr>
-				<th>
 					<label for="event_location"><?php _e('Event location', 'woo_ts' ); ?></label>
 				</th>
 				<td>
