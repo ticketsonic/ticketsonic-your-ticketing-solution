@@ -1,6 +1,6 @@
 <br class="clear" />
 
-<form enctype="multipart/form-data" method="post">
+<form id="create" enctype="multipart/form-data" method="post">
 	<table class="form-table">
 		<tbody>
 
@@ -20,7 +20,7 @@
 					<label for="event_title"><?php _e('Event title', 'woo_ts' ); ?></label>
 				</th>
 				<td>
-					<input type="text" size="50" id="event_title" name="event_title" value="Event title" class="text" />
+					<input type="text" size="50" id="event_title" name="event_title" value="" class="text" />
 				</td>
 			</tr>
 
@@ -29,7 +29,7 @@
 					<label for="event_description"><?php _e('Event description', 'woo_ts' ); ?></label>
 				</th>
 				<td>
-					<input type="text" size="50" id="event_description" name="event_description" value="Event description" class="text" />
+					<input type="text" size="50" id="event_description" name="event_description" value="" class="text" />
 				</td>
 			</tr>
 
@@ -38,7 +38,7 @@
 					<label for="event_location"><?php _e('Event location', 'woo_ts' ); ?></label>
 				</th>
 				<td>
-					<input type="text" size="50" id="event_location" name="event_location" value="Event location" class="text" />
+					<input type="text" size="50" id="event_location" name="event_location" value="" class="text" />
 				</td>
 			</tr>
 
@@ -51,37 +51,37 @@
 
 			<tr>
 				<th>
-					<label for="ticket_title1"><?php _e('Ticket title', 'woo_ts' ); ?></label>
+					<label for="ticket_title0"><?php _e('Ticket title1', 'woo_ts' ); ?></label>
 				</th>
 				<td>
-					<input type="text" size="50" id="ticket_title1" name="ticket[0][title]" value="Ticket title" class="text" />
+					<input type="text" size="50" id="ticket_title0" name="ticket[0][title]" value="" class="text" />
 				</td>
 			</tr>
 
 			<tr>
 				<th>
-					<label for="ticket_description1"><?php _e('Ticket description', 'woo_ts' ); ?></label>
+					<label for="ticket_description0"><?php _e('Ticket description1', 'woo_ts' ); ?></label>
 				</th>
 				<td>
-					<input type="text" size="50" id="ticket_description1" name="ticket[0][description]" value="Ticket description" class="text" />
+					<input type="text" size="50" id="ticket_description0" name="ticket[0][description]" value="" class="text" />
 				</td>
 			</tr>
 
 			<tr>
 				<th>
-					<label for="ticket_price1"><?php _e('Ticket price', 'woo_ts' ); ?></label>
+					<label for="ticket_price0"><?php _e('Ticket price1', 'woo_ts' ); ?></label>
 				</th>
 				<td>
-					<input type="text" size="50" id="ticket_price1" name="ticket[0][price]" value="90.00" class="text" />
+					<input type="text" size="50" id="ticket_price0" name="ticket[0][price]" value="" class="text" />
 				</td>
 			</tr>
 
 			<tr>
 				<th>
-					<label for="ticket_currency1"><?php _e('Ticket currency', 'woo_ts' ); ?></label>
+					<label for="ticket_currency0"><?php _e('Ticket currency1', 'woo_ts' ); ?></label>
 				</th>
 				<td>
-					<select name="ticket[0][currency]" id="ticket_currency1">
+					<select name="ticket[0][currency]" id="ticket_currency0">
 						<option value="BGN">BGN</option>
 						<option value="EUR">EUR</option>
 						<option value="USD">USD</option>
@@ -91,15 +91,18 @@
 
 			<tr>
 				<th>
-					<label for="ticket_stock1"><?php _e('Ticket stock', 'woo_ts' ); ?></label>
+					<label for="ticket_stock0"><?php _e('Ticket stock1', 'woo_ts' ); ?></label>
 				</th>
 				<td>
-					<input type="text" size="50" id="ticket_stock1" name="ticket[0][stock]" value="900" class="text" />
+					<input type="text" size="50" id="ticket_stock0" name="ticket[0][stock]" value="" class="text" />
 				</td>
 			</tr>
 		</tbody>
 	</table>
-	<!-- .form-table -->
+
+	<p class="submit">
+		<input type="button" id="new-ticket-button" class="button button-primary" value="Add new ticket">
+	</p>
 	
 	<p class="submit">
 		<input type="submit" name="submit" id="submit" class="button button-primary" value="<?php _e( 'Request event', 'woo_ts' ); ?>" />
