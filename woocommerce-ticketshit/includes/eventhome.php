@@ -5,6 +5,24 @@ use GuzzleHttp\Client;
 class EventHome {
     private $http;
 
+    public function get_request_from_remote($url, $headers, $body) {
+        $this->http = new GuzzleHttp\Client(['base_uri' => $url, 'verify' => false]);
+        $response = array();
+        try {
+            $response = $this->http->request('GET', $url, [
+                'headers' => $headers,
+                'body' => json_encode($body)
+            ]);
+        
+            $response = json_decode($response->getBody(), true);
+        } catch (Exception $ex) {
+            $response['status'] = 'error';
+            $response['message'] = $ex->getMessage();
+        }
+
+        return $response;
+    }
+
     public function get_sync_ticket_data($url, $email, $key, $event_id) {
         $response = $this->get_remote($url, $email, $key, $event_id);
 

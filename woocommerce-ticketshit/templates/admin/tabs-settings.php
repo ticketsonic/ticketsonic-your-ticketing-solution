@@ -3,7 +3,6 @@
 <form enctype="multipart/form-data" method="post">
 	<table class="form-table">
 		<tbody>
-
 			<?php do_action( 'woo_ts_export_settings_before' ); ?>
 
 			<tr id="general-settings">
@@ -29,6 +28,16 @@
 				<td>
 					<input type="text" size="50" id="ticket_info_endpoint" name="ticket_info_endpoint" value="<?php echo $ticket_info_endpoint; ?>" class="text" />
 					<p class="description"><?php _e( 'Ticket Endpoint', 'woo_ts' ); ?>.</p>
+				</td>
+			</tr>
+
+			<tr>
+				<th>
+					<label for="event_info_endpoint"><?php _e('Event Info Endpoint', 'woo_ts' ); ?></label>
+				</th>
+				<td>
+					<input type="text" size="50" id="event_info_endpoint" name="event_info_endpoint" value="<?php echo $event_info_endpoint; ?>" class="text" />
+					<p class="description"><?php _e( 'Event Info Endpoint', 'woo_ts' ); ?>.</p>
 				</td>
 			</tr>
 

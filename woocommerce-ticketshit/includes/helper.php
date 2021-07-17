@@ -72,6 +72,33 @@ class Helper {
         return $result;
     }
 
+    public function get_events_data_from_remote() {
+        $url = woo_ts_get_option('event_info_endpoint', '');
+        $email = woo_ts_get_option('api_userid', '');
+        $key = woo_ts_get_option('api_key', '');
+        $headers = array(
+            "x-api-userid" => $email,
+            "x-api-key" => $key,
+        );
+
+        $response = $this->eventhome->get_request_from_remote($url, $headers, null);
+        return $response;
+    }
+
+    public function get_event_ticket_data_from_remote($event_id) {
+        $url = woo_ts_get_option('ticket_info_endpoint', '');
+        $email = woo_ts_get_option('api_userid', '');
+        $key = woo_ts_get_option('api_key', '');
+        $headers = array(
+            "x-api-userid" => $email,
+            "x-api-key" => $key,
+            "x-api-eventid" => intval($event_id)
+        );
+
+        $response = $this->eventhome->get_request_from_remote($url, $headers, null);
+        return $response;
+    }
+
     public function order_tickets_in_remote($order_id, $url, $email, $key, $data) {
         write_log('request_barcodes_from_ts for order ' . $order_id . ' is fired');
         write_log('sending req to TS');

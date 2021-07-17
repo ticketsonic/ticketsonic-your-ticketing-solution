@@ -4,6 +4,7 @@
 		<a data-tab-id="export" class="nav-tab<?php woo_ts_admin_active_tab( 'import' ); ?>" href="<?php echo add_query_arg( array( 'page' => 'woo_ts', 'tab' => 'import' ), 'admin.php' ); ?>"><?php _e( 'Import', 'woo_ts' ); ?></a>
 		<a data-tab-id="settings" class="nav-tab<?php woo_ts_admin_active_tab( 'settings' ); ?>" href="<?php echo add_query_arg( array( 'page' => 'woo_ts', 'tab' => 'settings' ), 'admin.php' ); ?>"><?php _e( 'Settings', 'woo_ts' ); ?></a>
 		<a data-tab-id="create" class="nav-tab<?php woo_ts_admin_active_tab( 'create' ); ?>" href="<?php echo add_query_arg( array( 'page' => 'woo_ts', 'tab' => 'create' ), 'admin.php' ); ?>"><?php _e( 'Create', 'woo_ts' ); ?></a>
+		<a data-tab-id="stats" class="nav-tab<?php woo_ts_admin_active_tab( 'stats' ); ?>" href="<?php echo add_query_arg( array( 'page' => 'woo_ts', 'tab' => 'stats' ), 'admin.php' ); ?>"><?php _e( 'Statistics', 'woo_ts' ); ?></a>
 	</h2>
 	<?php woo_ts_tab_template( $tab ); ?>
 </div>

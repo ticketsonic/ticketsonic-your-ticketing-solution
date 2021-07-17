@@ -20,6 +20,7 @@ if (is_admin()) {
 				woo_ts_update_option( 'email_subject', ( isset( $_POST['email_subject'] ) ? sanitize_text_field( $_POST['email_subject'] ) : '' ) );
 				woo_ts_update_option( 'email_body', ( isset( $_POST['email_body'] ) ? wp_kses($_POST['email_body'], allowed_html()) : '' ) );
 				woo_ts_update_option( 'ticket_info_endpoint', ( isset( $_POST['ticket_info_endpoint'] ) ? sanitize_text_field( $_POST['ticket_info_endpoint'] ) : '' ) );
+				woo_ts_update_option( 'event_info_endpoint', ( isset( $_POST['event_info_endpoint'] ) ? sanitize_text_field( $_POST['event_info_endpoint'] ) : '' ) );
 				woo_ts_update_option( 'new_event_endpoint', ( isset( $_POST['new_event_endpoint'] ) ? sanitize_text_field( $_POST['new_event_endpoint'] ) : '' ) );
 				woo_ts_update_option( 'external_order_endpoint', ( isset( $_POST['external_order_endpoint'] ) ? sanitize_text_field( $_POST['external_order_endpoint'] ) : '' ) );
 				woo_ts_update_option( 'event_id', ( isset( $_POST['event_id'] ) ? sanitize_text_field( $_POST['event_id'] ) : '' ) );
