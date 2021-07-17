@@ -1,9 +1,10 @@
 <div id="poststuff">
-	<div id="upload-csv" class="postbox">
+	<div id="remote-sync">
 		<form id="sync_with_ts" enctype="multipart/form-data" method="post">
 			<?php do_action('woo_ts_before_upload' ); ?>
 
-				<h3 class="hndle"><?php _e('Update Tickets', 'woo_ts'); ?></h3>
+				<h3><div class="dashicons dashicons-admin-settings"></div>&nbsp;<?php _e( 'Sync tickets with TicketSonic', 'woo_ts' ); ?></h3>
+				<p class="description"><?php _e( 'Sync your tickets as WooCommerce products with TicketSonic.', 'woo_ts' ); ?></p>
 				<div class="inside">
 					<p class="submit">
 						<input type="submit" value="<?php _e('Sync with TS', 'woo_ts' ); ?>" class="button-primary" />
