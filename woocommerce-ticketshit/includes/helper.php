@@ -12,8 +12,13 @@ class Helper {
     public function create_new_event($url, $email, $key, $event_title, $event_description, $event_datetime, $event_location, $tickets_data) {
         write_log('creating new event is fired');
         write_log('sending req to TS');
+        $headers = array(
+            "x-api-userid" => $email,
+            "x-api-key" => $key,
+        );
+
         $body = $this->prepare_create_new_event_body($email, $key, $event_title, $event_description, $event_datetime, $event_location, $tickets_data);
-        $response = $this->eventhome->request_new_event_in_remote($url, $body);
+        $response = $this->eventhome->request_new_event_in_remote($url, $headers, $body);
 
         if ($response["status"] == "error") {
             woo_ts_admin_notice('Error sending new event request: ' . $response["message"] , 'error');
@@ -45,7 +50,13 @@ class Helper {
     }
 
     public function sync_tickets_with_remote($url, $email, $key, $event_id) {
-        $response = $this->eventhome->get_sync_ticket_data($url, $email, $key, $event_id);
+        $headers = array(
+            "x-api-userid" => $email,
+            "x-api-key" => $key,
+            "x-api-eventid" => $event_id
+        );
+        
+        $response = $this->eventhome->get_request_from_remote($url, $headers, null);
 
         if ($response["status"] == "error") {
             woo_ts_admin_notice('Error syncing tickets: ' . $response["message"] , 'error');

@@ -41,12 +41,6 @@ class EventHome {
         return $response;
     }
 
-    public function get_sync_ticket_data($url, $email, $key, $event_id) {
-        $response = $this->get_remote($url, $email, $key, $event_id);
-
-        return $response;
-    }
-
     public function get_remote($url, $email, $key, $event_id) {
         $this->http = new GuzzleHttp\Client(['base_uri' => $url, 'verify' => false]);
         $response = array();
@@ -77,8 +71,8 @@ class EventHome {
         return $response;
     }
 
-    public function request_new_event_in_remote($url, $data) {
-        $response = $this->post_remote($url, $data);
+    public function request_new_event_in_remote($url, $headers, $body) {
+        $response = $this->post_request_to_remote($url, $headers, $body);
 
         return $response;
     }
