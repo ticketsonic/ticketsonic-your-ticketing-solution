@@ -83,7 +83,7 @@
 	</table>
 
 	<p class="submit">
-		<input type="submit" name="submit" id="submit" class="button button-primary" value="<?php _e( 'Request event', 'woo_ts' ); ?>" />
+		<input type="submit" name="submit" id="submit" class="button button-primary" value="<?php _e( 'Request new ticket', 'woo_ts' ); ?>" />
 	</p>
 	<input type="hidden" name="action" value="create-ticket" />
 </form>
