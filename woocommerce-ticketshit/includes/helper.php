@@ -176,10 +176,6 @@ class Helper {
         }
 
         $body = array(
-            'headers' => array(
-                'api_userid' => $email,
-                'api_key' => $key,
-            ),
             'payload' => array(
                 'title' => $event_title,
                 'description' => $event_description,
