@@ -128,8 +128,12 @@ class Helper {
     public function order_tickets_in_remote($order_id, $url, $email, $key, $data) {
         write_log('request_barcodes_from_ts for order ' . $order_id . ' is fired');
         write_log('sending req to TS');
-        $body = $this->prepare_request_body($order_id, $email, $key, $data);
-        $response = $this->eventhome->request_tickets_in_remote($url, $body);
+        $headers = array(
+            "x-api-userid" => $email,
+            "x-api-key" => $key
+        );
+        $body = $this->prepare_order_tickets_request_body($order_id, $email, $key, $data);
+        $response = $this->eventhome->post_request_to_remote($url, $headers, $body);
     
         write_log('result from the request to TS for ' . $order_id . ' is received');
     
@@ -209,7 +213,7 @@ class Helper {
         return $body;
     }
 
-    private function prepare_request_body($order_id, $email, $key, $data) {
+    private function prepare_order_tickets_request_body($order_id, $email, $key, $data) {
         $order = wc_get_order($order_id);
         $body = array(
             'headers' => array(
