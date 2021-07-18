@@ -47,6 +47,16 @@
 				</th>
 				<td>
 					<input type="text" size="50" id="new_event_endpoint" name="new_event_endpoint" value="<?php echo $new_event_endpoint; ?>" class="text" />
+					<p class="description"><?php _e( 'Event Endpoint', 'woo_ts' ); ?>.</p>
+				</td>
+			</tr>
+
+			<tr>
+				<th>
+					<label for="new_ticket_endpoint"><?php _e('New Ticket Endpoint', 'woo_ts' ); ?></label>
+				</th>
+				<td>
+					<input type="text" size="50" id="new_ticket_endpoint" name="new_ticket_endpoint" value="<?php echo $new_ticket_endpoint; ?>" class="text" />
 					<p class="description"><?php _e( 'Ticket Endpoint', 'woo_ts' ); ?>.</p>
 				</td>
 			</tr>

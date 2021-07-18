@@ -22,6 +22,7 @@ if (is_admin()) {
 				woo_ts_update_option( 'ticket_info_endpoint', ( isset( $_POST['ticket_info_endpoint'] ) ? sanitize_text_field( $_POST['ticket_info_endpoint'] ) : '' ) );
 				woo_ts_update_option( 'event_info_endpoint', ( isset( $_POST['event_info_endpoint'] ) ? sanitize_text_field( $_POST['event_info_endpoint'] ) : '' ) );
 				woo_ts_update_option( 'new_event_endpoint', ( isset( $_POST['new_event_endpoint'] ) ? sanitize_text_field( $_POST['new_event_endpoint'] ) : '' ) );
+				woo_ts_update_option( 'new_ticket_endpoint', ( isset( $_POST['new_ticket_endpoint'] ) ? sanitize_text_field( $_POST['new_ticket_endpoint'] ) : '' ) );
 				woo_ts_update_option( 'external_order_endpoint', ( isset( $_POST['external_order_endpoint'] ) ? sanitize_text_field( $_POST['external_order_endpoint'] ) : '' ) );
 				woo_ts_update_option( 'event_id', ( isset( $_POST['event_id'] ) ? sanitize_text_field( $_POST['event_id'] ) : '' ) );
 
@@ -111,6 +112,74 @@ if (is_admin()) {
 
 				$helper = new Helper();
 				$result = $helper->create_new_event($url, $email, $key, $event_title, $event_description, $event_datetime, $event_location, $tickets_data);
+
+				if ($result["status"] == "success") {
+					woo_ts_admin_notice("Status: success<br>Event ID: " . $result["event_id"] . " successfully sent for processing. You will receive an email when it is processed.", "notice");
+				} else {
+					woo_ts_admin_notice("Failed to request new event: " . $result["message"], "error");
+				}
+
+				break;
+
+			case 'create-ticket':
+				$url = woo_ts_get_option('new_ticket_endpoint', '');
+				if (empty($url)) {
+					woo_ts_admin_notice("New Ticket Endpoint have to set in Settings", "error");
+					return;
+				}
+				
+				$email = woo_ts_get_option('api_userid', '');
+				if (empty($email)) {
+					woo_ts_admin_notice("Partner E-mail have to set in Settings", "error");
+					return;
+				}
+
+				$key = woo_ts_get_option('api_key', '');
+				if (empty($key)) {
+					woo_ts_admin_notice("Partner API Key have to set in Settings", "error");
+					return;
+				}
+
+				$ticket_eventid = $_POST['ticket_eventid'];
+				if (empty($ticket_eventid)) {
+					woo_ts_admin_notice("Ticket event id field have to set", "error");
+					return;
+				}
+
+				$ticket_title = $_POST['ticket_title'];
+				if (empty($ticket_title)) {
+					woo_ts_admin_notice("Ticket title field have to set", "error");
+					return;
+				}
+
+				$ticket_description = $_POST['ticket_description'];
+
+				$ticket_price = $_POST['ticket_price'];
+				if (empty($ticket_price)) {
+					woo_ts_admin_notice("Ticket price field have to set", "error");
+					return;
+				}
+
+				if (!is_int(intval($ticket_price))) {
+					woo_ts_admin_notice("Ticket price must be an integer number", "error");
+
+					return;
+				}
+
+				$ticket_currency = $_POST['ticket_currency'];
+				if (empty($ticket_currency)) {
+					woo_ts_admin_notice("Ticket currency field have to set", "error");
+					return;
+				}
+
+				$ticket_stock = $_POST['ticket_stock'];
+				if (empty($ticket_stock)) {
+					woo_ts_admin_notice("Ticket stock field have to set", "error");
+					return;
+				}
+
+				$helper = new Helper();
+				$result = $helper->create_new_ticket($url, $email, $key, $ticket_eventid, $ticket_title, $ticket_description, $ticket_price, $ticket_currency, $ticket_stock);
 
 				if ($result["status"] == "success") {
 					woo_ts_admin_notice("Status: success<br>Event ID: " . $result["event_id"] . " successfully sent for processing. You will receive an email when it is processed.", "notice");

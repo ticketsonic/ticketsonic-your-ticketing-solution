@@ -23,6 +23,27 @@ class Helper {
         return $response;
     }
 
+    public function create_new_ticket($url, $email, $key, $ticket_eventid, $ticket_title, $ticket_description, $ticket_price, $ticket_currency, $ticket_stock) {
+        write_log('creating new ticket is fired');
+        write_log('sending req to TS');
+
+        $headers = array(
+            "x-api-userid" => $email,
+            "x-api-key" => $key,
+            "x-api-eventid" => $ticket_eventid
+        );
+
+        $body = $this->prepare_create_new_ticket_body($email, $key, $ticket_eventid, $ticket_title, $ticket_description, $ticket_price, $ticket_currency, $ticket_stock);
+        $response = $this->eventhome->request_new_ticket_in_remote($url, $headers, $body);
+
+        if ($response["status"] == "error") {
+            woo_ts_admin_notice('Error sending new ticket request: ' . $response["message"] , 'error');
+            return;
+        }
+
+        return $response;
+    }
+
     public function sync_tickets_with_remote($url, $email, $key, $event_id) {
         $response = $this->eventhome->get_sync_ticket_data($url, $email, $key, $event_id);
 
@@ -157,6 +178,26 @@ class Helper {
                 'location' => $event_location,
                 'tickets' => $tickets_data,
                 'request_hash' => bin2hex(openssl_random_pseudo_bytes(16))
+            )
+        );
+
+        return $body;
+    }
+
+    private function prepare_create_new_ticket_body($email, $key, $ticket_eventid, $ticket_title, $ticket_description, $ticket_price, $ticket_currency, $ticket_stock) {
+        $ticket_price = intval($ticket_price) * 100;
+        $body = array(
+            'headers' => array(
+                'api_userid' => $email,
+                'api_key' => $key,
+                'x-api-eventid' => $ticket_eventid
+            ),
+            'payload' => array(
+                'title' => $ticket_title,
+                'description' => $ticket_description,
+                'price' => $ticket_price,
+                'currency' => $ticket_currency,
+                'stock' => $ticket_stock
             )
         );
 

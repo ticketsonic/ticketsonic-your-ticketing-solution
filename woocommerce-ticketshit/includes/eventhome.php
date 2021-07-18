@@ -23,6 +23,24 @@ class EventHome {
         return $response;
     }
 
+    public function post_request_to_remote($url, $headers, $body) {
+        $this->http = new GuzzleHttp\Client(['base_uri' => $url, 'verify' => false]);
+        $response = array();
+        try {
+            $response = $this->http->request('POST', $url, [
+                'headers' => $headers,
+                'body' => json_encode($body)
+            ]);
+        
+            $response = json_decode($response->getBody(), true);
+        } catch (Exception $ex) {
+            $response['status'] = 'error';
+            $response['message'] = $ex->getMessage();
+        }
+
+        return $response;
+    }
+
     public function get_sync_ticket_data($url, $email, $key, $event_id) {
         $response = $this->get_remote($url, $email, $key, $event_id);
 
@@ -61,6 +79,12 @@ class EventHome {
 
     public function request_new_event_in_remote($url, $data) {
         $response = $this->post_remote($url, $data);
+
+        return $response;
+    }
+
+    public function request_new_ticket_in_remote($url, $headers, $body) {
+        $response = $this->post_request_to_remote($url, $headers, $body);
 
         return $response;
     }
