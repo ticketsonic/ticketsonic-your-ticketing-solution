@@ -104,10 +104,7 @@ class Helper {
         return $result;
     }
 
-    public function get_events_data_from_remote() {
-        $url = woo_ts_get_option('event_info_endpoint', '');
-        $email = woo_ts_get_option('api_userid', '');
-        $key = woo_ts_get_option('api_key', '');
+    public function get_events_data_from_remote($url, $email, $key) {
         $headers = array(
             "x-api-userid" => $email,
             "x-api-key" => $key,
@@ -117,14 +114,11 @@ class Helper {
         return $response;
     }
 
-    public function get_event_ticket_data_from_remote($event_id) {
-        $url = woo_ts_get_option('ticket_info_endpoint', '');
-        $email = woo_ts_get_option('api_userid', '');
-        $key = woo_ts_get_option('api_key', '');
+    public function get_event_ticket_data_from_remote($url, $email, $key, $event_id) {
         $headers = array(
             "x-api-userid" => $email,
             "x-api-key" => $key,
-            "x-api-eventid" => intval($event_id)
+            "x-api-eventid" => $event_id
         );
 
         $response = $this->eventhome->get_request_from_remote($url, $headers, null);
