@@ -10,18 +10,16 @@ class Helper {
     }
 
     public function create_new_event($url, $email, $key, $event_title, $event_description, $event_datetime, $event_location, $tickets_data) {
-        write_log('creating new event is fired');
-        write_log('sending req to TS');
         $headers = array(
             "x-api-userid" => $email,
             "x-api-key" => $key,
         );
 
-        $body = $this->prepare_create_new_event_body($email, $key, $event_title, $event_description, $event_datetime, $event_location, $tickets_data);
-        $response = $this->eventhome->request_new_event_in_remote($url, $headers, $body);
+        $body = $this->prepare_create_new_event_request_data($headers, $event_title, $event_description, $event_datetime, $event_location, $tickets_data);
+        $response = $this->eventhome->post_request_to_remote($url, $headers, $body);
 
         if ($response["status"] == "error") {
-            woo_ts_admin_notice('Error sending new event request: ' . $response["message"] , 'error');
+            woo_ts_admin_notice("Error sending new event request: " . $response["message"] , "error");
             return;
         }
 
@@ -167,20 +165,21 @@ class Helper {
         }
     }
 
-    private function prepare_create_new_event_body($email, $key, $event_title, $event_description, $event_datetime, $event_location, $tickets_data) {
+    private function prepare_create_new_event_request_data($headers, $event_title, $event_description, $event_datetime, $event_location, $tickets_data) {
         foreach ($tickets_data as $k => $value) {
             $tickets_data[$k]["price"] = intval($value["price"]) * 100;
         }
 
         $body = array(
-            'payload' => array(
-                'title' => $event_title,
-                'description' => $event_description,
-                'datetime' => $event_datetime,
-                'location' => $event_location,
-                'tickets' => $tickets_data,
-                'request_hash' => bin2hex(openssl_random_pseudo_bytes(16))
-            )
+            "body" => array(
+                "title" => $event_title,
+                "description" => $event_description,
+                "datetime" => $event_datetime,
+                "location" => $event_location,
+                "tickets" => $tickets_data,
+                "request_hash" => bin2hex(openssl_random_pseudo_bytes(16))
+            ),
+            "headers" => $headers
         );
 
         return $body;
