@@ -29,17 +29,14 @@ class Helper {
     }
 
     public function create_new_ticket($url, $email, $key, $ticket_eventid, $ticket_title, $ticket_description, $ticket_price, $ticket_currency, $ticket_stock) {
-        write_log('creating new ticket is fired');
-        write_log('sending req to TS');
-
         $headers = array(
             "x-api-userid" => $email,
             "x-api-key" => $key,
             "x-api-eventid" => $ticket_eventid
         );
 
-        $body = $this->prepare_create_new_ticket_body($email, $key, $ticket_eventid, $ticket_title, $ticket_description, $ticket_price, $ticket_currency, $ticket_stock);
-        $response = $this->eventhome->request_new_ticket_in_remote($url, $headers, $body);
+        $body = $this->prepare_create_new_ticket_request_data($headers, $ticket_title, $ticket_description, $ticket_price, $ticket_currency, $ticket_stock);
+        $response = $this->eventhome->post_request_to_remote($url, $headers, $body);
 
         if ($response["status"] == "error") {
             woo_ts_admin_notice('Error sending new ticket request: ' . $response["message"] , 'error');
@@ -189,24 +186,20 @@ class Helper {
         return $body;
     }
 
-    private function prepare_create_new_ticket_body($email, $key, $ticket_eventid, $ticket_title, $ticket_description, $ticket_price, $ticket_currency, $ticket_stock) {
+    private function prepare_create_new_ticket_request_data($headers, $ticket_title, $ticket_description, $ticket_price, $ticket_currency, $ticket_stock) {
         $ticket_price = intval($ticket_price) * 100;
-        $body = array(
-            'headers' => array(
-                'api_userid' => $email,
-                'api_key' => $key,
-                'x-api-eventid' => $ticket_eventid
+        $request_data = array(
+            "body" => array(
+                "title" => $ticket_title,
+                "description" => $ticket_description,
+                "price" => $ticket_price,
+                "currency" => $ticket_currency,
+                "stock" => $ticket_stock
             ),
-            'payload' => array(
-                'title' => $ticket_title,
-                'description' => $ticket_description,
-                'price' => $ticket_price,
-                'currency' => $ticket_currency,
-                'stock' => $ticket_stock
-            )
+            "headers" => $headers
         );
 
-        return $body;
+        return $request_data;
     }
 
     private function prepare_order_tickets_request_body($order_id, $email, $key, $data) {

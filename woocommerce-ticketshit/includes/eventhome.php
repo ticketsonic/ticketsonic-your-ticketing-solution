@@ -77,12 +77,6 @@ class EventHome {
         return $response;
     }
 
-    public function request_new_ticket_in_remote($url, $headers, $body) {
-        $response = $this->post_request_to_remote($url, $headers, $body);
-
-        return $response;
-    }
-
     private function post_remote($url, $data) {
         $this->http = new GuzzleHttp\Client(['base_uri' => $url, 'verify' => false]);
         $response = array();

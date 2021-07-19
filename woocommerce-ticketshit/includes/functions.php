@@ -182,7 +182,7 @@ if (is_admin()) {
 				$result = $helper->create_new_ticket($url, $email, $key, $ticket_eventid, $ticket_title, $ticket_description, $ticket_price, $ticket_currency, $ticket_stock);
 
 				if ($result["status"] == "success") {
-					woo_ts_admin_notice("Status: success<br>Event ID: " . $result["event_id"] . " successfully sent for processing. You will receive an email when it is processed.", "notice");
+					woo_ts_admin_notice("Status: success<br>Ticket for event ID: " . $ticket_eventid . " successfully sent for processing. You will receive an email when it is processed.", "notice");
 				} else {
 					woo_ts_admin_notice("Failed to request new event: " . $result["message"], "error");
 				}
