@@ -80,43 +80,48 @@ if (is_admin()) {
 					return;
 				}
 
-				$event_title = $_POST['event_title'];
+				$event_title = sanitize_text_field( $_POST['event_title'] );
 				if (empty($event_title)) {
 					woo_ts_admin_notice("Event title field have to set", "error");
 					return;
 				}
 
-				$event_description = $_POST['event_description'];
-				$event_datetime = $_POST['event_datetime'];
-				$event_location = $_POST['event_location'];
+				$event_description = sanitize_text_field( $_POST['event_description'] );
+				$event_datetime = sanitize_text_field( $_POST['event_datetime'] );
+				$event_location = sanitize_text_field( $_POST['event_location'] );
 				
 				$tickets_data = $_POST['ticket'];
 				foreach ($tickets_data as $value) {
 					if (empty($value["title"])) {
+						$value["title"] = sanitize_text_field( $value["title"] );
 						woo_ts_admin_notice("Ticket title must be set", "error");
 
 						return;
 					}
 
 					if (empty($value["price"])) {
+						$value["price"] = sanitize_text_field( $value["price"] );
 						woo_ts_admin_notice("Ticket price must be set", "error");
 
 						return;
 					}
 
 					if (!is_int(intval($value["price"]))) {
+						$value["price"] = sanitize_text_field( $value["price"] );
 						woo_ts_admin_notice("Ticket price must be an integer number", "error");
 
 						return;
 					}
 
 					if (empty($value["stock"])) {
+						$value["stock"] = sanitize_text_field( $value["stock"] );
 						woo_ts_admin_notice("Ticket stock must be set", "error");
 
 						return;
 					}
 
 					if (empty($value["currency"])) {
+						$value["currency"] = sanitize_text_field( $value["currency"] );
 						woo_ts_admin_notice("Ticket currency must be set", "error");
 
 						return;
@@ -153,39 +158,39 @@ if (is_admin()) {
 					return;
 				}
 
-				$ticket_eventid = $_POST['ticket_eventid'];
+				$ticket_eventid = sanitize_text_field( $_POST['ticket_eventid'] );
 				if (empty($ticket_eventid)) {
 					woo_ts_admin_notice("Ticket event id field have to set", "error");
 					return;
 				}
 
-				$ticket_title = $_POST['ticket_title'];
+				$ticket_title = sanitize_text_field( $_POST['ticket_title'] );
 				if (empty($ticket_title)) {
 					woo_ts_admin_notice("Ticket title field have to set", "error");
 					return;
 				}
 
-				$ticket_description = $_POST['ticket_description'];
+				$ticket_description = sanitize_text_field( $_POST['ticket_description']);
 
-				$ticket_price = $_POST['ticket_price'];
+				$ticket_price = sanitize_text_field(  $_POST['ticket_price'] );
 				if (empty($ticket_price)) {
 					woo_ts_admin_notice("Ticket price field have to set", "error");
 					return;
 				}
 
-				if (!is_int(intval($ticket_price))) {
+				if (!is_int(intval(sanitize_text_field( $ticket_price )))) {
 					woo_ts_admin_notice("Ticket price must be an integer number", "error");
 
 					return;
 				}
 
-				$ticket_currency = $_POST['ticket_currency'];
+				$ticket_currency = sanitize_text_field( $_POST['ticket_currency'] );
 				if (empty($ticket_currency)) {
 					woo_ts_admin_notice("Ticket currency field have to set", "error");
 					return;
 				}
 
-				$ticket_stock = $_POST['ticket_stock'];
+				$ticket_stock = sanitize_text_field( $_POST['ticket_stock'] );
 				if (empty($ticket_stock)) {
 					woo_ts_admin_notice("Ticket stock field have to set", "error");
 					return;
