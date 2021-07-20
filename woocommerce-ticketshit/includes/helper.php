@@ -3,7 +3,6 @@
 require("mpdf_generator.php");
 require("cryptography.php");
 require( dirname( __FILE__ ) . '/../vendor/autoload.php');
-use GuzzleHttp\Client;
 
 function request_create_new_event($url, $email, $key, $event_title, $event_description, $event_datetime, $event_location, $tickets_data) {
     $headers = array(
@@ -11,7 +10,22 @@ function request_create_new_event($url, $email, $key, $event_title, $event_descr
         "x-api-key" => $key,
     );
 
-    $body = prepare_create_new_event_request_data($headers, $event_title, $event_description, $event_datetime, $event_location, $tickets_data);
+    foreach ($tickets_data as $k => $value) {
+        $tickets_data[$k]["price"] = intval($value["price"]) * 100;
+    }
+
+    $body = array(
+        "body" => array(
+            "title" => $event_title,
+            "description" => $event_description,
+            "datetime" => $event_datetime,
+            "location" => $event_location,
+            "tickets" => $tickets_data,
+            "request_hash" => bin2hex(openssl_random_pseudo_bytes(16))
+        ),
+        "headers" => $headers
+    );
+
     $response = post_request_to_remote($url, $headers, $body);
 
     if ($response["status"] == "error") {
@@ -29,7 +43,17 @@ function request_create_new_ticket($url, $email, $key, $ticket_eventid, $ticket_
         "x-api-eventid" => $ticket_eventid
     );
 
-    $body = prepare_create_new_ticket_request_data($headers, $ticket_title, $ticket_description, $ticket_price, $ticket_currency, $ticket_stock);
+    $ticket_price = intval($ticket_price) * 100;
+    $body = array(
+        "body" => array(
+            "title" => $ticket_title,
+            "description" => $ticket_description,
+            "price" => $ticket_price,
+            "currency" => $ticket_currency,
+            "stock" => $ticket_stock
+        ),
+        "headers" => $headers
+    );
     $response = post_request_to_remote($url, $headers, $body);
 
     if ($response["status"] == "error") {
@@ -50,7 +74,7 @@ function sync_tickets_with_remote($url, $email, $key, $event_id) {
     $response = get_request_from_remote($url, $headers, null);
 
     if ($response["status"] == "error") {
-        woo_ts_admin_notice('Error syncing tickets: ' . $response["message"] , 'error');
+        woo_ts_admin_notice("Error syncing tickets: " . $response["message"] , "error");
         return;
     }
 
@@ -166,42 +190,6 @@ function request_order_tickets_in_remote($order_id, $url, $email, $key) {
     write_log('Order meta for ticket files for order ' . $order_id . ' is saved');
 
     return $order;
-}
-
-function prepare_create_new_event_request_data($headers, $event_title, $event_description, $event_datetime, $event_location, $tickets_data) {
-    foreach ($tickets_data as $k => $value) {
-        $tickets_data[$k]["price"] = intval($value["price"]) * 100;
-    }
-
-    $body = array(
-        "body" => array(
-            "title" => $event_title,
-            "description" => $event_description,
-            "datetime" => $event_datetime,
-            "location" => $event_location,
-            "tickets" => $tickets_data,
-            "request_hash" => bin2hex(openssl_random_pseudo_bytes(16))
-        ),
-        "headers" => $headers
-    );
-
-    return $body;
-}
-
-function prepare_create_new_ticket_request_data($headers, $ticket_title, $ticket_description, $ticket_price, $ticket_currency, $ticket_stock) {
-    $ticket_price = intval($ticket_price) * 100;
-    $request_data = array(
-        "body" => array(
-            "title" => $ticket_title,
-            "description" => $ticket_description,
-            "price" => $ticket_price,
-            "currency" => $ticket_currency,
-            "stock" => $ticket_stock
-        ),
-        "headers" => $headers
-    );
-
-    return $request_data;
 }
 
 function prepare_order_tickets_request_body($order_id, $email, $key, $data) {
