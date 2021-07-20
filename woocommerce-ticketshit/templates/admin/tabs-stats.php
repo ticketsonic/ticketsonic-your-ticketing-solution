@@ -1,7 +1,6 @@
 <?php
 
 require_once WOO_TS_PATH . '/includes/helper.php';
-$helper = new Helper();
 
 $url = woo_ts_get_option('event_info_endpoint', '');
 if (empty($url)) {
@@ -21,7 +20,7 @@ if (empty($key)) {
     return;
 }
 
-$raw_events = $helper->get_events_data_from_remote($url, $email, $key);
+$raw_events = get_events_data_from_remote($url, $email, $key);
 
 $url = woo_ts_get_option('ticket_info_endpoint', '');
 if (empty($url)) {
@@ -29,7 +28,7 @@ if (empty($url)) {
     return;
 }
 
-$raw_tickets = $helper->get_event_ticket_data_from_remote($url, $email, $key, null);
+$raw_tickets = get_event_ticket_data_from_remote($url, $email, $key, null);
 
 print "<h3><div class=\"dashicons dashicons-admin-settings\"></div>&nbsp;List of events</h3>";
 
