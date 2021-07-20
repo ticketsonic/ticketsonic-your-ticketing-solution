@@ -1,6 +1,6 @@
 <?php
 
-require('helper.php');
+require('ticketsonic.php');
 
 if (is_admin()) {
 	include_once( WOO_TS_PATH . 'includes/admin.php' );

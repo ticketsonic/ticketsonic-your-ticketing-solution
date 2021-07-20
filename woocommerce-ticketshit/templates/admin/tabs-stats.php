@@ -1,6 +1,6 @@
 <?php
 
-require_once WOO_TS_PATH . '/includes/helper.php';
+require_once WOO_TS_PATH . '/includes/ticketsonic.php';
 
 $url = woo_ts_get_option('event_info_endpoint', '');
 if (empty($url)) {
@@ -29,31 +29,49 @@ if (empty($url)) {
 }
 
 $raw_tickets = get_event_ticket_data_from_remote($url, $email, $key, null);
-
-print "<h3><div class=\"dashicons dashicons-admin-settings\"></div>&nbsp;List of events</h3>";
-
-print "<table><thead><tr><td>Title</td><td>Event ID</td></tr></thead><tr>";
-
-foreach ($raw_events["events"] as $event) {
-    print "<tr>";
-    print "<td>" . $event["title"] . "</td>";
-    print "<td>" . $event["event_id"] . "</td>";
-    print "</tr>";
-}
-
-print "</table>";
-
-print "<h3><div class=\"dashicons dashicons-admin-settings\"></div>&nbsp;List of tickets</h3>";
-
-print "<table><thead><tr><td>Event ID</td><td>Title</td><td>Price</td><td>Currency</td><td>Stock</td></tr></thead>";
-    foreach ($raw_tickets["tickets"] as $ticket) {
-        print "<tr>";
-        print "<td>" . $ticket["event_id"] . "</td>";
-        print "<td>" . $ticket["ticket_title_en"] . "</td>";
-        print "<td>" . $ticket["price"] . "</td>";
-        print "<td>" . $ticket["currency"] . "</td>";
-        print "<td>" . $ticket["stock"] . "</td>";
-        print "</tr>";
-    }
-    print "</tr></table>";
 ?>
+<div class="remote-data">
+    <h3><div class="dashicons dashicons-admin-settings"></div>&nbsp;List of events</h3>
+
+    <table class="wp-list-table widefat fixed striped table-view-list posts">
+        <thead>
+            <tr>
+                <th class="manage-column column-xm">Event ID</th>
+                <th>Title</th>
+            </tr>
+        </thead>    
+        <tbody>
+            <?php foreach ($raw_events["events"] as $event): ?>
+                <tr>
+                    <td class="sku column-name"><?php print $event["event_id"]; ?></td>
+                    <td class="column-name"><?php print $event["title"]; ?></td>
+                </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+
+    <h3><div class="dashicons dashicons-admin-settings"></div>&nbsp;List of tickets</h3>
+
+    <table class="wp-list-table widefat fixed striped table-view-list posts">
+        <thead>
+            <tr>
+                <th class="manage-column column-xm">Event ID</th>
+                <th class="manage-column column-xs">Price</th>
+                <th class="manage-column column-xs">Currency</th>
+                <th class="manage-column column-xs">Stock</th>
+                <th>Title</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($raw_tickets["tickets"] as $ticket): ?>
+            <tr>
+                <td><?php print $ticket["event_id"]; ?></td>
+                <td><?php print $ticket["price"]; ?></td>
+                <td><?php print $ticket["currency"]; ?></td>
+                <td><?php print $ticket["stock"]; ?></td>
+                <td><?php print $ticket["ticket_title_en"]; ?></td>
+            </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+</div>

@@ -321,3 +321,15 @@
 	color: #fff;
 	position: absolute;
 }
+
+table.wp-list-table .column-xs {
+    width: 5%;
+}
+
+table.wp-list-table .column-xm {
+    width: 17%;
+}
+
+div.remote-data h3 {
+	margin-top: 50px;
+}
