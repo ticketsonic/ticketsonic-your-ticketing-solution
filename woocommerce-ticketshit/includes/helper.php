@@ -140,7 +140,7 @@ function get_event_ticket_data_from_remote($url, $email, $key, $event_id) {
     return $response;
 }
 
-function request_order_tickets_in_remote($order_id, $url, $email, $key) {
+function request_create_tickets_order_in_remote($order_id, $url, $email, $key) {
     $order = wc_get_order($order_id);
 
 	$data = array(

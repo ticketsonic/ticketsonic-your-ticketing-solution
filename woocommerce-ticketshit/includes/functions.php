@@ -224,13 +224,13 @@ function mysite_woocommerce_payment_complete($order_id) {
 	// write_log('mysite_woocommerce_payment_complete for order ' . $order_id . ' is fired');
 }
 
-add_action('woocommerce_order_status_processing', 'order_tickets_in_remote', 10, 1);
-function order_tickets_in_remote($order_id) {
+add_action('woocommerce_order_status_processing', 'create_tickets_order_in_remote', 10, 1);
+function create_tickets_order_in_remote($order_id) {
 	$url = woo_ts_get_option('external_order_endpoint', '');
 	$email = woo_ts_get_option('api_userid', '');
 	$key = woo_ts_get_option('api_key', '');
 
-	request_order_tickets_in_remote($order_id, $url, $email, $key);
+	request_create_tickets_order_in_remote($order_id, $url, $email, $key);
 }
 
 /**
@@ -250,7 +250,7 @@ function manual_ticket_generation_order_action($actions) {
 	$promoter_api_key = woo_ts_get_option('api_key', '');
 
 	//FIXME: check if arguments are not. Causes failure in WP if $endpoint_url, $api_userid, $promoter_api_key are null
-	// request_order_tickets_in_remote($order_id, $endpoint_url, $api_userid, $promoter_api_key, $data);
+	// request_create_tickets_order_in_remote($order_id, $endpoint_url, $api_userid, $promoter_api_key, $data);
 
     $actions['wc_manual_ticket_generation_order_action'] = __( 'Generate tickets', 'generate-tickets' );
     return $actions;
@@ -262,7 +262,7 @@ function send_tickets_to_customer_after_order_completed($order_id) {
 	$email = woo_ts_get_option('api_userid', '');
 	$key = woo_ts_get_option('api_key', '');
 
-    $order = request_order_tickets_in_remote($order_id, $url, $email, $key);
+    $order = request_create_tickets_order_in_remote($order_id, $url, $email, $key);
 
     if ($order == null) {
         return;
