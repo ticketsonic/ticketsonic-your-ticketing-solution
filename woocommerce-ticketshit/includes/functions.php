@@ -32,8 +32,23 @@ if (is_admin()) {
 
 			case 'sync_with_ts':
 				$url = woo_ts_get_option('ticket_info_endpoint', '');
+				if (empty($url)) {
+					woo_ts_admin_notice("Ticket Info Endpoint have to set in Settings", "error");
+					return;
+				}
+				
 				$email = woo_ts_get_option('api_userid', '');
+				if (empty($email)) {
+					woo_ts_admin_notice("Partner E-mail have to set in Settings", "error");
+					return;
+				}
+
 				$key = woo_ts_get_option('api_key', '');
+				if (empty($key)) {
+					woo_ts_admin_notice("Partner API Key have to set in Settings", "error");
+					return;
+				}
+
 				$event_id = woo_ts_get_option('event_id', '');
 				
 				$result = sync_tickets_with_remote($url, $email, $key, $event_id);
