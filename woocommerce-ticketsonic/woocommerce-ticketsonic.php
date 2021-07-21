@@ -1,8 +1,8 @@
 <?php
 /*
-Plugin Name: WooCommerce - Ticket Importer
-Plugin URI: https://github.com/vgvassilev/ticketshit-plugins/tree/master/woocommerce-ticketshit
-Description: Import Tickets (products) into your WooCommerce store from Ticket"s HIT system
+Plugin Name: WooCommerce - TicketSonic
+Plugin URI: https://github.com/mvassilev/ticketsonic-plugins/tree/master/woocommerce-ticketsonic
+Description: Sync Tickets into your WooCommerce store from the TicketSonic system
 Version: 0.1
 Author: Martin Vassilev
 Author URI: https://github.com/mvassilev/
@@ -26,14 +26,14 @@ define( "WOO_TS_PLUGINPATH", WP_PLUGIN_URL . "/" . basename( dirname( __FILE__ )
 
 $uploads_dir = wp_get_upload_dir();
 define( "WOO_TS_UPLOADPATH", $uploads_dir["basedir"] . "/" . WOO_TS_DIRNAME );
-define( "WOO_TS_TICKETSDIR", WP_PLUGIN_DIR . "/woocommerce-ticketshit/tickets/" );
+define( "WOO_TS_TICKETSDIR", WP_PLUGIN_DIR . "/woocommerce-ticketsonic/tickets/" );
 define( "WOO_TS_UPLOADURLPATH", $uploads_dir["baseurl"] . "/" . WOO_TS_DIRNAME );
 
 include_once( WOO_TS_PATH . "includes/functions.php" );
 
 if( is_admin() ) {
     function woo_ts_register_importer() {
-        register_importer( "woo_ts", __( "Tickets", "woocommerce-ticketshit" ), __( "<strong>Tickets Importer</strong> - Import Tickets into WooCommerce from Ticket\"s HIT.", "woo_ts" ), "woo_ts_html_page" );
+        register_importer( "woo_ts", __( "Tickets", "woocommerce-ticketsonic" ), __( "<strong>Tickets Importer</strong> - Import Tickets into WooCommerce from TicketSonic.", "woo_ts" ), "woo_ts_html_page" );
     }
     add_action( "admin_init", "woo_ts_register_importer" );
 
@@ -49,13 +49,12 @@ if( is_admin() ) {
     }
     add_action( "admin_init", "woo_ts_admin_init" );
 
-    // HTML templates and form processor for Product Importer screen
     function woo_ts_html_page() {
         // Check the User has the manage_woocommerce capability
         if( current_user_can( "manage_woocommerce" ) == false )
             return;
 
-        $title = __( "Product Importer", "woo_ts" );
+        $title = __( "TicketSonic", "woo_ts" );
 
         woo_ts_template_header( $title );
         woo_ts_manage_form();

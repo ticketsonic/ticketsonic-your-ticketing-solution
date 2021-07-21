@@ -106,9 +106,9 @@ function sync_tickets_with_remote($url, $email, $key, $event_id) {
         $ticket_obj->set_downloadable(true);
         $ticket_obj->set_virtual(true);
 
-        $ticketshit_term = get_term_by("slug", "ticketshit", "product_cat");
-        if ($ticketshit_term) {
-            $ticket_obj->set_category_ids(array($ticketshit_term->term_id));
+        $ticketsonic_term = get_term_by("slug", "ticketsonic", "product_cat");
+        if ($ticketsonic_term) {
+            $ticket_obj->set_category_ids(array($ticketsonic_term->term_id));
         }
 
         $woo_ticket_id = $ticket_obj->save();

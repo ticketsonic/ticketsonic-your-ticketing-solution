@@ -33,7 +33,7 @@ class MPDF_Generator {
 
     function SetBackground() {
         $uploads_dir = wp_get_upload_dir();
-        $image_path = $uploads_dir["basedir"] . "/woocommerce-ticketshit/pdf_background.jpg";
+        $image_path = $uploads_dir["basedir"] . "/woocommerce-ticketsonic/pdf_background.jpg";
         if (file_exists($image_path))
         $this->mpdf->Image($image_path, 0, 0, $this->w, $this->h, "jpg", "", true, false);
     }

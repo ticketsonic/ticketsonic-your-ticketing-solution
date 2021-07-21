@@ -57,7 +57,6 @@ function woo_ts_admin_notice_print() {
 
 }
 
-// HTML template header on Product Importer screen
 function woo_ts_template_header( $title = "", $icon = "woocommerce" ) { ?>
 <div id="woo-pi" class="wrap">
     <div id="icon-<?php echo $icon; ?>" class="icon32 icon32-woocommerce-importer"><br /></div>
@@ -66,7 +65,6 @@ function woo_ts_template_header( $title = "", $icon = "woocommerce" ) { ?>
 
 }
 
-// HTML template footer on Product Importer screen
 function woo_ts_template_footer() { ?>
 </div>
 <!-- .wrap -->
@@ -77,13 +75,12 @@ function woo_ts_template_footer() { ?>
 // Add Product Import to WordPress Administration menu
 function woo_ts_admin_menu() {
 
-    $page = add_submenu_page( "woocommerce", __( "Ticket Importer", "woo_ts" ), __( "Ticket Importer", "woo_ts" ), "manage_woocommerce", "woo_ts", "woo_ts_html_page" );
+    $page = add_submenu_page( "woocommerce", __( "TicketSonic", "woo_ts" ), __( "TicketSonic", "woo_ts" ), "manage_woocommerce", "woo_ts", "woo_ts_html_page" );
     add_action( "admin_print_styles-" . $page, "woo_ts_enqueue_scripts" );
 
 }
 add_action( "admin_menu", "woo_ts_admin_menu", 11 );
 
-// Load CSS and jQuery scripts for Product Importer screen
 function woo_ts_enqueue_scripts( $hook ) {
     // Simple check that WooCommerce is activated
     if( class_exists( "WooCommerce" ) ) {
@@ -101,7 +98,6 @@ function woo_ts_enqueue_scripts( $hook ) {
     wp_enqueue_style( "woo_vm_styles", plugins_url( "/templates/admin/woocommerce-admin_dashboard_vm-plugins.css", WOO_TS_RELPATH ) );
 }
 
-// HTML active class for the currently selected tab on the Product Importer screen
 function woo_ts_admin_active_tab( $tab_name = null, $tab = null ) {
     if( isset( $_GET["tab"] ) && !$tab )
         $tab = $_GET["tab"];
@@ -119,7 +115,6 @@ function woo_ts_admin_active_tab( $tab_name = null, $tab = null ) {
 
 }
 
-// HTML template for each tab on the Product Importer screen
 function woo_ts_tab_template( $tab = "" ) {
 
     global $import;
