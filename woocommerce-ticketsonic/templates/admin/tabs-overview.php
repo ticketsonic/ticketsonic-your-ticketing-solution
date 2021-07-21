@@ -1,9 +1,18 @@
 <div class="overview-left">
     <h3><div class="dashicons dashicons-migrate"></div>&nbsp;<a href="<?php echo add_query_arg( "tab", "sync" ); ?>"><?php _e( "Sync", "woo_ts" ); ?></a></h3>
-    <p><?php _e( "Issue sync commands in WooCommerce from TicketSonic.", "woo_ts" ); ?></p>
+    <p><?php _e( "Sync TicketSonic data with the WooCommerce store.", "woo_ts" ); ?></p>
 
     <h3><div class="dashicons dashicons-admin-settings"></div>&nbsp;<a href="<?php echo add_query_arg( "tab", "settings" ); ?>"><?php _e( "Settings", "woo_ts" ); ?></a></h3>
-    <p><?php _e( "Manage import options from a single detailed screen.", "woo_ts" ); ?></p>
+    <p><?php _e( "Manage credentials data to gain access to TicketSonic.", "woo_ts" ); ?></p>
+
+    <h3><div class="dashicons dashicons-admin-settings"></div>&nbsp;<a href="<?php echo add_query_arg( "tab", "create-event" ); ?>"><?php _e( "Request New Event", "woo_ts" ); ?></a></h3>
+    <p><?php _e( "Sends a new request to TicketSonic for a new event.", "woo_ts" ); ?></p>
+
+    <h3><div class="dashicons dashicons-admin-settings"></div>&nbsp;<a href="<?php echo add_query_arg( "tab", "create-ticket" ); ?>"><?php _e( "Request New Ticket", "woo_ts" ); ?></a></h3>
+    <p><?php _e( "Sends a new request to TicketSonic for a new ticket associated to a existing event.", "woo_ts" ); ?></p>
+
+    <h3><div class="dashicons dashicons-admin-settings"></div>&nbsp;<a href="<?php echo add_query_arg( "tab", "ticketsonic" ); ?>"><?php _e( "TicketSonic", "woo_ts" ); ?></a></h3>
+    <p><?php _e( "Preview live data in TicketSonic.", "woo_ts" ); ?></p>
 </div>
 <!-- .overview-left -->
 <div class="welcome-panel overview-right">
