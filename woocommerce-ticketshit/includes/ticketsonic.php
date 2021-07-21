@@ -144,26 +144,26 @@ function get_event_ticket_data_from_remote($url, $email, $key, $event_id) {
 function request_create_tickets_order_in_remote($order_id, $url, $email, $key) {
     $order = wc_get_order($order_id);
 
-	$data = array(
-		"start_time" => null,
-		"end_time" => null,
-		"group" => null
-	);
+    $data = array(
+        "start_time" => null,
+        "end_time" => null,
+        "group" => null
+    );
 
-	if (class_exists("Booked_WC_Appointment")) {
-		$appointment_id = $order->get_meta("_booked_wc_order_appointments");
-		$appointment = Booked_WC_Appointment::get($appointment_id[0]);
-		$from_to_arr = explode("-", $appointment->timeslot);
-		$from_date = date_create_from_format("Hi", $from_to_arr[0]);
-		$to_date = date_create_from_format("Hi", $from_to_arr[1]);
-		$interval = date_diff($to_date, $from_date);
-		$minutes_diff = $interval->d * 24 * 60;
-		$minutes_diff += $interval->h * 60;
-		$minutes_diff += $interval->i;
+    if (class_exists("Booked_WC_Appointment")) {
+        $appointment_id = $order->get_meta("_booked_wc_order_appointments");
+        $appointment = Booked_WC_Appointment::get($appointment_id[0]);
+        $from_to_arr = explode("-", $appointment->timeslot);
+        $from_date = date_create_from_format("Hi", $from_to_arr[0]);
+        $to_date = date_create_from_format("Hi", $from_to_arr[1]);
+        $interval = date_diff($to_date, $from_date);
+        $minutes_diff = $interval->d * 24 * 60;
+        $minutes_diff += $interval->h * 60;
+        $minutes_diff += $interval->i;
 
-		$data["start_time"] = strval(intval($appointment->timestamp));
-		$data["end_time"] = strval(intval($appointment->timestamp) + $minutes_diff * 60);
-	}
+        $data["start_time"] = strval(intval($appointment->timestamp));
+        $data["end_time"] = strval(intval($appointment->timestamp) + $minutes_diff * 60);
+    }
 
     $headers = array(
         "x-api-userid" => $email,

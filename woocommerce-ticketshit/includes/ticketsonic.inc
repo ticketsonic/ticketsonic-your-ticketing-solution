@@ -111,63 +111,63 @@ function filename_renamer($dir, $name, $ext){
 }
 
 function allowed_html() {
-	return array (
-		"html" => array (
-			"href" => array(),
-			"class" => array(),
-			"style" => array(),
-		),
-		"body" => array (
-			"href" => array(),
-			"class" => array(),
-			"style" => array(),
-		),
-		"style" => array (
-			"href" => array(),
-			"class" => array(),
-			"style" => array(),
-		),
-		"table" => array (
-			"href" => array(),
-			"class" => array(),
-			"style" => array(),
-		),
-		"tbody" => array (
-			"href" => array(),
-			"class" => array(),
-			"style" => array(),
-		),
-		"th" => array (
-			"href" => array(),
-			"class" => array(),
-			"style" => array(),
-		),
-		"tr" => array (
-			"href" => array(),
-			"class" => array(),
-			"style" => array(),
-		),
-		"td" => array (
-			"href" => array(),
-			"class" => array(),
-			"style" => array(),
-		),
-		"div" => array (
-			"href" => array(),
-			"class" => array(),
-			"style" => array(),
-		),
-		"p" => array (
-			"href" => array(),
-			"class" => array(),
-			"style" => array(),
-		),
-		"h1" => array (
-			"href" => array(),
-			"class" => array(),
-			"style" => array(),
-		),
-	);
+    return array (
+        "html" => array (
+            "href" => array(),
+            "class" => array(),
+            "style" => array(),
+        ),
+        "body" => array (
+            "href" => array(),
+            "class" => array(),
+            "style" => array(),
+        ),
+        "style" => array (
+            "href" => array(),
+            "class" => array(),
+            "style" => array(),
+        ),
+        "table" => array (
+            "href" => array(),
+            "class" => array(),
+            "style" => array(),
+        ),
+        "tbody" => array (
+            "href" => array(),
+            "class" => array(),
+            "style" => array(),
+        ),
+        "th" => array (
+            "href" => array(),
+            "class" => array(),
+            "style" => array(),
+        ),
+        "tr" => array (
+            "href" => array(),
+            "class" => array(),
+            "style" => array(),
+        ),
+        "td" => array (
+            "href" => array(),
+            "class" => array(),
+            "style" => array(),
+        ),
+        "div" => array (
+            "href" => array(),
+            "class" => array(),
+            "style" => array(),
+        ),
+        "p" => array (
+            "href" => array(),
+            "class" => array(),
+            "style" => array(),
+        ),
+        "h1" => array (
+            "href" => array(),
+            "class" => array(),
+            "style" => array(),
+        ),
+    );
 }
 
 ?>
