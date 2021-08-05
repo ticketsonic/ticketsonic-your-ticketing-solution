@@ -16,15 +16,12 @@ function request_create_new_event($url, $email, $key, $event_title, $event_descr
     }
 
     $body = array(
-        "body" => array(
-            "title" => $event_title,
-            "description" => $event_description,
-            "datetime" => $event_datetime,
-            "location" => $event_location,
-            "tickets" => $tickets_data,
-            "request_hash" => bin2hex(openssl_random_pseudo_bytes(16))
-        ),
-        "headers" => $headers
+        "primary_text_pl" => $event_title,
+        "secondary_text_pl" => $event_description,
+        "datetime" => $event_datetime,
+        "location" => $event_location,
+        "tickets" => $tickets_data,
+        "request_hash" => bin2hex(openssl_random_pseudo_bytes(16))
     );
 
     $response = post_request_to_remote($url, $headers, $body);
@@ -46,14 +43,11 @@ function request_create_new_ticket($url, $email, $key, $ticket_eventid, $ticket_
 
     $ticket_price = intval($ticket_price) * 100;
     $body = array(
-        "body" => array(
-            "title" => $ticket_title,
-            "description" => $ticket_description,
-            "price" => $ticket_price,
-            "currency" => $ticket_currency,
-            "stock" => $ticket_stock
-        ),
-        "headers" => $headers
+        "primary_text_pl" => $ticket_title,
+        "secondary_text_pl" => $ticket_description,
+        "price" => $ticket_price,
+        "currency" => $ticket_currency,
+        "stock" => $ticket_stock
     );
     $response = post_request_to_remote($url, $headers, $body);
 
@@ -91,10 +85,10 @@ function sync_tickets_with_remote($url, $email, $key, $event_id) {
         }
 
         $ticket_obj->set_sku($ticket["sku"]);
-        $ticket_obj->set_name($ticket["ticket_title_en"] . " " . $ticket["ticket_description_en"]);
+        $ticket_obj->set_name($ticket["primary_text_pl"]);
+        $ticket_obj->set_description($ticket["secondary_text_pl"]);
         $ticket_obj->set_status("publish");
         $ticket_obj->set_catalog_visibility("visible");
-        $ticket_obj->set_description($ticket["ticket_description_en"]);
         
         $price = (int)$ticket["price"] / 100;
         $ticket_obj->set_price($price);
@@ -190,24 +184,18 @@ function request_create_tickets_order_in_remote($order_id, $url, $email, $key) {
 function prepare_order_tickets_request_body($order_id, $email, $key, $data) {
     $order = wc_get_order($order_id);
     $body = array(
-        "headers" => array(
-            "api_userid" => $email,
-            "api_key" => $key,
+        "order_hash" => bin2hex(openssl_random_pseudo_bytes(16)),
+        "order_details" => array(
+            "customer_billing_name" => get_customer_name($order),
+            "customer_billing_company" => get_customer_company($order)
         ),
-        "payload" => array(
-            "order_hash" => bin2hex(openssl_random_pseudo_bytes(16)),
-            "order_details" => array(
-                "customer_billing_name" => get_customer_name($order),
-                "customer_billing_company" => get_customer_company($order)
-            ),
-            "tickets" => array()
-        )
+        "tickets" => array()
     );
 
     $items = $order->get_items();
     foreach($items as $item) {
         $ticket = new WC_Product_Simple($item["product_id"]);
-        $body["payload"]["tickets"][] = array(
+        $body["tickets"][] = array(
             "sku" => $ticket->get_sku(),
             "stock" => $item["quantity"],
             "start_time" => $data["start_time"],

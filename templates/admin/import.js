@@ -43,7 +43,7 @@ $j(function() {
                     <label for="ticket_title${i}">Ticket title${i+1}</label>
                 </th>
                 <td>
-                    <input type="text" size="50" id="ticket_title${i}" name="ticket[${i}][title]" value="" class="text" />
+                    <input type="text" size="50" id="ticket_title${i}" name="ticket[${i}][primary_text_pl]" value="" class="text" />
                 </td>
             </tr>
 
@@ -52,7 +52,7 @@ $j(function() {
                     <label for="ticket_description${i}">Ticket description${i+1}</label>
                 </th>
                 <td>
-                    <input type="text" size="50" id="ticket_description${i}" name="ticket[${i}][description]" value="" class="text" />
+                    <input type="text" size="50" id="ticket_description${i}" name="ticket[${i}][secondary_text_pl]" value="" class="text" />
                 </td>
             </tr>
 

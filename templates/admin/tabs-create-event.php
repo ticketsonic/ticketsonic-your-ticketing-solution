@@ -54,7 +54,7 @@
                     <label for="ticket_title0"><?php _e("Ticket title1", "woo_ts" ); ?></label>
                 </th>
                 <td>
-                    <input type="text" size="50" id="ticket_title0" name="ticket[0][title]" value="" class="text" />
+                    <input type="text" size="50" id="ticket_title0" name="ticket[0][primary_text_pl]" value="" class="text" />
                 </td>
             </tr>
 
@@ -63,7 +63,7 @@
                     <label for="ticket_description0"><?php _e("Ticket description1", "woo_ts" ); ?></label>
                 </th>
                 <td>
-                    <input type="text" size="50" id="ticket_description0" name="ticket[0][description]" value="" class="text" />
+                    <input type="text" size="50" id="ticket_description0" name="ticket[0][secondary_text_pl]" value="" class="text" />
                 </td>
             </tr>
 

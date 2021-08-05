@@ -92,8 +92,8 @@ if (is_admin()) {
                 
                 $tickets_data = $_POST["ticket"];
                 foreach ($tickets_data as $value) {
-                    if (empty($value["title"])) {
-                        $value["title"] = sanitize_text_field( $value["title"] );
+                    if (empty($value["primary_text_pl"])) {
+                        $value["primary_text_pl"] = sanitize_text_field( $value["primary_text_pl"] );
                         woo_ts_admin_notice("Ticket title must be set", "error");
 
                         return;
@@ -164,13 +164,13 @@ if (is_admin()) {
                     return;
                 }
 
-                $ticket_title = sanitize_text_field( $_POST["ticket_title"] );
+                $ticket_title = sanitize_text_field( $_POST["primary_text_pl"] );
                 if (empty($ticket_title)) {
                     woo_ts_admin_notice("Ticket title field have to set", "error");
                     return;
                 }
 
-                $ticket_description = sanitize_text_field( $_POST["ticket_description"]);
+                $ticket_description = sanitize_text_field( $_POST["secondary_text_pl"]);
 
                 $ticket_price = sanitize_text_field(  $_POST["ticket_price"] );
                 if (empty($ticket_price)) {

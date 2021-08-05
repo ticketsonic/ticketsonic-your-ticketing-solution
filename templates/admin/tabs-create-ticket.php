@@ -33,19 +33,19 @@
 
             <tr>
                 <th>
-                    <label for="ticket_title"><?php _e("Ticket title", "woo_ts" ); ?></label>
+                    <label for="primary_text_pl"><?php _e("Ticket title", "woo_ts" ); ?></label>
                 </th>
                 <td>
-                    <input type="text" size="50" id="ticket_title" name="ticket_title" value="" class="text" />
+                    <input type="text" size="50" id="ticketprimary_text_pl_title" name="primary_text_pl" value="" class="text" />
                 </td>
             </tr>
 
             <tr>
                 <th>
-                    <label for="ticket_description"><?php _e("Ticket description", "woo_ts" ); ?></label>
+                    <label for="secondary_text_pl"><?php _e("Ticket description", "woo_ts" ); ?></label>
                 </th>
                 <td>
-                    <input type="text" size="50" id="ticket_description" name="ticket_description" value="" class="text" />
+                    <input type="text" size="50" id="secondary_text_pl" name="secondary_text_pl" value="" class="text" />
                 </td>
             </tr>
 
