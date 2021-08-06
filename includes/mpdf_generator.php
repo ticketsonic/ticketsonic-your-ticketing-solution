@@ -39,15 +39,11 @@ class MPDF_Generator {
     }
 
     function SetText($event_titme, $ticket_title, $ticket_price) {
-        $this->mpdf->WriteText(80, 17, "Grand Conference Ticket");
-        $this->mpdf->WriteText(20, 35, "Event:");
-        $this->mpdf->WriteText(40, 35, $event_titme);
+        $this->mpdf->WriteText(20, 35, $event_titme);
 
-        $this->mpdf->WriteText(20, 45, "Ticket:");
-        $this->mpdf->WriteText(40, 45, $ticket_title);
+        $this->mpdf->WriteText(20, 45, $ticket_title);
 
-        $this->mpdf->WriteText(20, 55, "Price:");
-        $this->mpdf->WriteText(40, 55, $ticket_price);
+        $this->mpdf->WriteText(20, 55, $ticket_price);
     }
 
     function SetQR($data) {
