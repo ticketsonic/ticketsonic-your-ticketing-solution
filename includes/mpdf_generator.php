@@ -50,7 +50,7 @@ class MPDF_Generator {
         $this->mpdf->SetFillColor(0,0,0);
         
         foreach($data as $key => $row) {
-            $this->mpdf->SetXY(150, 30 + $key);
+            $this->mpdf->SetXY(145, 25 + $key);
             for($i = 0; $i < $row->count(); $i++)
                 if ($row[$i] == 1)
                     $this->mpdf->Cell(1,1,"",0, 0, "", true);
