@@ -55,21 +55,23 @@ $raw_tickets = get_event_ticket_data_from_remote($url, $email, $key, null);
     <table class="wp-list-table widefat fixed striped table-view-list posts">
         <thead>
             <tr>
-                <th class="manage-column column-xm">Event ID</th>
+                <th class="manage-column column-xs">Sku</th>
+                <th class="manage-column column-xm">Title</th>
                 <th class="manage-column column-xs">Price</th>
                 <th class="manage-column column-xs">Currency</th>
                 <th class="manage-column column-xs">Stock</th>
-                <th>Title</th>
+                <th class="manage-column column-xm">Event ID</th>
             </tr>
         </thead>
         <tbody>
             <?php foreach ($raw_tickets["tickets"] as $ticket): ?>
             <tr>
-                <td><?php print $ticket["event_id"]; ?></td>
+                <td><?php print $ticket["sku"]; ?></td>
+                <td><?php print $ticket["primary_text_pl"]; ?></td>
                 <td><?php print $ticket["price"]; ?></td>
                 <td><?php print $ticket["currency"]; ?></td>
                 <td><?php print $ticket["stock"]; ?></td>
-                <td><?php print $ticket["ticket_title_en"]; ?></td>
+                <td><?php print $ticket["event_id"]; ?></td>
             </tr>
             <?php endforeach; ?>
         </tbody>
