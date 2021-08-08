@@ -26,6 +26,10 @@ function parse_raw_recrypted_ticket($raw_decrypted_ticket) {
                     $result["price"] = bin_to_int_data(substr($raw_decrypted_ticket, $i, $len));
                     break;
 
+                case "I":
+                    $result["product_id"] = bin_to_int_data(substr($raw_decrypted_ticket, $i, $len));
+                    break;
+
                 case "E":
                     $result["event_id"] = bin_to_int_data(substr($raw_decrypted_ticket, $i, $len));
                     break;
