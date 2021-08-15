@@ -5,7 +5,7 @@ require("cryptography.php");
 require("ticketsonic.inc");
 require( dirname( __FILE__ ) . "/../vendor/autoload.php");
 
-function request_create_new_event($url, $email, $key, $event_title, $event_description, $event_datetime, $event_location, $tickets_data) {
+function request_create_new_event($url, $email, $key, $event_title, $event_description, $event_datetime, $event_location, $tickets_data, $badge_text_horizontal_location, $badge_text_vartical_location, $badge_primary_text_fontsize, $badge_secondary_text_fontsize) {
     $headers = array(
         "x-api-userid" => $email,
         "x-api-key" => $key,
@@ -15,13 +15,20 @@ function request_create_new_event($url, $email, $key, $event_title, $event_descr
         $tickets_data[$k]["price"] = intval($value["price"]) * 100;
     }
 
+    $badge_background = WOO_TS_UPLOADURLPATH . "/badge_background.jpg";
+
     $body = array(
         "primary_text_pl" => $event_title,
         "secondary_text_pl" => $event_description,
         "datetime" => $event_datetime,
         "location" => $event_location,
         "tickets" => $tickets_data,
-        "request_hash" => bin2hex(openssl_random_pseudo_bytes(16))
+        "request_hash" => bin2hex(openssl_random_pseudo_bytes(16)),
+        "badge_background" => base64_encode(file_get_contents($badge_background)),
+        "badge_text_horizontal_location" => $badge_text_horizontal_location,
+        "badge_text_vertical_location" => $badge_text_vartical_location,
+        "badge_primary_text_fontsize" => $badge_primary_text_fontsize,
+        "badge_secondary_text_fontsize" => $badge_secondary_text_fontsize
     );
 
     $response = post_request_to_remote($url, $headers, $body);

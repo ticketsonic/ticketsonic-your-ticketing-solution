@@ -106,8 +106,29 @@ function upload_custom_ticket_background() {
     remove_filter( "upload_dir", "wpse_141088_upload_dir" );
 }
 
+function upload_custom_badge_background() {
+    add_filter( "upload_dir", "wpse_141088_upload_dir" );
+    include_once(ABSPATH . "wp-admin/includes/file.php" );
+    include_once(ABSPATH . "wp-admin/includes/media.php");
+    
+    $allowed_file_types = array("jpg" =>"image/jpeg","jpeg" =>"image/jpeg");
+    $upload_overrides = array( "test_form" => false, "unique_filename_callback" => "badge_background_file_renamer", "mimes" => $allowed_file_types);
+    $badge_file = $_FILES["badge_file"];
+
+    $movefile = wp_handle_upload($badge_file, $upload_overrides);
+    if (!$movefile || isset($movefile["error"]) ) {
+        woo_ts_admin_notice($movefile["error"], "error");
+    }
+
+    remove_filter( "upload_dir", "wpse_141088_upload_dir" );
+}
+
 function filename_renamer($dir, $name, $ext){
     return "pdf_background" . $ext;
+}
+
+function badge_background_file_renamer($dir, $name, $ext){
+    return "badge_background" . $ext;
 }
 
 function allowed_html() {

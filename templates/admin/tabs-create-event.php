@@ -97,6 +97,68 @@
                     <input type="text" size="50" id="ticket_stock0" name="ticket[0][stock]" value="" class="text" />
                 </td>
             </tr>
+
+            <tr id="badge-settings">
+                <td colspan="2" style="padding:0;">
+                    <h3><div class="dashicons dashicons-admin-settings"></div>&nbsp;<?php _e( "Badge settings", "woo_ts" ); ?></h3>
+                    <p class="description"><?php _e( "Set badge background and text location for autoprinting badges.", "woo_ts" ); ?></p>
+                </td>
+            </tr>
+
+            <tr>
+                <th>
+                    <label for="badge_background"><?php _e("Badge Background", "woo_ts" ); ?></label>
+                </th>
+                <td>
+                    <img style="width: 150px;" src="<?php print WOO_TS_UPLOADURLPATH; ?>/badge_background.jpg"/>
+                    <input type="file" name="badge_file" id="badge_file">
+                    <p class="description"><?php _e( "Only jpeg files are accepted", "woo_ts" ); ?>.</p>
+                </td>
+            </tr>
+
+            <tr>
+                <th>
+                    <label for="badge_text_horizontal_location"><?php _e("Badge text horizontal location", "woo_ts" ); ?></label>
+                </th>
+                <td>
+                    <select name="badge_text_horizontal_location" id="badge_text_horizontal_location">
+                        <option value="left">Left</option>
+                        <option value="center" selected>Center</option>
+                        <option value="right">Right</option>
+                    </select>
+                </td>
+            </tr>
+
+            <tr>
+                <th>
+                    <label for="badge_text_vertical_location"><?php _e("Badge text vertical location", "woo_ts" ); ?></label>
+                </th>
+                <td>
+                    <select name="badge_text_vertical_location" id="badge_text_vertical_location">
+                        <option value="top">Top</option>
+                        <option value="center" selected>Center</option>
+                        <option value="bottom">Bottom</option>
+                    </select>
+                </td>
+            </tr>
+
+            <tr>
+                <th>
+                    <label for="badge_primary_text_fontsize"><?php _e("Primary text font size", "woo_ts" ); ?></label>
+                </th>
+                <td>
+                    <input type="text" size="50" id="badge_primary_text_fontsize" name="badge_primary_text_fontsize" value="100" class="text" />
+                </td>
+            </tr>
+
+            <tr>
+                <th>
+                    <label for="badge_secondary_text_fontsize"><?php _e("Secondary text font size", "woo_ts" ); ?></label>
+                </th>
+                <td>
+                    <input type="text" size="50" id="badge_secondary_text_fontsize" name="badge_secondary_text_fontsize" value="80" class="text" />
+                </td>
+            </tr>
         </tbody>
     </table>
 

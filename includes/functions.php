@@ -128,8 +128,43 @@ if (is_admin()) {
                     }
                 }
 
+                $badge_text_horizontal_location = sanitize_text_field( $_POST["badge_text_horizontal_location"] );
+                if (empty($badge_text_horizontal_location)) {
+                    woo_ts_admin_notice("Badge text horizontal location must be set", "error");
+                    return;
+                }
+
+                $badge_text_vertical_location = sanitize_text_field( $_POST["badge_text_vertical_location"] );
+                if (empty($badge_text_vertical_location)) {
+                    woo_ts_admin_notice("Badge text vertical location must be set", "error");
+                    return;
+                }
                 
-                $result = request_create_new_event($url, $email, $key, $event_title, $event_description, $event_datetime, $event_location, $tickets_data);
+                $badge_primary_text_fontsize = sanitize_text_field( $_POST["badge_primary_text_fontsize"] );
+                if (empty($badge_primary_text_fontsize)) {
+                    woo_ts_admin_notice("Primary text font size must be set", "error");
+                    return;
+                }
+
+                if (!is_int(intval($badge_primary_text_fontsize))) {
+                    woo_ts_admin_notice("Primary text font size must be an integer number", "error");
+                    return;
+                }
+
+                $badge_secondary_text_fontsize = sanitize_text_field( $_POST["badge_secondary_text_fontsize"] );
+                if (empty($badge_secondary_text_fontsize)) {
+                    woo_ts_admin_notice("Primary text font size must be set", "error");
+                    return;
+                }
+
+                if (!is_int(intval($badge_secondary_text_fontsize))) {
+                    woo_ts_admin_notice("Secondary text font size must be an integer number", "error");
+                    return;
+                }
+
+                upload_custom_badge_background();
+                
+                $result = request_create_new_event($url, $email, $key, $event_title, $event_description, $event_datetime, $event_location, $tickets_data, $badge_text_horizontal_location, $badge_text_vertical_location, $badge_primary_text_fontsize, $badge_secondary_text_fontsize);
 
                 if ($result["status"] == "success") {
                     woo_ts_admin_notice("Status: success<br>Event ID: " . $result["event_id"] . " successfully sent for processing. You will receive an email when it is processed.", "notice");
