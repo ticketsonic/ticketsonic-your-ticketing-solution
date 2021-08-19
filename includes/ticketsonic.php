@@ -5,7 +5,7 @@ require("cryptography.php");
 require("ticketsonic.inc");
 require( dirname( __FILE__ ) . "/../vendor/autoload.php");
 
-function request_create_new_event($url, $email, $key, $event_title, $event_description, $event_datetime, $event_location, $tickets_data, $badge_text_horizontal_location, $badge_text_vartical_location, $badge_primary_text_fontsize, $badge_secondary_text_fontsize) {
+function request_create_new_event($url, $email, $key, $event_title, $event_description, $event_datetime, $event_location, $tickets_data, $badge_text_horizontal_location, $badge_text_vartical_location, $badge_primary_text_fontsize, $badge_secondary_text_fontsize, $badge_primary_text_color, $badge_secondary_text_color) {
     $headers = array(
         "x-api-userid" => $email,
         "x-api-key" => $key,
@@ -28,7 +28,9 @@ function request_create_new_event($url, $email, $key, $event_title, $event_descr
         "badge_text_horizontal_location" => $badge_text_horizontal_location,
         "badge_text_vertical_location" => $badge_text_vartical_location,
         "badge_primary_text_fontsize" => $badge_primary_text_fontsize,
-        "badge_secondary_text_fontsize" => $badge_secondary_text_fontsize
+        "badge_secondary_text_fontsize" => $badge_secondary_text_fontsize,
+        "badge_primary_text_color" => $badge_primary_text_color,
+        "badge_secondary_text_color" => $badge_secondary_text_color
     );
 
     $response = post_request_to_remote($url, $headers, $body);

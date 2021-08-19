@@ -111,6 +111,7 @@
                 </th>
                 <td>
                     <img style="width: 150px;" src="<?php print WOO_TS_UPLOADURLPATH; ?>/badge_background.jpg"/>
+                    <br>
                     <input type="file" name="badge_file" id="badge_file">
                     <p class="description"><?php _e( "Only jpeg files are accepted", "woo_ts" ); ?>.</p>
                 </td>
@@ -157,6 +158,24 @@
                 </th>
                 <td>
                     <input type="text" size="50" id="badge_secondary_text_fontsize" name="badge_secondary_text_fontsize" value="80" class="text" />
+                </td>
+            </tr>
+
+            <tr>
+                <th>
+                    <label for="badge_primary_text_color"><?php _e("Primary text color", "woo_ts" ); ?></label>
+                </th>
+                <td>
+                    <input type="text" size="50" id="badge_primary_text_color" name="badge_primary_text_color" value="#000000" class="text" />
+                </td>
+            </tr>
+
+            <tr>
+                <th>
+                    <label for="badge_secondary_text_color"><?php _e("Secondary text color", "woo_ts" ); ?></label>
+                </th>
+                <td>
+                    <input type="text" size="50" id="badge_secondary_text_color" name="badge_secondary_text_color" value="#000000" class="text" />
                 </td>
             </tr>
         </tbody>

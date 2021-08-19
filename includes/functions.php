@@ -162,9 +162,24 @@ if (is_admin()) {
                     return;
                 }
 
+                $badge_primary_text_color = sanitize_text_field( $_POST["badge_primary_text_color"] );
+                if (empty($badge_primary_text_color)) {
+                    woo_ts_admin_notice("Primary text color must be set", "error");
+                    return;
+                }
+
+                $badge_secondary_text_color = sanitize_text_field( $_POST["badge_secondary_text_color"] );
+                if (empty($badge_secondary_text_color)) {
+                    woo_ts_admin_notice("Secondary text color must be set", "error");
+                    return;
+                }
+
                 upload_custom_badge_background();
                 
-                $result = request_create_new_event($url, $email, $key, $event_title, $event_description, $event_datetime, $event_location, $tickets_data, $badge_text_horizontal_location, $badge_text_vertical_location, $badge_primary_text_fontsize, $badge_secondary_text_fontsize);
+                $result = request_create_new_event($url, $email, $key, $event_title, $event_description, $event_datetime,
+                                                   $event_location, $tickets_data, $badge_text_horizontal_location,
+                                                   $badge_text_vertical_location, $badge_primary_text_fontsize,
+                                                   $badge_secondary_text_fontsize, $badge_primary_text_color, $badge_secondary_text_color);
 
                 if ($result["status"] == "success") {
                     woo_ts_admin_notice("Status: success<br>Event ID: " . $result["event_id"] . " successfully sent for processing. You will receive an email when it is processed.", "notice");
