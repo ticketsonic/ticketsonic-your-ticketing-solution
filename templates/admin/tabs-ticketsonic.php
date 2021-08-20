@@ -38,13 +38,26 @@ $raw_tickets = get_event_ticket_data_from_remote($url, $email, $key, null);
             <tr>
                 <th class="manage-column column-xm">Event ID</th>
                 <th>Title</th>
+                <th>Horizontal text location</th>
+                <th>Vertical text location</th>
+                <th>Horizontal text font size</th>
+                <th>Vertical text font size</th>
+                <th>Horizontal text font color</th>
+                <th>Vertical text font color</th>
             </tr>
         </thead>    
         <tbody>
             <?php foreach ($raw_events["events"] as $event): ?>
+                <?php $badge_data = json_decode($event["badge_data"]); ?>
                 <tr>
                     <td class="sku column-name"><?php print $event["event_id"]; ?></td>
                     <td class="column-name"><?php print $event["title"]; ?></td>
+                    <td class="column-name"><?php print $badge_data->badge_text_horizontal_location; ?></td>
+                    <td class="column-name"><?php print $badge_data->badge_text_vertical_location; ?></td>
+                    <td class="column-name"><?php print $badge_data->badge_primary_text_fontsize; ?></td>
+                    <td class="column-name"><?php print $badge_data->badge_secondary_text_fontsize; ?></td>
+                    <td class="column-name"><?php print $badge_data->badge_primary_text_color; ?></td>
+                    <td class="column-name"><?php print $badge_data->badge_secondary_text_color; ?></td>
                 </tr>
             <?php endforeach; ?>
         </tbody>

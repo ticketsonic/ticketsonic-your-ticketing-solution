@@ -97,6 +97,13 @@
                     <input type="text" size="50" id="ticket_stock0" name="ticket[0][stock]" value="" class="text" />
                 </td>
             </tr>
+            <tr>
+                <td>
+                    <p class="submit">
+                        <input type="button" id="new-ticket-button" class="button button-primary" value="Add new ticket">
+                    </p>
+                </td>
+            </tr>
 
             <tr id="badge-settings">
                 <td colspan="2" style="padding:0;">
@@ -180,10 +187,6 @@
             </tr>
         </tbody>
     </table>
-
-    <p class="submit">
-        <input type="button" id="new-ticket-button" class="button button-primary" value="Add new ticket">
-    </p>
     
     <p class="submit">
         <input type="submit" name="submit" id="submit" class="button button-primary" value="<?php _e( "Request new event", "woo_ts" ); ?>" />
