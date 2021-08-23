@@ -63,6 +63,16 @@
 
             <tr>
                 <th>
+                    <label for="change_ticket_endpoint"><?php _e("Change Ticket Endpoint", "woo_ts" ); ?></label>
+                </th>
+                <td>
+                    <input type="text" size="50" id="change_ticket_endpoint" name="change_ticket_endpoint" value="<?php echo $change_ticket_endpoint; ?>" class="text" />
+                    <p class="description"><?php _e( "Ticket Endpoint", "woo_ts" ); ?>.</p>
+                </td>
+            </tr>
+
+            <tr>
+                <th>
                     <label for="external_order_endpoint"><?php _e("Order Endpoint", "woo_ts" ); ?></label>
                 </th>
                 <td>

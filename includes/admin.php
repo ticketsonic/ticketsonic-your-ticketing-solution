@@ -143,6 +143,7 @@ function woo_ts_tab_template( $tab = "" ) {
             $event_info_endpoint = woo_ts_get_option( "event_info_endpoint", "");
             $new_event_endpoint = woo_ts_get_option( "new_event_endpoint", "");
             $new_ticket_endpoint = woo_ts_get_option( "new_ticket_endpoint", "");
+            $change_ticket_endpoint = woo_ts_get_option( "change_ticket_endpoint", "");
             $external_order_endpoint = woo_ts_get_option( "external_order_endpoint", "");
             $event_id = woo_ts_get_option( "event_id", "");
             break;

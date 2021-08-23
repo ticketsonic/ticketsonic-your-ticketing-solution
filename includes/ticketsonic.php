@@ -68,6 +68,31 @@ function request_create_new_ticket($url, $email, $key, $ticket_eventid, $ticket_
     return $response;
 }
 
+function request_change_ticket($url, $email, $key, $ticket_sku, $ticket_title, $ticket_description, $ticket_price, $ticket_currency, $ticket_stock) {
+    $headers = array(
+        "x-api-userid" => $email,
+        "x-api-key" => $key,
+        "x-api-sku" => $ticket_sku
+    );
+
+    $ticket_price = intval($ticket_price) * 100;
+    $body = array(
+        "primary_text_pl" => $ticket_title,
+        "secondary_text_pl" => $ticket_description,
+        "price" => $ticket_price,
+        "currency" => $ticket_currency,
+        "stock" => $ticket_stock
+    );
+    $response = post_request_to_remote($url, $headers, $body);
+
+    if ($response["status"] == "error") {
+        woo_ts_admin_notice("Error sending new ticket request: " . $response["message"] , "error");
+        return;
+    }
+
+    return $response;
+}
+
 function sync_tickets_with_remote($url, $email, $key, $event_id) {
     $headers = array(
         "x-api-userid" => $email,

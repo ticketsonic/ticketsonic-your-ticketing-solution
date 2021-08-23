@@ -12,6 +12,66 @@ if (is_admin()) {
 
         $action = woo_ts_get_action();
         switch( $action ) {
+            case "ticket-change":
+                $url = woo_ts_get_option("change_ticket_endpoint", "");
+                if (empty($url)) {
+                    woo_ts_admin_notice("Change Ticket Endpoint have to set in Settings", "error");
+                    return;
+                }
+                
+                $email = woo_ts_get_option("api_userid", "");
+                if (empty($email)) {
+                    woo_ts_admin_notice("Partner E-mail have to set in Settings", "error");
+                    return;
+                }
+
+                $key = woo_ts_get_option("api_key", "");
+                if (empty($key)) {
+                    woo_ts_admin_notice("Partner API Key have to set in Settings", "error");
+                    return;
+                }
+
+                $ticket_sku = sanitize_text_field( $_POST["ticket_sku"] );
+                if (empty($ticket_sku)) {
+                    woo_ts_admin_notice("Sku field have to be set", "error");
+                    return;
+                }
+
+                $ticket_title = sanitize_text_field( $_POST["ticket_primary_text_pl"] );
+                if (empty($ticket_title)) {
+                    woo_ts_admin_notice("Ticket title field have to set", "error");
+                    return;
+                }
+
+                $ticket_description = sanitize_text_field( $_POST["ticket_secondary_text_pl"]);
+
+                $ticket_price = sanitize_text_field(  $_POST["ticket_price"] );
+
+                if (!is_int(intval(sanitize_text_field( $ticket_price )))) {
+                    woo_ts_admin_notice("Ticket price must be an integer number", "error");
+
+                    return;
+                }
+
+                $ticket_currency = sanitize_text_field( $_POST["ticket_currency"] );
+
+                $ticket_stock = sanitize_text_field( $_POST["ticket_stock"] );
+                if (!is_int(intval(sanitize_text_field( $ticket_stock )))) {
+                    woo_ts_admin_notice("Ticket stock must be an integer number", "error");
+
+                    return;
+                }
+
+                
+                $result = request_change_ticket($url, $email, $key, $ticket_sku, $ticket_title, $ticket_description, $ticket_price, $ticket_currency, $ticket_stock);
+
+                if ($result["status"] == "success") {
+                    woo_ts_admin_notice("Status: success<br>Ticket with SKU: " . $ticket_sku . " successfully sent for processing. You will receive an email when it is processed.", "notice");
+                } else {
+                    woo_ts_admin_notice("Failed to request new event: " . $result["message"], "error");
+                }
+
+                break;
             case "save-settings":
                 woo_ts_update_option( "api_key", ( isset( $_POST["api_key"] ) ? sanitize_text_field( $_POST["api_key"] ) : "" ) );
                 woo_ts_update_option( "api_userid", ( isset( $_POST["api_userid"] ) ? sanitize_text_field( $_POST["api_userid"] ) : "" ) );
@@ -21,6 +81,7 @@ if (is_admin()) {
                 woo_ts_update_option( "event_info_endpoint", ( isset( $_POST["event_info_endpoint"] ) ? sanitize_text_field( $_POST["event_info_endpoint"] ) : "" ) );
                 woo_ts_update_option( "new_event_endpoint", ( isset( $_POST["new_event_endpoint"] ) ? sanitize_text_field( $_POST["new_event_endpoint"] ) : "" ) );
                 woo_ts_update_option( "new_ticket_endpoint", ( isset( $_POST["new_ticket_endpoint"] ) ? sanitize_text_field( $_POST["new_ticket_endpoint"] ) : "" ) );
+                woo_ts_update_option( "change_ticket_endpoint", ( isset( $_POST["change_ticket_endpoint"] ) ? sanitize_text_field( $_POST["change_ticket_endpoint"] ) : "" ) );
                 woo_ts_update_option( "external_order_endpoint", ( isset( $_POST["external_order_endpoint"] ) ? sanitize_text_field( $_POST["external_order_endpoint"] ) : "" ) );
                 woo_ts_update_option( "event_id", ( isset( $_POST["event_id"] ) ? sanitize_text_field( $_POST["event_id"] ) : "" ) );
 

@@ -95,4 +95,32 @@ $j(function() {
         $j("#file-filters-"+type).trigger("click");
     });
 
+    var rowHtml = '';
+    $j(document).on('click', '.edit-ticket-row', function() {
+        rowHtml = $j(this).parent().html();
+        var rowId = $j(this).parent().attr('id');
+
+        var titleTdValue = $j('#' + rowId + ' .title').html();
+        $j('#' + rowId + ' .title').replaceWith('<td class="title"><input type="text" name="ticket_primary_text_pl" value="' + titleTdValue + '"></td>');
+
+        var priceTdValue = $j('#' + rowId + ' .price').html();
+        $j('#' + rowId + ' .price').replaceWith('<td class="price"><input type="text" name="ticket_price" value="' + priceTdValue + '"></td>');
+
+        var currencyTdValue = $j('#' + rowId + ' .currency').html();
+        $j('#' + rowId + ' .currency').replaceWith('<td class="currency"><select name="ticket_currency" class="currency"><option value="BGN">BGN</option><option value="EUR">EUR</option><option value="USD">USD</option></select></td>');
+        $j('#' + rowId + ' select.currency').val(currencyTdValue);
+
+        var stockTdValue = $j('#' + rowId + ' .stock').html();
+        $j('#' + rowId + ' .stock').replaceWith('<td class="stock"><input type="text" name="ticket_stock" value="' + stockTdValue + '"></td>');
+
+        var skuTdValue = $j('#' + rowId + ' .sku').html();
+        $j('#' + rowId).append('<td class="hidden"><input type="hidden" name="ticket_sku" value="' + skuTdValue + '"></td>');
+
+        $j('#' + rowId + ' .edit-ticket-row').replaceWith('<td><input type="submit" id="request-ticket-change" class="button button-primary" value="Request the change"><input type="button" id="cancel-ticket-change" class="button button-primary" value="Cancel"></td>');
+    });
+
+    $j(document).on('click', '#cancel-ticket-change', function() {
+        var rowId = $j(this).parent().parent().attr('id');
+        $j('#' + rowId).replaceWith('<tr id="' + rowId + '">' + rowHtml + '</tr>');
+    });
 });

@@ -44,6 +44,7 @@ $raw_tickets = get_event_ticket_data_from_remote($url, $email, $key, null);
                 <th>Vertical text font size</th>
                 <th>Horizontal text font color</th>
                 <th>Vertical text font color</th>
+                <th>Edit</th>
             </tr>
         </thead>    
         <tbody>
@@ -58,6 +59,7 @@ $raw_tickets = get_event_ticket_data_from_remote($url, $email, $key, null);
                     <td class="column-name"><?php print $badge_data->badge_secondary_text_fontsize; ?></td>
                     <td class="column-name"><?php print $badge_data->badge_primary_text_color; ?></td>
                     <td class="column-name"><?php print $badge_data->badge_secondary_text_color; ?></td>
+                    <td class="column-name">Edit</td>
                 </tr>
             <?php endforeach; ?>
         </tbody>
@@ -65,28 +67,33 @@ $raw_tickets = get_event_ticket_data_from_remote($url, $email, $key, null);
 
     <h3><div class="dashicons dashicons-admin-settings"></div>&nbsp;List of tickets</h3>
 
-    <table class="wp-list-table widefat fixed striped table-view-list posts">
-        <thead>
-            <tr>
-                <th class="manage-column column-xs">Sku</th>
-                <th class="manage-column column-xm">Title</th>
-                <th class="manage-column column-xs">Price</th>
-                <th class="manage-column column-xs">Currency</th>
-                <th class="manage-column column-xs">Stock</th>
-                <th class="manage-column column-xm">Event ID</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php foreach ($raw_tickets["tickets"] as $ticket): ?>
-            <tr>
-                <td><?php print $ticket["sku"]; ?></td>
-                <td><?php print $ticket["primary_text_pl"]; ?></td>
-                <td><?php print $ticket["price"]; ?></td>
-                <td><?php print $ticket["currency"]; ?></td>
-                <td><?php print $ticket["stock"]; ?></td>
-                <td><?php print $ticket["event_id"]; ?></td>
-            </tr>
-            <?php endforeach; ?>
-        </tbody>
-    </table>
+    <form method="POST">
+        <table id="tickets" class="wp-list-table widefat fixed striped table-view-list posts">
+            <thead>
+                <tr>
+                    <th class="manage-column column-xs">Sku</th>
+                    <th class="manage-column column-xm">Title</th>
+                    <th class="manage-column column-xs">Price</th>
+                    <th class="manage-column column-xs">Currency</th>
+                    <th class="manage-column column-xs">Stock</th>
+                    <th class="manage-column column-xm">Event ID</th>
+                    <th class="manage-column column-xm">Edit</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($raw_tickets["tickets"] as $key => $ticket): ?>
+                <tr id="row-<?php print $key; ?>">
+                    <td class="sku"><?php print $ticket["sku"]; ?></td>
+                    <td class="title"><?php print $ticket["primary_text_pl"]; ?></td>
+                    <td class="price"><?php printf("%2.2f", $ticket["price"] / 100); ?></td>
+                    <td class="currency"><?php print $ticket["currency"]; ?></td>
+                    <td class="stock"><?php print $ticket["stock"]; ?></td>
+                    <td class="event_id"><?php print $ticket["event_id"]; ?></td>
+                    <td class="edit-ticket-row"><a>Edit</a></td>
+                </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+        <input type="hidden" name="action" value="ticket-change" />
+    </form>
 </div>

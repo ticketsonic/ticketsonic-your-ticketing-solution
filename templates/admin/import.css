@@ -333,3 +333,19 @@ table.wp-list-table .column-xm {
 div.remote-data h3 {
     margin-top: 50px;
 }
+
+.wp-list-table td input[type='text'], .wp-list-table td input[type='select'] {   
+    width: 90%;
+}
+
+.wp-list-table td input {
+    margin-right: 10px !important;
+}
+
+.wp-list-table td a {
+    cursor: pointer;
+}
+
+.wp-list-table td a:hover {
+    text-decoration: underline;
+}
