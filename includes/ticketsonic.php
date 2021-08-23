@@ -75,7 +75,7 @@ function request_change_ticket($url, $email, $key, $ticket_sku, $ticket_title, $
         "x-api-sku" => $ticket_sku
     );
 
-    $ticket_price = intval($ticket_price) * 100;
+    $ticket_price = intval($ticket_price * 100);
     $body = array(
         "primary_text_pl" => $ticket_title,
         "secondary_text_pl" => $ticket_description,
