@@ -95,9 +95,9 @@ $j(function() {
         $j("#file-filters-"+type).trigger("click");
     });
 
-    var rowHtml = '';
+    var rowTicketHtml = '';
     $j(document).on('click', '.edit-ticket-row', function() {
-        rowHtml = $j(this).parent().html();
+        rowTicketHtml = $j(this).parent().html();
         var rowId = $j(this).parent().attr('id');
 
         var titleTdValue = $j('#' + rowId + ' .title').html();
@@ -121,6 +121,45 @@ $j(function() {
 
     $j(document).on('click', '#cancel-ticket-change', function() {
         var rowId = $j(this).parent().parent().attr('id');
-        $j('#' + rowId).replaceWith('<tr id="' + rowId + '">' + rowHtml + '</tr>');
+        $j('#' + rowId).replaceWith('<tr id="' + rowId + '">' + rowTicketHtml + '</tr>');
+    });
+
+    var rowEventHtml = '';
+    $j(document).on('click', '.edit-event-row', function() {
+        rowEventHtml = $j(this).parent().html();
+        var rowId = $j(this).parent().attr('id');
+
+        var titleTdValue = $j('#' + rowId + ' .title').html();
+        $j('#' + rowId + ' .title').replaceWith('<td class="title"><input type="text" name="event_primary_text_pl" value="' + titleTdValue + '"></td>');
+
+        var hTextLocTdValue = $j('#' + rowId + ' .htext-loc').html();
+        $j('#' + rowId + ' .htext-loc').replaceWith('<td class="htext-loc"><select name="badge_text_horizontal_location" class="htext-loc"><option value="left">left</option><option value="center" selected="selected">center</option><option value="right">right</option></select></td>');
+        $j('#' + rowId + ' select.htext-loc').val(hTextLocTdValue);
+
+        var vTextLocTdValue = $j('#' + rowId + ' .vtext-loc').html();
+        $j('#' + rowId + ' .vtext-loc').replaceWith('<td class="htext-loc"><select name="badge_text_vertical_location" class="htext-loc"><option value="top">top</option><option value="center" selected="selected">center</option><option value="bottom">bottom</option></select></td>');
+        $j('#' + rowId + ' select.vtext-loc').val(vTextLocTdValue);
+
+        var ptFontSizeTdValue = $j('#' + rowId + ' .htext-fontsize').html();
+        $j('#' + rowId + ' .htext-fontsize').replaceWith('<td class="htext-fontsize"><input type="text" name="badge_primary_text_fontsize" value="' + ptFontSizeTdValue + '"></td>');
+
+        var stFontSizeTdValue = $j('#' + rowId + ' .vtext-fontsize').html();
+        $j('#' + rowId + ' .vtext-fontsize').replaceWith('<td class="vtext-fontsize"><input type="text" name="badge_secondary_text_fontsize" value="' + stFontSizeTdValue + '"></td>');
+
+        var ptFontColorTdValue = $j('#' + rowId + ' .htext-color').html();
+        $j('#' + rowId + ' .htext-color').replaceWith('<td class="htext-color"><input type="text" name="badge_primary_text_color" value="' + ptFontColorTdValue + '"></td>');
+
+        var stFontColorTdValue = $j('#' + rowId + ' .vtext-color').html();
+        $j('#' + rowId + ' .vtext-color').replaceWith('<td class="vtext-color"><input type="text" name="badge_secondary_text_color" value="' + stFontColorTdValue + '"></td>');
+
+        var eventIdTdValue = $j('#' + rowId + ' .event-id').html();
+        $j('#' + rowId).append('<td class="hidden"><input type="hidden" name="event_id" value="' + eventIdTdValue + '"></td>');
+
+        $j('#' + rowId + ' .edit-event-row').replaceWith('<td><input type="submit" id="request-event-change" class="button button-primary" value="Request the change"><input type="button" id="cancel-event-change" class="button button-primary" value="Cancel"></td>');
+    });
+
+    $j(document).on('click', '#cancel-event-change', function() {
+        var rowId = $j(this).parent().parent().attr('id');
+        $j('#' + rowId).replaceWith('<tr id="' + rowId + '">' + rowEventHtml + '</tr>');
     });
 });

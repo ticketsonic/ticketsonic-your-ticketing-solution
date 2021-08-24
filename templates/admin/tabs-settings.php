@@ -43,6 +43,16 @@
 
             <tr>
                 <th>
+                    <label for="change_event_endpoint"><?php _e("Change Event Endpoint", "woo_ts" ); ?></label>
+                </th>
+                <td>
+                    <input type="text" size="50" id="change_event_endpoint" name="change_event_endpoint" value="<?php echo $change_event_endpoint; ?>" class="text" />
+                    <p class="description"><?php _e( "Endpoint for requesting changes in event", "woo_ts" ); ?>.</p>
+                </td>
+            </tr>
+
+            <tr>
+                <th>
                     <label for="new_event_endpoint"><?php _e("New Event Endpoint", "woo_ts" ); ?></label>
                 </th>
                 <td>

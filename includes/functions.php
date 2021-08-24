@@ -72,6 +72,70 @@ if (is_admin()) {
                 }
 
                 break;
+
+            case "event-change":
+                $url = woo_ts_get_option("change_event_endpoint", "");
+                if (empty($url)) {
+                    woo_ts_admin_notice("Change Event Endpoint have to set in Settings", "error");
+                    return;
+                }
+                
+                $email = woo_ts_get_option("api_userid", "");
+                if (empty($email)) {
+                    woo_ts_admin_notice("Partner E-mail have to set in Settings", "error");
+                    return;
+                }
+
+                $key = woo_ts_get_option("api_key", "");
+                if (empty($key)) {
+                    woo_ts_admin_notice("Partner API Key have to set in Settings", "error");
+                    return;
+                }
+
+                $event_id = sanitize_text_field( $_POST["event_id"] );
+                if (empty($event_id)) {
+                    woo_ts_admin_notice("Event ID have to be set", "error");
+                    return;
+                }
+
+                $event_title = sanitize_text_field( $_POST["event_primary_text_pl"] );
+                if (empty($event_title)) {
+                    woo_ts_admin_notice("Event title field have to set", "error");
+                    return;
+                }
+
+                $event_description = sanitize_text_field( $_POST["event_secondary_text_pl"]);
+                $event_location = sanitize_text_field( $_POST["event_location"]);
+                $event_start_datetime = sanitize_text_field( $_POST["event_start_datetime"]);
+
+                $badge_text_horizontal_location = sanitize_text_field( $_POST["badge_text_horizontal_location"]);
+                $badge_text_vertical_location = sanitize_text_field( $_POST["badge_text_vertical_location"]);
+
+                $badge_primary_text_fontsize = sanitize_text_field( $_POST["badge_primary_text_fontsize"]);
+                $badge_secondary_text_fontsize = sanitize_text_field( $_POST["badge_secondary_text_fontsize"]);
+
+                $badge_primary_text_color = sanitize_text_field( $_POST["badge_primary_text_color"]);
+                $badge_secondary_text_color = sanitize_text_field( $_POST["badge_secondary_text_color"]);
+
+                $event_badge_data = array(
+                    "badge_text_horizontal_location" => $badge_text_horizontal_location,
+                    "badge_text_vertical_location" => $badge_text_vertical_location,
+                    "badge_primary_text_fontsize" => $badge_primary_text_fontsize,
+                    "badge_secondary_text_fontsize" => $badge_secondary_text_fontsize,
+                    "badge_primary_text_color" => $badge_primary_text_color,
+                    "badge_secondary_text_color" => $badge_secondary_text_color
+                );
+                
+                $result = request_change_event($url, $email, $key, $event_id, $event_title, $event_description, $event_location, $event_start_datetime, $event_badge_data);
+
+                if ($result["status"] == "success") {
+                    woo_ts_admin_notice("Status: success<br>Event with ID: " . $event_id . " successfully sent for processing. You will receive an email when it is processed.", "notice");
+                } else {
+                    woo_ts_admin_notice("Failed to request new event: " . $result["message"], "error");
+                }
+
+                break;
+
             case "save-settings":
                 woo_ts_update_option( "api_key", ( isset( $_POST["api_key"] ) ? sanitize_text_field( $_POST["api_key"] ) : "" ) );
                 woo_ts_update_option( "api_userid", ( isset( $_POST["api_userid"] ) ? sanitize_text_field( $_POST["api_userid"] ) : "" ) );
@@ -80,6 +144,7 @@ if (is_admin()) {
                 woo_ts_update_option( "ticket_info_endpoint", ( isset( $_POST["ticket_info_endpoint"] ) ? sanitize_text_field( $_POST["ticket_info_endpoint"] ) : "" ) );
                 woo_ts_update_option( "event_info_endpoint", ( isset( $_POST["event_info_endpoint"] ) ? sanitize_text_field( $_POST["event_info_endpoint"] ) : "" ) );
                 woo_ts_update_option( "new_event_endpoint", ( isset( $_POST["new_event_endpoint"] ) ? sanitize_text_field( $_POST["new_event_endpoint"] ) : "" ) );
+                woo_ts_update_option( "change_event_endpoint", ( isset( $_POST["change_event_endpoint"] ) ? sanitize_text_field( $_POST["change_event_endpoint"] ) : "" ) );
                 woo_ts_update_option( "new_ticket_endpoint", ( isset( $_POST["new_ticket_endpoint"] ) ? sanitize_text_field( $_POST["new_ticket_endpoint"] ) : "" ) );
                 woo_ts_update_option( "change_ticket_endpoint", ( isset( $_POST["change_ticket_endpoint"] ) ? sanitize_text_field( $_POST["change_ticket_endpoint"] ) : "" ) );
                 woo_ts_update_option( "external_order_endpoint", ( isset( $_POST["external_order_endpoint"] ) ? sanitize_text_field( $_POST["external_order_endpoint"] ) : "" ) );

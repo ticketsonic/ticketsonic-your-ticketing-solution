@@ -32,38 +32,40 @@ $raw_tickets = get_event_ticket_data_from_remote($url, $email, $key, null);
 ?>
 <div class="remote-data">
     <h3><div class="dashicons dashicons-admin-settings"></div>&nbsp;List of events</h3>
-
-    <table class="wp-list-table widefat fixed striped table-view-list posts">
-        <thead>
-            <tr>
-                <th class="manage-column column-xm">Event ID</th>
-                <th>Title</th>
-                <th>Horizontal text location</th>
-                <th>Vertical text location</th>
-                <th>Horizontal text font size</th>
-                <th>Vertical text font size</th>
-                <th>Horizontal text font color</th>
-                <th>Vertical text font color</th>
-                <th>Edit</th>
-            </tr>
-        </thead>    
-        <tbody>
-            <?php foreach ($raw_events["events"] as $event): ?>
-                <?php $badge_data = json_decode($event["badge_data"]); ?>
+    <form method="POST">
+        <table class="wp-list-table widefat fixed striped table-view-list posts">
+            <thead>
                 <tr>
-                    <td class="sku column-name"><?php print $event["event_id"]; ?></td>
-                    <td class="column-name"><?php print $event["title"]; ?></td>
-                    <td class="column-name"><?php print $badge_data->badge_text_horizontal_location; ?></td>
-                    <td class="column-name"><?php print $badge_data->badge_text_vertical_location; ?></td>
-                    <td class="column-name"><?php print $badge_data->badge_primary_text_fontsize; ?></td>
-                    <td class="column-name"><?php print $badge_data->badge_secondary_text_fontsize; ?></td>
-                    <td class="column-name"><?php print $badge_data->badge_primary_text_color; ?></td>
-                    <td class="column-name"><?php print $badge_data->badge_secondary_text_color; ?></td>
-                    <td class="column-name">Edit</td>
+                    <th class="manage-column column-xm">Event ID</th>
+                    <th>Title</th>
+                    <th>Horizontal text location</th>
+                    <th>Vertical text location</th>
+                    <th>Horizontal text font size</th>
+                    <th>Vertical text font size</th>
+                    <th>Horizontal text font color</th>
+                    <th>Vertical text font color</th>
+                    <th>Edit</th>
                 </tr>
-            <?php endforeach; ?>
-        </tbody>
-    </table>
+            </thead>    
+            <tbody>
+                <?php foreach ($raw_events["events"] as $key => $event): ?>
+                    <?php $badge_data = json_decode($event["badge_data"]); ?>
+                    <tr id="row-<?php print $key; ?>">
+                        <td class="event-id"><?php print $event["event_id"]; ?></td>
+                        <td class="title"><?php print $event["title"]; ?></td>
+                        <td class="htext-loc"><?php print $badge_data->badge_text_horizontal_location; ?></td>
+                        <td class="vtext-loc"><?php print $badge_data->badge_text_vertical_location; ?></td>
+                        <td class="htext-fontsize"><?php print $badge_data->badge_primary_text_fontsize; ?></td>
+                        <td class="vtext-fontsize"><?php print $badge_data->badge_secondary_text_fontsize; ?></td>
+                        <td class="htext-color"><?php print $badge_data->badge_primary_text_color; ?></td>
+                        <td class="vtext-color"><?php print $badge_data->badge_secondary_text_color; ?></td>
+                        <td class="edit-event-row"><a>Edit</a></td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+        <input type="hidden" name="action" value="event-change" />
+    </form>
 
     <h3><div class="dashicons dashicons-admin-settings"></div>&nbsp;List of tickets</h3>
 

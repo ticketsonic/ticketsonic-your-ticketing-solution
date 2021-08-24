@@ -93,6 +93,30 @@ function request_change_ticket($url, $email, $key, $ticket_sku, $ticket_title, $
     return $response;
 }
 
+function request_change_event($url, $email, $key, $event_id, $event_title, $event_description, $event_location, $event_starttime, $event_badge_data) {
+    $headers = array(
+        "x-api-userid" => $email,
+        "x-api-key" => $key,
+        "x-api-eventid" => $event_id
+    );
+
+    $body = array(
+        "primary_text_pl" => $event_title,
+        "secondary_text_pl" => $event_description,
+        "location" => $event_location,
+        "start_datetime" => $event_starttime,
+        "badge_data" => json_encode($event_badge_data)
+    );
+    $response = post_request_to_remote($url, $headers, $body);
+
+    if ($response["status"] == "error") {
+        woo_ts_admin_notice("Error sending new ticket request: " . $response["message"] , "error");
+        return;
+    }
+
+    return $response;
+}
+
 function sync_tickets_with_remote($url, $email, $key, $event_id) {
     $headers = array(
         "x-api-userid" => $email,
