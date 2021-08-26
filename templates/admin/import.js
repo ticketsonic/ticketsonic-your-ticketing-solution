@@ -95,33 +95,35 @@ $j(function() {
         $j("#file-filters-"+type).trigger("click");
     });
 
-    var rowTicketHtml = '';
+    var rowTicketHtml = [];
     $j(document).on('click', '.edit-ticket-row', function() {
-        rowTicketHtml = $j(this).parent().html();
         var rowId = $j(this).parent().attr('id');
+        var id = rowId.substring(4);
+        rowTicketHtml[id] = $j(this).parent().html();
 
-        var titleTdValue = $j('#' + rowId + ' .title').html();
-        $j('#' + rowId + ' .title').replaceWith('<td class="title"><input type="text" name="ticket_primary_text_pl" value="' + titleTdValue + '"></td>');
+        var titleTdValue = $j('#tickets #' + rowId + ' .ticket-title').html();
+        $j('#tickets #' + rowId + ' .ticket-title').replaceWith('<td class="ticket-title"><input type="text" name="ticket_primary_text_pl" value="' + titleTdValue + '"></td>');
 
-        var priceTdValue = $j('#' + rowId + ' .price').html();
-        $j('#' + rowId + ' .price').replaceWith('<td class="price"><input type="text" name="ticket_price" value="' + priceTdValue + '"></td>');
+        var priceTdValue = $j('#tickets #' + rowId + ' .price').html();
+        $j('#tickets #' + rowId + ' .price').replaceWith('<td class="price"><input type="text" name="ticket_price" value="' + priceTdValue + '"></td>');
 
-        var currencyTdValue = $j('#' + rowId + ' .currency').html();
-        $j('#' + rowId + ' .currency').replaceWith('<td class="currency"><select name="ticket_currency" class="currency"><option value="BGN">BGN</option><option value="EUR">EUR</option><option value="USD">USD</option></select></td>');
-        $j('#' + rowId + ' select.currency').val(currencyTdValue);
+        var currencyTdValue = $j('#tickets #' + rowId + ' .currency').html();
+        $j('#tickets #' + rowId + ' .currency').replaceWith('<td class="currency"><select name="ticket_currency" class="currency"><option value="BGN">BGN</option><option value="EUR">EUR</option><option value="USD">USD</option></select></td>');
+        $j('#tickets #' + rowId + ' select.currency').val(currencyTdValue);
 
-        var stockTdValue = $j('#' + rowId + ' .stock').html();
-        $j('#' + rowId + ' .stock').replaceWith('<td class="stock"><input type="text" name="ticket_stock" value="' + stockTdValue + '"></td>');
+        var stockTdValue = $j('#tickets #' + rowId + ' .stock').html();
+        $j('#tickets #' + rowId + ' .stock').replaceWith('<td class="stock"><input type="text" name="ticket_stock" value="' + stockTdValue + '"></td>');
 
-        var skuTdValue = $j('#' + rowId + ' .sku').html();
-        $j('#' + rowId).append('<td class="hidden"><input type="hidden" name="ticket_sku" value="' + skuTdValue + '"></td>');
+        var skuTdValue = $j('#tickets #' + rowId + ' .sku').html();
+        $j('#tickets #' + rowId).append('<td class="hidden"><input type="hidden" name="ticket_sku" value="' + skuTdValue + '"></td>');
 
-        $j('#' + rowId + ' .edit-ticket-row').replaceWith('<td><input type="submit" id="request-ticket-change" class="button button-primary" value="Request the change"><input type="button" id="cancel-ticket-change" class="button button-primary" value="Cancel"></td>');
+        $j('#tickets #' + rowId + ' .edit-ticket-row').replaceWith('<td><input type="submit" id="request-ticket-change" class="button button-primary" value="Request"><input type="button" id="cancel-ticket-change" class="button button-primary" value="Cancel"></td>');
     });
 
     $j(document).on('click', '#cancel-ticket-change', function() {
         var rowId = $j(this).parent().parent().attr('id');
-        $j('#' + rowId).replaceWith('<tr id="' + rowId + '">' + rowTicketHtml + '</tr>');
+        var id = rowId.substring(4);
+        $j('#tickets #' + rowId).replaceWith('<tr id="' + rowId + '">' + rowTicketHtml[id] + '</tr>');
     });
 
     var rowEventHtml = '';
@@ -129,37 +131,37 @@ $j(function() {
         rowEventHtml = $j(this).parent().html();
         var rowId = $j(this).parent().attr('id');
 
-        var titleTdValue = $j('#' + rowId + ' .title').html();
-        $j('#' + rowId + ' .title').replaceWith('<td class="title"><input type="text" name="event_primary_text_pl" value="' + titleTdValue + '"></td>');
+        var titleTdValue = $j('#events #' + rowId + ' .title').html();
+        $j('#events #' + rowId + ' .title').replaceWith('<td class="title"><input type="text" name="event_primary_text_pl" value="' + titleTdValue + '"></td>');
 
-        var hTextLocTdValue = $j('#' + rowId + ' .htext-loc').html();
-        $j('#' + rowId + ' .htext-loc').replaceWith('<td class="htext-loc"><select name="badge_text_horizontal_location" class="htext-loc"><option value="left">left</option><option value="center" selected="selected">center</option><option value="right">right</option></select></td>');
-        $j('#' + rowId + ' select.htext-loc').val(hTextLocTdValue);
+        var hTextLocTdValue = $j('#events #' + rowId + ' .htext-loc').html();
+        $j('#events #' + rowId + ' .htext-loc').replaceWith('<td class="htext-loc"><select name="badge_text_horizontal_location" class="htext-loc"><option value="left">left</option><option value="center" selected>center</option><option value="right">right</option></select></td>');
+        $j('#events #' + rowId + ' select.htext-loc').val(hTextLocTdValue);
 
-        var vTextLocTdValue = $j('#' + rowId + ' .vtext-loc').html();
-        $j('#' + rowId + ' .vtext-loc').replaceWith('<td class="htext-loc"><select name="badge_text_vertical_location" class="htext-loc"><option value="top">top</option><option value="center" selected="selected">center</option><option value="bottom">bottom</option></select></td>');
-        $j('#' + rowId + ' select.vtext-loc').val(vTextLocTdValue);
+        var vTextLocTdValue = $j('#events #' + rowId + ' .vtext-loc').html();
+        $j('#events #' + rowId + ' .vtext-loc').replaceWith('<td class="vtext-loc"><select name="badge_text_vertical_location" class="vtext-loc"><option value="top">top</option><option value="center" selected>center</option><option value="bottom">bottom</option></select></td>');
+        $j('#events #' + rowId + ' select.vtext-loc').val(vTextLocTdValue);
 
-        var ptFontSizeTdValue = $j('#' + rowId + ' .htext-fontsize').html();
-        $j('#' + rowId + ' .htext-fontsize').replaceWith('<td class="htext-fontsize"><input type="text" name="badge_primary_text_fontsize" value="' + ptFontSizeTdValue + '"></td>');
+        var ptFontSizeTdValue = $j('#events #' + rowId + ' .htext-fontsize').html();
+        $j('#events #' + rowId + ' .htext-fontsize').replaceWith('<td class="htext-fontsize"><input type="text" name="badge_primary_text_fontsize" value="' + ptFontSizeTdValue + '"></td>');
 
-        var stFontSizeTdValue = $j('#' + rowId + ' .vtext-fontsize').html();
-        $j('#' + rowId + ' .vtext-fontsize').replaceWith('<td class="vtext-fontsize"><input type="text" name="badge_secondary_text_fontsize" value="' + stFontSizeTdValue + '"></td>');
+        var stFontSizeTdValue = $j('#events #' + rowId + ' .vtext-fontsize').html();
+        $j('#events #' + rowId + ' .vtext-fontsize').replaceWith('<td class="vtext-fontsize"><input type="text" name="badge_secondary_text_fontsize" value="' + stFontSizeTdValue + '"></td>');
 
-        var ptFontColorTdValue = $j('#' + rowId + ' .htext-color').html();
-        $j('#' + rowId + ' .htext-color').replaceWith('<td class="htext-color"><input type="text" name="badge_primary_text_color" value="' + ptFontColorTdValue + '"></td>');
+        var ptFontColorTdValue = $j('#events #' + rowId + ' .htext-color').html();
+        $j('#events #' + rowId + ' .htext-color').replaceWith('<td class="htext-color"><input type="text" name="badge_primary_text_color" value="' + ptFontColorTdValue + '"></td>');
 
-        var stFontColorTdValue = $j('#' + rowId + ' .vtext-color').html();
-        $j('#' + rowId + ' .vtext-color').replaceWith('<td class="vtext-color"><input type="text" name="badge_secondary_text_color" value="' + stFontColorTdValue + '"></td>');
+        var stFontColorTdValue = $j('#events #' + rowId + ' .vtext-color').html();
+        $j('#events #' + rowId + ' .vtext-color').replaceWith('<td class="vtext-color"><input type="text" name="badge_secondary_text_color" value="' + stFontColorTdValue + '"></td>');
 
-        var eventIdTdValue = $j('#' + rowId + ' .event-id').html();
-        $j('#' + rowId).append('<td class="hidden"><input type="hidden" name="event_id" value="' + eventIdTdValue + '"></td>');
+        var eventIdTdValue = $j('#events #' + rowId + ' .event-id').html();
+        $j('#events #' + rowId).append('<td class="hidden"><input type="hidden" name="event_id" value="' + eventIdTdValue + '"></td>');
 
-        $j('#' + rowId + ' .edit-event-row').replaceWith('<td><input type="submit" id="request-event-change" class="button button-primary" value="Request the change"><input type="button" id="cancel-event-change" class="button button-primary" value="Cancel"></td>');
+        $j('#events #' + rowId + ' .edit-event-row').replaceWith('<td><input type="submit" id="request-event-change" class="button button-primary" value="Request"><input type="button" id="cancel-event-change" class="button button-primary" value="Cancel"></td>');
     });
 
     $j(document).on('click', '#cancel-event-change', function() {
         var rowId = $j(this).parent().parent().attr('id');
-        $j('#' + rowId).replaceWith('<tr id="' + rowId + '">' + rowEventHtml + '</tr>');
+        $j('#events #' + rowId).replaceWith('<tr id="' + rowId + '">' + rowEventHtml + '</tr>');
     });
 });

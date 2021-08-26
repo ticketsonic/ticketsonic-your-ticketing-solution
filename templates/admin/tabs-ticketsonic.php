@@ -33,18 +33,18 @@ $raw_tickets = get_event_ticket_data_from_remote($url, $email, $key, null);
 <div class="remote-data">
     <h3><div class="dashicons dashicons-admin-settings"></div>&nbsp;List of events</h3>
     <form method="POST">
-        <table class="wp-list-table widefat fixed striped table-view-list posts">
+        <table id="events" class="wp-list-table widefat fixed striped table-view-list posts">
             <thead>
                 <tr>
-                    <th class="manage-column column-xm">Event ID</th>
-                    <th>Title</th>
-                    <th>Horizontal text location</th>
-                    <th>Vertical text location</th>
-                    <th>Horizontal text font size</th>
-                    <th>Vertical text font size</th>
-                    <th>Horizontal text font color</th>
-                    <th>Vertical text font color</th>
-                    <th>Edit</th>
+                    <th class="manage-column column-xs">Event ID</th>
+                    <th class="manage-column column-xs">Title</th>
+                    <th class="manage-column column-xs">Horizontal text location</th>
+                    <th class="manage-column column-xs">Vertical text location</th>
+                    <th class="manage-column column-xs">Horizontal text font size</th>
+                    <th class="manage-column column-xs">Vertical text font size</th>
+                    <th class="manage-column column-xs">Horizontal text font color</th>
+                    <th class="manage-column column-xs">Vertical text font color</th>
+                    <th class="manage-column column-xs">Edit</th>
                 </tr>
             </thead>    
             <tbody>
@@ -80,7 +80,7 @@ $raw_tickets = get_event_ticket_data_from_remote($url, $email, $key, null);
                     <th class="manage-column column-xs">Price</th>
                     <th class="manage-column column-xs">Currency</th>
                     <th class="manage-column column-xs">Stock</th>
-                    <th class="manage-column column-xm">Event ID</th>
+                    <th class="manage-column column-xs">Event ID</th>
                     <th class="manage-column column-xm">Edit</th>
                 </tr>
             </thead>
@@ -89,7 +89,7 @@ $raw_tickets = get_event_ticket_data_from_remote($url, $email, $key, null);
                     <?php foreach ($raw_tickets["tickets"] as $key => $ticket): ?>
                     <tr id="row-<?php print $key; ?>">
                         <td class="sku"><?php print $ticket["sku"]; ?></td>
-                        <td class="title"><?php print $ticket["primary_text_pl"]; ?></td>
+                        <td class="ticket-title"><?php print $ticket["primary_text_pl"]; ?></td>
                         <td class="price"><?php printf("%2.2f", $ticket["price"] / 100); ?></td>
                         <td class="currency"><?php print $ticket["currency"]; ?></td>
                         <td class="stock"><?php print $ticket["stock"]; ?></td>
