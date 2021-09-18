@@ -17,14 +17,15 @@ class MPDF_Generator {
         ]);
     }
 
-    function generate_ticket($name, $description, $price, $sensitive_decoded, $ticket_file_abs_path) {
+    function generate_file($name, $description, $price, $sensitive_decoded, $ticket_file_abs_path) {
         $this->AddPage();
         $this->SetBackground();
         
         $this->SetText($name, $description, $price);
         $this->SetQR(qr_binary_to_binary(base64_encode($sensitive_decoded)));
-        // TODO: Check if it is writable
-        $this->Output("F", $ticket_file_abs_path);
+        
+        $result = $this->Output("F", $ticket_file_abs_path);
+        return $result;
     }
 
     function AddPage() {
@@ -61,7 +62,14 @@ class MPDF_Generator {
     }
 
     function Output($type, $path) {
-        $this->mpdf->Output($path, $type);
+        $result = array("status" => "success");
+        try {
+            $this->mpdf->Output($path, $type);
+        } catch (\Mpdf\MpdfException $e) {
+            $result = array("status" => "failure", "message" => $e->getMessage());
+        }
+
+        return $result;
     }
 }
 ?>

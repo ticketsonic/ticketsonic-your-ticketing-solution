@@ -231,9 +231,13 @@ function request_create_tickets_order_in_remote($order_id, $url, $email, $key) {
         return;
     }
 
-    $ticket_file_paths = generate_ticket_files($response["tickets"], $order_id);
-    
-    $order->add_meta_data("ticket_file_paths", $ticket_file_paths);
+    $generated_ticket_files = generate_ticket_files($response["tickets"], $order_id);
+    if ($generated_ticket_files["status"] != "success") {
+        $order->update_status("failed", $generated_ticket_files["message"]);
+        return;
+    }
+
+    $order->add_meta_data("ticket_file_paths", $generated_ticket_files["payload"]);
     $order->save();
 
     return $order;
