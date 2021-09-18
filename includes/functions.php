@@ -423,6 +423,11 @@ function create_tickets_order_in_remote($order_id) {
  */
 add_action( "woocommerce_order_actions", "manual_ticket_generation_order_action" );
 function manual_ticket_generation_order_action($actions) {
+    $actions["wc_manual_ticket_generation_order_action"] = __( "Generate tickets", "generate-tickets" );
+    return $actions;
+}
+
+function manual_ticket_generation_order( $order ) {
     global $theorder;
 
     $order_id = $theorder->id;
@@ -432,10 +437,8 @@ function manual_ticket_generation_order_action($actions) {
 
     //FIXME: check if arguments are not. Causes failure in WP if $endpoint_url, $api_userid, $promoter_api_key are null
     // request_create_tickets_order_in_remote($order_id, $endpoint_url, $api_userid, $promoter_api_key, $data);
-
-    $actions["wc_manual_ticket_generation_order_action"] = __( "Generate tickets", "generate-tickets" );
-    return $actions;
 }
+add_action( 'woocommerce_order_action_wc_manual_ticket_generation_order_action', 'manual_ticket_generation_order' );
 
 add_action("woocommerce_order_status_completed", "send_tickets_to_customer_after_order_completed", 10, 1);
 function send_tickets_to_customer_after_order_completed($order_id) {
