@@ -195,6 +195,9 @@ function get_event_ticket_data_from_remote($url, $email, $key, $event_id) {
 
 function request_create_tickets_order_in_remote($order_id, $url, $email, $key) {
     $order = wc_get_order($order_id);
+    if (!empty($order->get_meta("ticket_file_paths"))) {
+        return $order;
+    }
 
     $data = array(
         "start_time" => null,
@@ -225,7 +228,6 @@ function request_create_tickets_order_in_remote($order_id, $url, $email, $key) {
 
     $response = post_request_to_remote($url, $headers, $body);
 
-    $order = wc_get_order($order_id);
     if ($response["status"] != "success") {
         $order->update_status("failed", "Error fetching result for order " . $order_id . ": ". $response["message"]);
         return;
