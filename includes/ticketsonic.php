@@ -195,7 +195,7 @@ function get_event_ticket_data_from_remote($url, $email, $key, $event_id) {
 
 function request_create_tickets_order_in_remote($order_id, $url, $email, $key) {
     $order = wc_get_order($order_id);
-    if (!empty($order->get_meta("ticket_file_paths"))) {
+    if ($order->meta_exists("tickets_data")) {
         return $order;
     }
 
@@ -233,13 +233,21 @@ function request_create_tickets_order_in_remote($order_id, $url, $email, $key) {
         return;
     }
 
-    $generated_ticket_files = generate_ticket_files($response["tickets"], $order_id);
-    if ($generated_ticket_files["status"] != "success") {
-        $order->update_status("failed", $generated_ticket_files["message"]);
+    $ticket_file_paths = get_ticket_file_paths($response["tickets"], $order_id);
+    if ($ticket_file_paths["status"] != "success") {
+        $order->update_status("failed", $ticket_file_paths["message"]);
         return;
     }
 
-    $order->add_meta_data("ticket_file_paths", $generated_ticket_files["payload"]);
+    $tickets_metadata = get_tickets_meta($response["tickets"], $order_id);
+    if ($tickets_metadata["status"] != "success") {
+        $order->update_status("failed", $tickets_metadata["message"]);
+        return;
+    }
+
+    $tickets_data = array_merge($ticket_file_paths["payload"], $tickets_metadata["payload"]);
+    $order->add_meta_data("tickets_data", $tickets_data);
+
     $order->save();
 
     return $order;

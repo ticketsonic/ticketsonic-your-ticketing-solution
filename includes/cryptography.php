@@ -104,31 +104,29 @@ function bin_to_int_data($str) {
     return $result;
 }
 
-function qr_binary_to_html_table($raw_input) {
-    $binary_input = QRcode::text($raw_input);
-    $output = "<table><tbody>";
-    foreach($binary_input as $line) {
-        //die(gettype($line));
-        $output .= "<tr>";
-        $patterns = array();
-        $patterns[0] = "/0/";
-        $patterns[1] = "/1/";
-        $replacements = array();
-        $replacements[1] = "<td></td>";
-        $replacements[0] = "<th></th>";
-        
-        $output .= preg_replace($patterns, $replacements, $line);
-        $output .= "</tr>";
-    }
-    $output .= "</tbody></table>";
-    return $output;
-}
-
 function qr_binary_to_binary($raw_input) {
     $qrCode = Encoder::encode($raw_input, ErrorCorrectionLevel::L(), Encoder::DEFAULT_BYTE_MODE_ECODING);
     $matrix = $qrCode->getMatrix();
     $rows = $matrix->getArray()->toArray();
     return $rows;
+}
+
+function bin_to_int_array($str) {
+    $result = array();
+    for ($i = strlen($str) - 1; $i >= 0; $i--) {
+        $result[] = ord($str[$i]);
+    }
+
+    return $result;
+}
+
+function int_array_to_bin($str) {
+    $result = array();
+    for ($i = count($str) - 1; $i >= 0; $i--) {
+        $result[] = chr($str[$i]);
+    }
+
+    return implode("", $result);
 }
 
 ?>

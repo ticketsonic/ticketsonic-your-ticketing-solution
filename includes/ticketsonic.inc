@@ -1,12 +1,37 @@
 <?php
 
-function generate_ticket_files($tickets_data, $order_id) {
-    $dir_created = wp_mkdir_p(WOO_TS_UPLOADPATH . "/" . $order_id . "/");
-    if (!$dir_created) {
+function get_tickets_meta($tickets_data, $order_id) {
+    $tickets_meta = array();
+
+    foreach ($tickets_data as $index => $ticket) {
+        $decoded_ticket = decode_barcode($ticket["encrypted_data"]);
+        if ($decoded_ticket["status"] == "failure")
+            return $decoded_ticket;
+
+        $woo_product_id = wc_get_product_id_by_sku($ticket["sku"]);
+        $woo_product = new WC_Product_Simple($woo_product_id);
+
+        $ticket_meta = array(
+            "title" => $woo_product->get_name(),
+            "description" => $woo_product->get_description(),
+            "formatted_price" => $decoded_ticket["payload"]["formatted_price"],
+            "sensitive_decoded" => bin_to_int_array($decoded_ticket["payload"]["sensitive_decoded"])
+        );
+        
+        $tickets_meta[] = $ticket_meta;
+    }
+
+    return array("status" => "success", "payload" => array("tickets_meta" => $tickets_meta));
+}
+
+function get_ticket_file_paths($tickets_data, $order_id) {
+    $is_dir_created = wp_mkdir_p(WOO_TS_UPLOADPATH . "/" . $order_id . "/");
+    if (!$is_dir_created) {
         return array("status" => "failure", "message" => "Unable to create a folder for storing the ticket files");
     }
 
-    $generated_files_paths = array();
+    $ticket_files_paths = array();
+    $ticket_url_paths = array();
     
     foreach ($tickets_data as $index => $ticket) {
         $decoded_barcode = decode_barcode($ticket["encrypted_data"]);
@@ -16,15 +41,15 @@ function generate_ticket_files($tickets_data, $order_id) {
         $woo_product_id = wc_get_product_id_by_sku($ticket["sku"]);
         $woo_product = new WC_Product_Simple($woo_product_id);
 
-        $generated_file = generate_ticket_file($woo_product->get_name(), $woo_product->get_description(), $decoded_barcode["payload"]["formatted_price"], $decoded_barcode["payload"]["sensitive_decoded"], $order_id, $index);
+        $generated_file = get_ticket_file_path($woo_product->get_name(), $woo_product->get_description(), $decoded_barcode["payload"]["formatted_price"], $decoded_barcode["payload"]["sensitive_decoded"], $order_id, $index);
         if ($generated_file["status"] == "failure")
             return $generated_file;
 
-        $generated_files_paths["ticket_file_abs_path"][] = $generated_file["ticket_file_abs_path"];
-        $generated_files_paths["ticket_file_url_path"][] = $generated_file["ticket_file_url_path"];
+        $ticket_files_paths[] = $generated_file["ticket_file_abs_path"];
+        $ticket_url_paths[] = $generated_file["ticket_file_url_path"];
     }
     
-    return array("status" => "success", "payload" => $generated_files_paths);
+    return array("status" => "success", "payload" => array("ticket_file_abs_path" => $ticket_files_paths, "ticket_file_url_path" => $ticket_url_paths));
 }
 
 function decode_barcode($encrypted_data) {
@@ -43,7 +68,7 @@ function decode_barcode($encrypted_data) {
     return array("status" => "success", "payload" => $result);
 }
 
-function generate_ticket_file($name, $description, $price, $sensitive_decoded, $order_id, $index) {
+function get_ticket_file_path($name, $description, $price, $sensitive_decoded, $order_id, $index) {
     $file_generator = new MPDF_Generator();
 
     $ticket_file_abs_path = WOO_TS_UPLOADPATH . "/" . $order_id . "/" . $index . "." . $file_generator->extension; // file extension will be appended by the generator
@@ -57,15 +82,47 @@ function generate_ticket_file($name, $description, $price, $sensitive_decoded, $
     return $ticket_file_paths;
 }
 
-function send_tickets_by_mail($target_user_mail, $order_id, $sensitive_decoded_tickets) {
-    if (!empty($sensitive_decoded_tickets)) {
+function send_pdf_tickets_by_mail($target_user_mail, $order_id, $ticket_file_abs_paths) {
+    if (!empty($ticket_file_abs_paths)) {
+        $headers = array("Content-Type: text/html; charset=UTF-8");
+        $mail_sent = wp_mail($target_user_mail, woo_ts_get_option("email_subject", ""), woo_ts_get_option("email_body", ""), $headers, $ticket_file_abs_paths);
+
+        return $mail_sent;
+    }
+
+    return false;
+}
+
+function send_html_tickets_by_mail($target_user_mail, $tickets_data) {
+    $tickets_meta = $tickets_data["tickets_meta"];
+    if (!empty($tickets_meta)) {
         $headers = array("Content-Type: text/html; charset=UTF-8");
 
         $email_body = woo_ts_get_option("email_body", "");
-        foreach ($sensitive_decoded_tickets as $sensitive_decoded_ticket) {
 
+        $output = null;
+        foreach ($tickets_meta as $ticket_meta) {
+            $int_array = int_array_to_bin($ticket_meta["sensitive_decoded"]);
+            $matrix = qr_binary_to_binary(base64_encode($int_array));
+            $output .= "<table><tbody>";
+            
+            foreach($matrix as $key => $row) {
+                $output .= "<tr>";
+                
+                for($i = 0; $i < $row->count(); $i++)
+                    if ($row[$i] == 1)
+                        $output .= "<th></th>";
+                    else
+                        $output .= "<td></td>";
+                
+                $output .= "</tr>";
+            }
+            $output .= "</tbody></table>";
         }
-        $mail_sent = wp_mail($target_user_mail, woo_ts_get_option("email_subject", ""), woo_ts_get_option("email_body", ""), $headers, $sensitive_decoded_tickets);
+
+        $email_body = str_replace("[qrs]", $output, $email_body);
+
+        $mail_sent = wp_mail($target_user_mail, woo_ts_get_option("email_subject", ""), $email_body, $headers, null);
 
         return $mail_sent;
     }
@@ -76,7 +133,7 @@ function send_tickets_by_mail($target_user_mail, $order_id, $sensitive_decoded_t
 function get_customer_name($order) {
     return $order->get_billing_first_name() . " " . $order->get_billing_last_name();
 }
-    
+
 function get_customer_company($order) {
     return $order->get_billing_company();;
 }

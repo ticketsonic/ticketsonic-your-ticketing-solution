@@ -440,8 +440,8 @@ function manual_ticket_generation_order( $order ) {
 }
 add_action( 'woocommerce_order_action_wc_manual_ticket_generation_order_action', 'manual_ticket_generation_order' );
 
-add_action("woocommerce_order_status_completed", "send_tickets_to_customer_after_order_completed", 10, 1);
-function send_tickets_to_customer_after_order_completed($order_id) {
+// add_action("woocommerce_order_status_completed", "send_pdf_tickets_to_customer_after_order_completed", 10, 1);
+function send_pdf_tickets_to_customer_after_order_completed($order_id) {
     $url = woo_ts_get_option("external_order_endpoint", "");
     $email = woo_ts_get_option("api_userid", "");
     $key = woo_ts_get_option("api_key", "");
@@ -455,13 +455,13 @@ function send_tickets_to_customer_after_order_completed($order_id) {
     write_log("woocommerce_order_status_completed");
     write_log("send_tickets_to_email_after_order_completed for order " . $order_id . " is fired");
 
-    $ticket_files = $order->get_meta("ticket_file_paths");
+    $ticket_files = $order->get_meta("tickets_data");
     
     if (!empty($ticket_files)) {
         $ticket_file_abs_paths = $ticket_files["ticket_file_abs_path"];
         
         // TODO: Check if there are files generated
-        $mail_sent = send_tickets_by_mail($order->get_billing_email(), $order_id, $ticket_file_abs_paths);
+        $mail_sent = send_pdf_tickets_by_mail($order->get_billing_email(), $order_id, $ticket_file_abs_paths);
         write_log("mail status: " . $mail_sent);
         write_log("mail attachments: " . print_r($ticket_file_abs_paths));
         if (!$mail_sent)
@@ -471,20 +471,42 @@ function send_tickets_to_customer_after_order_completed($order_id) {
     write_log("Tickets files for order " . $order_id . " are sent via mail to " . $order->get_billing_email());
 }
 
+add_action("woocommerce_order_status_completed", "send_html_tickets_to_customer_after_order_completed", 10, 1);
+function send_html_tickets_to_customer_after_order_completed($order_id) {
+    $url = woo_ts_get_option("external_order_endpoint", "");
+    $email = woo_ts_get_option("api_userid", "");
+    $key = woo_ts_get_option("api_key", "");
+
+    $order = request_create_tickets_order_in_remote($order_id, $url, $email, $key);
+
+    if ($order == null) {
+        return;
+    }
+
+   $tickets_data = $order->get_meta("tickets_data");
+    
+    if (!empty($tickets_data)) {
+        $mail_sent = send_html_tickets_by_mail($order->get_billing_email(), $tickets_data);
+        if (!$mail_sent)
+            write_log("Could not send mail with tickets");
+    }
+}
+
 add_action( "woocommerce_admin_order_data_after_order_details", "display_ticket_links_in_order_details" );
 function display_ticket_links_in_order_details($order) {
-    print "<br class=\"clear\" />";
-    print "<h4>Ticket Files</h4>";
-    $ticket_file_paths = $order->get_meta("ticket_file_paths");
-    $ticket_files_url_path = $ticket_file_paths["ticket_file_url_path"];
-    if (!empty($ticket_files_url_path)) {
-        foreach($ticket_files_url_path as $key => $ticket_file_path) {
-            print("<div><a href=\"" . $ticket_file_path . "\">Tickets</a></div>");
-        }
-        print "<br class=\"clear\" />";
-    } else {
-        print("<div>No ticket files found for this order</div>");
-    }
+    // print "<br class=\"clear\" />";
+    // print "<h4>Ticket Files</h4>";
+    // $tickets_data = $order->get_meta("tickets_data");
+    // $ticket_file_paths = $tickets_data["meta"];
+    // $ticket_files_url_path = $ticket_file_paths["ticket_file_url_path"];
+    // if (!empty($ticket_files_url_path)) {
+    //     foreach($ticket_files_url_path as $key => $ticket_file_path) {
+    //         print("<div><a href=\"" . $ticket_file_path . "\">Tickets</a></div>");
+    //     }
+    //     print "<br class=\"clear\" />";
+    // } else {
+    //     print("<div>No ticket files found for this order</div>");
+    // }
 }
 
 add_action( "admin_notices", "ticketsdir_writable_error_message" );
