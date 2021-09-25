@@ -22,7 +22,7 @@ class MPDF_Generator {
         $this->SetBackground();
         
         $this->SetText($name, $description, $price);
-        $this->SetQR(qr_binary_to_binary(base64_encode($sensitive_decoded)));
+        $this->SetQR(get_qr_matrix(base64_encode($sensitive_decoded)));
         
         $result = $this->Output("F", $ticket_file_abs_path);
         return $result;

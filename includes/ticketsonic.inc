@@ -103,7 +103,7 @@ function send_html_tickets_by_mail($target_user_mail, $tickets_data) {
         $output = null;
         foreach ($tickets_meta as $ticket_meta) {
             $int_array = int_array_to_bin($ticket_meta["sensitive_decoded"]);
-            $matrix = qr_binary_to_binary(base64_encode($int_array));
+            $matrix = get_qr_matrix(base64_encode($int_array));
             $output .= "<table><tbody>";
             
             foreach($matrix as $key => $row) {
@@ -136,6 +136,13 @@ function get_customer_name($order) {
 
 function get_customer_company($order) {
     return $order->get_billing_company();;
+}
+
+function get_qr_matrix($raw_input) {
+    $qrCode = BaconQrCode\Encoder\Encoder::encode($raw_input, BaconQrCode\Common\ErrorCorrectionLevel::L(), BaconQrCode\Encoder\Encoder::DEFAULT_BYTE_MODE_ECODING);
+    $matrix = $qrCode->getMatrix();
+    $rows = $matrix->getArray()->toArray();
+    return $rows;
 }
 
 function write_log($log) {

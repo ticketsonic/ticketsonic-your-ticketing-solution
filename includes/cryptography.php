@@ -1,9 +1,5 @@
 <?php
 
-use BaconQrCode\Encoder\Encoder;
-use BaconQrCode\Encoder\QrCode;
-use BaconQrCode\Common\ErrorCorrectionLevel;
-
 function parse_raw_recrypted_ticket($raw_decrypted_ticket) {
     $result = array();
     $checksum = 0;
@@ -102,13 +98,6 @@ function bin_to_int_data($str) {
     }
 
     return $result;
-}
-
-function qr_binary_to_binary($raw_input) {
-    $qrCode = Encoder::encode($raw_input, ErrorCorrectionLevel::L(), Encoder::DEFAULT_BYTE_MODE_ECODING);
-    $matrix = $qrCode->getMatrix();
-    $rows = $matrix->getArray()->toArray();
-    return $rows;
 }
 
 function bin_to_int_array($str) {
