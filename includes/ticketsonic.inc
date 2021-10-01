@@ -97,32 +97,47 @@ function send_html_tickets_by_mail($target_user_mail, $tickets_data) {
     $tickets_meta = $tickets_data["tickets_meta"];
     if (!empty($tickets_meta)) {
         $headers = array("Content-Type: text/html; charset=UTF-8");
+        
+        foreach ($tickets_meta as $key => $ticket_meta) {
+            $ticket_title = $ticket_meta["title"];
+            $ticket_description = $ticket_meta["description"];
+            $ticket_price = $ticket_meta["formatted_price"];
 
-        $email_body = woo_ts_get_option("email_body", "");
+            $email_body = woo_ts_get_option("email_body", "");
+            $email_subject = woo_ts_get_option("email_subject", "");
+            $qr = null;
 
-        $output = null;
-        foreach ($tickets_meta as $ticket_meta) {
             $int_array = int_array_to_bin($ticket_meta["sensitive_decoded"]);
             $matrix = get_qr_matrix(base64_encode($int_array));
-            $output .= "<table><tbody>";
+            $qr .= "<table><tbody>";
             
-            foreach($matrix as $key => $row) {
-                $output .= "<tr>";
+            foreach($matrix as $row) {
+                $qr .= "<tr>";
                 
                 for($i = 0; $i < $row->count(); $i++)
                     if ($row[$i] == 1)
-                        $output .= "<th></th>";
+                        $qr .= "<td class=\"black-square\"></td>";
                     else
-                        $output .= "<td></td>";
+                        $qr .= "<td class=\"white-square\"></td>";
                 
-                $output .= "</tr>";
+                $qr .= "</tr>";
             }
-            $output .= "</tbody></table>";
+
+            $qr .= "</tbody></table>";
+
+            $email_body = str_replace("[ticket_number]", $key + 1, $email_body);
+            $email_body = str_replace("[ticket_qr]", $qr, $email_body);
+            $email_body = str_replace("[ticket_title]", $ticket_title, $email_body);
+            $email_body = str_replace("[ticket_description]", $ticket_description, $email_body);
+            $email_body = str_replace("[ticket_price]", $ticket_price, $email_body);
+
+            $email_subject = str_replace("[ticket_number]", $key + 1, $email_subject);
+            $email_subject = str_replace("[ticket_title]", $ticket_title, $email_subject);
+            $email_subject = str_replace("[ticket_description]", $ticket_description, $email_subject);
+            $email_subject = str_replace("[ticket_price]", $ticket_price, $email_subject);
+
+            $mail_sent = wp_mail($target_user_mail, $email_subject, $email_body, $headers, null);
         }
-
-        $email_body = str_replace("[qrs]", $output, $email_body);
-
-        $mail_sent = wp_mail($target_user_mail, woo_ts_get_option("email_subject", ""), $email_body, $headers, null);
 
         return $mail_sent;
     }
