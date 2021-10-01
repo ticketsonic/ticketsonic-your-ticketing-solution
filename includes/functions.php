@@ -577,4 +577,20 @@ function wpse_141088_upload_dir( $dir ) {
     ) + $dir;
 }
 
+add_filter( 'safe_style_css', function( $styles ) {
+    $styles[] = 'display';
+    $styles[] = 'stop-color';
+    $styles[] = 'stop-opacity';
+    $styles[] = 'opacity';
+    $styles[] = 'fill-opacity';
+    $styles[] = 'stroke';
+    $styles[] = 'stroke-width';
+    $styles[] = 'stroke-linejoin';
+    $styles[] = 'stroke-miterlimit';
+    $styles[] = 'stroke-dasharray';
+    $styles[] = 'fill';
+    $styles[] = 'stroke-linecap';
+    return $styles;
+} );
+
 ?>

@@ -215,6 +215,11 @@ function allowed_html() {
             "class" => array(),
             "style" => array(),
         ),
+        "head" => array (
+            "href" => array(),
+            "class" => array(),
+            "style" => array(),
+        ),
         "body" => array (
             "href" => array(),
             "class" => array(),
@@ -229,6 +234,11 @@ function allowed_html() {
             "href" => array(),
             "class" => array(),
             "style" => array(),
+            "width" => array(),
+            "cellspacing" => array(),
+            "cellpadding" => array(),
+            "border" => array(),
+            "role" => array(),
         ),
         "tbody" => array (
             "href" => array(),
@@ -249,6 +259,10 @@ function allowed_html() {
             "href" => array(),
             "class" => array(),
             "style" => array(),
+            "align" => array(),
+            "width" => array(),
+            "height" => array(),
+            "rowspan" => array(),
         ),
         "div" => array (
             "href" => array(),
@@ -260,11 +274,89 @@ function allowed_html() {
             "class" => array(),
             "style" => array(),
         ),
+        "a" => array (
+            "href" => array(),
+            "class" => array(),
+            "style" => array(),
+        ),
         "h1" => array (
             "href" => array(),
             "class" => array(),
             "style" => array(),
         ),
+        "h2" => array (
+            "href" => array(),
+            "class" => array(),
+            "style" => array(),
+        ),
+        "h3" => array (
+            "href" => array(),
+            "class" => array(),
+            "style" => array(),
+        ),
+        "h4" => array (
+            "href" => array(),
+            "class" => array(),
+            "style" => array(),
+        ),
+        "svg" => array (
+            "href" => array(),
+            "class" => array(),
+            "style" => array(),
+            "viewbox" => true,
+            "width" => array(),
+            "height" => array(),
+            "xmlns" => array(),
+            "xmlns:xlink" => array(),
+            "xmlns:bx" => array()
+        ),
+        "defs" => array (
+            "href" => array(),
+            "class" => array(),
+            "style" => array(),
+        ),
+        "stop" => array (
+            "offset" => array(),
+            "class" => array(),
+            "style" => array(),
+            "id" => array(),
+        ),
+        "lineargradient" => array (
+            "id" => array(),
+            "gradientunits" => array(),
+            "x1" => array(),
+            "x2" => array(),
+            "y1" => array(),
+            "y2" => array(),
+            "gradienttransform" => array(),
+            "xlink:href" => array(),
+            "bx:pinned" => array()
+        ),
+        "path" => array (
+            "d" => array(),
+            "class" => array(),
+            "style" => array(),
+            "id" => array(),
+            "transform" => array(),
+        ),
+        "rect" => array (
+            "href" => array(),
+            "class" => array(),
+            "style" => array(),
+            "x" => array(),
+            "y" => array(),
+            "height" => array(),
+            "width" => array(),
+            "transform" => array(),
+            "id" => array(),
+        ),
+        "g" => array (
+            "href" => array(),
+            "class" => array(),
+            "style" => array(),
+            "transform" => array(),
+            "id" => array()
+        )
     );
 }
 
