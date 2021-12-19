@@ -1,11 +1,11 @@
 <?php
 /*
 Plugin Name: WooCommerce - TicketSonic
-Plugin URI: https://github.com/mvassilev/ticketsonic-plugins/tree/master/woocommerce-ticketsonic
+Plugin URI: https://github.com/ticketsonic/woocommerce-ticketsonic
 Description: Sync Tickets into your WooCommerce store from the TicketSonic system
 Version: 0.1
 Author: Martin Vassilev
-Author URI: https://github.com/mvassilev/
+Author URI: https://github.com/ticketsonic/
 License: GPL2
 
 Text Domain: woocommerce-product-importer
