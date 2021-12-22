@@ -8,7 +8,7 @@ Author: Martin Vassilev
 Author URI: https://github.com/ticketsonic/
 License: GPL2
 
-Text Domain: woocommerce-product-importer
+Text Domain: woocommerce-ticketsonic
 Domain Path: /languages/
 
 WC requires at least: 2.3
@@ -25,8 +25,8 @@ define( "WOO_TS_PREFIX", "woo_ts" );
 define( "WOO_TS_PLUGINPATH", WP_PLUGIN_URL . "/" . basename( dirname( __FILE__ ) ) );
 
 $uploads_dir = wp_get_upload_dir();
+
 define( "WOO_TS_UPLOADPATH", $uploads_dir["basedir"] . "/" . WOO_TS_DIRNAME );
-define( "WOO_TS_TICKETSDIR", WP_PLUGIN_DIR . "/woocommerce-ticketsonic/tickets/" );
 define( "WOO_TS_UPLOADURLPATH", $uploads_dir["baseurl"] . "/" . WOO_TS_DIRNAME );
 
 include_once( WOO_TS_PATH . "includes/functions.php" );

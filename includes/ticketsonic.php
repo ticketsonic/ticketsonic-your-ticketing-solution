@@ -1,11 +1,25 @@
 <?php
 
-require("mpdf_generator.php");
 require("cryptography.php");
 require("ticketsonic.inc");
+
 require( dirname( __FILE__ ) . "/../vendor/autoload.php");
 
-function request_create_new_event($url, $email, $key, $event_title, $event_description, $event_datetime, $event_location, $tickets_data, $badge_text_horizontal_location, $badge_text_vartical_location, $badge_primary_text_fontsize, $badge_secondary_text_fontsize, $badge_primary_text_color, $badge_secondary_text_color) {
+function request_create_new_event($url,
+                                  $email,
+                                  $key,
+                                  $event_title,
+                                  $event_description,
+                                  $event_datetime,
+                                  $event_location,
+                                  $tickets_data,
+                                  $badge_text_horizontal_location,
+                                  $badge_text_vartical_location,
+                                  $badge_primary_text_fontsize,
+                                  $badge_secondary_text_fontsize,
+                                  $badge_primary_text_color,
+                                  $badge_secondary_text_color
+                                 ) {
     $headers = array(
         "x-api-userid" => $email,
         "x-api-key" => $key,
@@ -117,7 +131,7 @@ function request_change_event($url, $email, $key, $event_id, $event_title, $even
     return $response;
 }
 
-function sync_tickets_with_remote($url, $email, $key, $event_id) {
+function get_tickets_with_remote($url, $email, $key, $event_id) {
     $headers = array(
         "x-api-userid" => $email,
         "x-api-key" => $key,
@@ -126,50 +140,7 @@ function sync_tickets_with_remote($url, $email, $key, $event_id) {
     
     $response = get_request_from_remote($url, $headers, null);
 
-    if ($response["status"] == "error") {
-        woo_ts_admin_notice("Error syncing tickets: " . $response["message"] , "error");
-        return;
-    }
-
-    $imported_count = 0;
-    foreach ($response["tickets"] as $key => $ticket) {
-        $woo_product_id = wc_get_product_id_by_sku($ticket["sku"]);
-
-        $ticket_obj = new WC_Product_Simple();
-
-        // Ticket does not exist so we skip
-        if ($woo_product_id != 0) {
-            $ticket_obj = new WC_Product_Simple($woo_product_id);
-        }
-
-        $ticket_obj->set_sku($ticket["sku"]);
-        $ticket_obj->set_name($ticket["primary_text_pl"]);
-        $ticket_obj->set_description($ticket["secondary_text_pl"]);
-        $ticket_obj->set_status("publish");
-        $ticket_obj->set_catalog_visibility("visible");
-        
-        $price = (int)$ticket["price"] / 100;
-        $ticket_obj->set_price($price);
-        $ticket_obj->set_regular_price($price);
-        $ticket_obj->set_manage_stock(true);
-        $ticket_obj->set_stock_quantity($ticket["stock"]);
-        $ticket_obj->set_stock_status("instock");
-        $ticket_obj->set_sold_individually(false);
-        $ticket_obj->set_downloadable(true);
-        $ticket_obj->set_virtual(true);
-
-        $ticketsonic_term = get_term_by("slug", "ticketsonic", "product_cat");
-        if ($ticketsonic_term) {
-            $ticket_obj->set_category_ids(array($ticketsonic_term->term_id));
-        }
-
-        $woo_ticket_id = $ticket_obj->save();
-
-        $imported_count++;
-    }
-
-    $result = array("status" => "success", "message" => "Number of imported tickets: " . $imported_count, "user_public_key" => $response["user_public_key"]);
-    return $result;
+    return $response;
 }
 
 function get_events_data_from_remote($url, $email, $key) {
@@ -194,10 +165,19 @@ function get_event_ticket_data_from_remote($url, $email, $key, $event_id) {
 }
 
 function request_create_tickets_order_in_remote($order_id, $url, $email, $key) {
+    $headers = array(
+        "x-api-userid" => $email,
+        "x-api-key" => $key
+    );
+    $body = prepare_order_tickets_request_body($order_id, $email, $key);
+
+    $response = post_request_to_remote($url, $headers, $body);
+
+    return $response;
+}
+
+function prepare_order_tickets_request_body($order_id, $email, $key) {
     $order = wc_get_order($order_id);
-    if ($order->meta_exists("tickets_data")) {
-        return $order;
-    }
 
     $data = array(
         "start_time" => null,
@@ -220,41 +200,6 @@ function request_create_tickets_order_in_remote($order_id, $url, $email, $key) {
         $data["end_time"] = strval(intval($appointment->timestamp) + $minutes_diff * 60);
     }
 
-    $headers = array(
-        "x-api-userid" => $email,
-        "x-api-key" => $key
-    );
-    $body = prepare_order_tickets_request_body($order_id, $email, $key, $data);
-
-    $response = post_request_to_remote($url, $headers, $body);
-
-    if ($response["status"] != "success") {
-        $order->update_status("failed", "Error fetching result for order " . $order_id . ": ". $response["message"]);
-        return;
-    }
-
-    $ticket_file_paths = get_ticket_file_paths($response["tickets"], $order_id);
-    if ($ticket_file_paths["status"] != "success") {
-        $order->update_status("failed", $ticket_file_paths["message"]);
-        return;
-    }
-
-    $tickets_metadata = get_tickets_meta($response["tickets"], $order_id);
-    if ($tickets_metadata["status"] != "success") {
-        $order->update_status("failed", $tickets_metadata["message"]);
-        return;
-    }
-
-    $tickets_data = array_merge($ticket_file_paths["payload"], $tickets_metadata["payload"]);
-    $order->add_meta_data("tickets_data", $tickets_data);
-
-    $order->save();
-
-    return $order;
-}
-
-function prepare_order_tickets_request_body($order_id, $email, $key, $data) {
-    $order = wc_get_order($order_id);
     $body = array(
         "order_hash" => bin2hex(openssl_random_pseudo_bytes(16)),
         "order_details" => array(
@@ -313,4 +258,5 @@ function post_request_to_remote($url, $headers, $body) {
 
     return $response;
 }
+
 ?>

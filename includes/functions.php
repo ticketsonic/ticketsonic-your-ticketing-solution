@@ -1,6 +1,7 @@
 <?php
 
 require("ticketsonic.php");
+require("ticket_generator.php");
 
 if (is_admin()) {
     include_once( WOO_TS_PATH . "includes/admin.php" );
@@ -177,7 +178,50 @@ if (is_admin()) {
 
                 $event_id = woo_ts_get_option("event_id", "");
                 
-                $result = sync_tickets_with_remote($url, $email, $key, $event_id);
+                $response = get_tickets_with_remote($url, $email, $key, $event_id);
+                if ($response["status"] == "error") {
+                    woo_ts_admin_notice("Error syncing tickets: " . $response["message"] , "error");
+                    return;
+                }
+            
+                $imported_count = 0;
+                foreach ($response["tickets"] as $key => $ticket) {
+                    $woo_product_id = wc_get_product_id_by_sku($ticket["sku"]);
+            
+                    $ticket_obj = new WC_Product_Simple();
+            
+                    // Ticket does not exist so we skip
+                    if ($woo_product_id != 0) {
+                        $ticket_obj = new WC_Product_Simple($woo_product_id);
+                    }
+            
+                    $ticket_obj->set_sku($ticket["sku"]);
+                    $ticket_obj->set_name($ticket["primary_text_pl"]);
+                    $ticket_obj->set_description($ticket["secondary_text_pl"]);
+                    $ticket_obj->set_status("publish");
+                    $ticket_obj->set_catalog_visibility("visible");
+                    
+                    $price = (int)$ticket["price"] / 100;
+                    $ticket_obj->set_price($price);
+                    $ticket_obj->set_regular_price($price);
+                    $ticket_obj->set_manage_stock(true);
+                    $ticket_obj->set_stock_quantity($ticket["stock"]);
+                    $ticket_obj->set_stock_status("instock");
+                    $ticket_obj->set_sold_individually(false);
+                    $ticket_obj->set_downloadable(true);
+                    $ticket_obj->set_virtual(true);
+            
+                    $ticketsonic_term = get_term_by("slug", "ticketsonic", "product_cat");
+                    if ($ticketsonic_term) {
+                        $ticket_obj->set_category_ids(array($ticketsonic_term->term_id));
+                    }
+            
+                    $woo_ticket_id = $ticket_obj->save();
+            
+                    $imported_count++;
+                }
+            
+                $result = array("status" => "success", "message" => "Number of imported tickets: " . $imported_count, "user_public_key" => $response["user_public_key"]);
 
                 if ($result["status"] == "success") {
                     woo_ts_admin_notice($result["message"], "notice");
@@ -387,31 +431,49 @@ if (is_admin()) {
 
     // Add plugin ticket term
     function woo_ts_structure_init() {
-        wp_insert_term("TicketSonic Tickets","product_cat",
+        wp_insert_term("TicketSonic Tickets", "product_cat",
             array(
-            "description"=> "TicketSonic Tickets imported tickets.",
-            "slug" => "ticketsonic"
+                "description" => "TicketSonic Tickets imported tickets.",
+                "slug" => "ticketsonic"
             )
         );
 
         // TODO: Add catch handler
-        wp_mkdir_p(WOO_TS_TICKETSDIR);
+        // wp_mkdir_p(WOO_TS_TICKETSDIR);
         wp_mkdir_p(WOO_TS_UPLOADPATH);
     }
 }
 
-add_action("woocommerce_payment_complete", "mysite_woocommerce_payment_complete");
-function mysite_woocommerce_payment_complete($order_id) {
-    // write_log("mysite_woocommerce_payment_complete for order " . $order_id . " is fired");
+/**
+ * Add a custom action to order actions select box on edit order page
+ * Ability to resend html based tickets via e-mail
+ *
+ * @param array $actions order actions array to display
+ * @return array - updated actions
+ */
+add_action( "woocommerce_order_actions", "resend_ticket_files_order_action" );
+function resend_ticket_files_order_action($actions) {
+    $actions["wc_resend_ticket_files_order_action"] = __( "Resend ticket files via e-mail", "resend-tickets" );
+    return $actions;
 }
 
-add_action("woocommerce_order_status_processing", "create_tickets_order_in_remote", 10, 1);
-function create_tickets_order_in_remote($order_id) {
-    $url = woo_ts_get_option("external_order_endpoint", "");
-    $email = woo_ts_get_option("api_userid", "");
-    $key = woo_ts_get_option("api_key", "");
+add_action( 'woocommerce_order_action_wc_resend_ticket_files_order_action', 'resend_ticket_files_order' );
+function resend_ticket_files_order( $order ) {
+    $tickets_data = $order->get_meta("tickets_data");
+    
+    if (!empty($tickets_data)) {
+        $mail_sent = send_html_tickets_by_mail($order->get_billing_email(), $tickets_data);
+        if (!$mail_sent) {
+            $order->add_order_note( "Error sending tickets via e-mail." );
 
-    request_create_tickets_order_in_remote($order_id, $url, $email, $key);
+            return;
+        }
+
+        $order->add_order_note( "Tickets resent by e-mail." );
+    } else {
+        $order->add_order_note( "No generated tickets were found to be sent via email." );
+        return;
+    }
 }
 
 /**
@@ -421,104 +483,110 @@ function create_tickets_order_in_remote($order_id) {
  * @param array $actions order actions array to display
  * @return array - updated actions
  */
-add_action( "woocommerce_order_actions", "manual_ticket_generation_order_action" );
-function manual_ticket_generation_order_action($actions) {
-    $actions["wc_manual_ticket_generation_order_action"] = __( "Generate tickets", "generate-tickets" );
+add_action( "woocommerce_order_actions", "force_generate_new_tickets_order_action" );
+function force_generate_new_tickets_order_action($actions) {
+    $actions["wc_force_generate_new_tickets_order_action"] = __( "Force generate new tickets", "generate-tickets" );
     return $actions;
 }
 
-function manual_ticket_generation_order( $order ) {
-    global $theorder;
+add_action( 'woocommerce_order_action_wc_force_generate_new_tickets_order_action', 'force_generate_new_tickets_order' );
+function force_generate_new_tickets_order( $order ) {
+    $order_id = $order->id;
 
-    $order_id = $theorder->id;
-    $endpoint_url = woo_ts_get_option("external_order_endpoint", "");
-    $api_userid = woo_ts_get_option("api_userid", "");
-    $promoter_api_key = woo_ts_get_option("api_key", "");
-
-    //FIXME: check if arguments are not. Causes failure in WP if $endpoint_url, $api_userid, $promoter_api_key are null
-    // request_create_tickets_order_in_remote($order_id, $endpoint_url, $api_userid, $promoter_api_key, $data);
-}
-add_action( 'woocommerce_order_action_wc_manual_ticket_generation_order_action', 'manual_ticket_generation_order' );
-
-// add_action("woocommerce_order_status_completed", "send_pdf_tickets_to_customer_after_order_completed", 10, 1);
-function send_pdf_tickets_to_customer_after_order_completed($order_id) {
     $url = woo_ts_get_option("external_order_endpoint", "");
     $email = woo_ts_get_option("api_userid", "");
     $key = woo_ts_get_option("api_key", "");
 
-    $order = request_create_tickets_order_in_remote($order_id, $url, $email, $key);
+    $response = request_create_tickets_order_in_remote($order_id, $url, $email, $key);
 
-    if ($order == null) {
+    if ($response["status"] != "success") {
+        $order->update_status("failed", "Error fetching result for order " . $order_id . ": ". $response["message"]);
         return;
     }
 
-    write_log("woocommerce_order_status_completed");
-    write_log("send_tickets_to_email_after_order_completed for order " . $order_id . " is fired");
-
-    $ticket_files = $order->get_meta("tickets_data");
-    
-    if (!empty($ticket_files)) {
-        $ticket_file_abs_paths = $ticket_files["ticket_file_abs_path"];
-        
-        // TODO: Check if there are files generated
-        $mail_sent = send_pdf_tickets_by_mail($order->get_billing_email(), $order_id, $ticket_file_abs_paths);
-        write_log("mail status: " . $mail_sent);
-        write_log("mail attachments: " . print_r($ticket_file_abs_paths));
-        if (!$mail_sent)
-            write_log("Could not send mail with tickets");
+    $generated_tickets = generate_file_tickets($response["tickets"], $order_id);
+    if ($generated_tickets["status"] != "success") {
+        $order->update_status("failed", $generated_tickets["message"]);
+        return;
     }
 
-    write_log("Tickets files for order " . $order_id . " are sent via mail to " . $order->get_billing_email());
+    $tickets_metadata = get_tickets_meta($response["tickets"]);
+    if ($tickets_metadata["status"] != "success") {
+        $order->update_status("failed", $tickets_metadata["message"]);
+        return;
+    }
+
+    $tickets_data = array_merge($generated_tickets["payload"], $tickets_metadata["payload"]);
+    $order->add_meta_data("tickets_data", $tickets_data);
+
+    $order->add_order_note( "Tickets generated successfully." );
+
+    $order->save();
 }
 
 add_action("woocommerce_order_status_completed", "send_html_tickets_to_customer_after_order_completed", 10, 1);
 function send_html_tickets_to_customer_after_order_completed($order_id) {
+    $order = wc_get_order($order_id);
+    if ($order->meta_exists("tickets_data")) {
+        return;
+    }
+
     $url = woo_ts_get_option("external_order_endpoint", "");
     $email = woo_ts_get_option("api_userid", "");
     $key = woo_ts_get_option("api_key", "");
 
-    $order = request_create_tickets_order_in_remote($order_id, $url, $email, $key);
+    $response = request_create_tickets_order_in_remote($order_id, $url, $email, $key);
 
-    if ($order == null) {
+    if ($response["status"] != "success") {
+        $order->update_status("failed", "Error fetching result for order " . $order_id . ": ". $response["message"]);
         return;
     }
 
-   $tickets_data = $order->get_meta("tickets_data");
+    $generated_tickets = generate_file_tickets($response["tickets"], $order_id);
+    if ($generated_tickets["status"] != "success") {
+        $order->update_status("failed", $generated_tickets["message"]);
+        return;
+    }
+
+    $tickets_metadata = get_tickets_meta($response["tickets"]);
+    if ($tickets_metadata["status"] != "success") {
+        $order->update_status("failed", $tickets_metadata["message"]);
+        return;
+    }
+
+    $tickets_data = array_merge($generated_tickets["payload"], $tickets_metadata["payload"]);
+    $order->add_meta_data("tickets_data", $tickets_data);
+
+    $order->save();
     
     if (!empty($tickets_data)) {
         $mail_sent = send_html_tickets_by_mail($order->get_billing_email(), $tickets_data);
-        if (!$mail_sent)
+        if (!$mail_sent) {
+            $order->update_status("failed", "Unable to send email with tickets!");
             write_log("Could not send mail with tickets");
+
+            return;
+        }
+
+        $order->add_order_note( "Tickets sent by e-mail." );
     }
 }
 
 add_action( "woocommerce_admin_order_data_after_order_details", "display_ticket_links_in_order_details" );
 function display_ticket_links_in_order_details($order) {
-    // print "<br class=\"clear\" />";
-    // print "<h4>Ticket Files</h4>";
-    // $tickets_data = $order->get_meta("tickets_data");
-    // $ticket_file_paths = $tickets_data["meta"];
-    // $ticket_files_url_path = $ticket_file_paths["ticket_file_url_path"];
-    // if (!empty($ticket_files_url_path)) {
-    //     foreach($ticket_files_url_path as $key => $ticket_file_path) {
-    //         print("<div><a href=\"" . $ticket_file_path . "\">Tickets</a></div>");
-    //     }
-    //     print "<br class=\"clear\" />";
-    // } else {
-    //     print("<div>No ticket files found for this order</div>");
-    // }
-}
+    print "<br class=\"clear\" />";
+    print "<h4>Ticket Files</h4>";
+    
+    $generated_tickets = $order->get_meta("tickets_data");
+    $ticket_files_url_path = $generated_tickets["ticket_file_url_path"];
 
-add_action( "admin_notices", "ticketsdir_writable_error_message" );
-function ticketsdir_writable_error_message() {
-    if (!is_writable(WOO_TS_TICKETSDIR)) {
-        print "<div class=\"error notice\">";
-        print    "<p>Ensure " . WOO_TS_TICKETSDIR . " is writable</p>";
-        print "</div>";
+    if (!empty($ticket_files_url_path)) {
+        foreach($ticket_files_url_path as $key => $ticket_file_path) {
+            print("<div><a href=\"" . $ticket_file_path . "\">Tickets</a></div>");
+        }
+        print "<br class=\"clear\" />";
     } else {
-        print "<div class=\"notice notice-success\">";
-        print    "<p>" . WOO_TS_TICKETSDIR . " is writable</p>";
-        print "</div>";
+        print("<div>No ticket files found for this order</div>");
     }
 }
 
