@@ -1,6 +1,6 @@
 <?php
 
-function get_tickets_meta($tickets_data) {
+function decode_tickets($tickets_data) {
     $tickets_meta = array();
 
     foreach ($tickets_data as $index => $ticket) {
@@ -54,23 +54,7 @@ function send_html_tickets_by_mail($target_user_mail, $tickets_data) {
             $email_subject = woo_ts_get_option("email_subject", "");
             $qr = null;
 
-            $int_array = int_array_to_bin($ticket_meta["sensitive_decoded"]);
-            $matrix = get_qr_matrix(base64_encode($int_array));
-            $qr .= "<table><tbody>";
-            
-            foreach($matrix as $row) {
-                $qr .= "<tr>";
-                
-                for($i = 0; $i < $row->count(); $i++)
-                    if ($row[$i] == 1)
-                        $qr .= "<td class=\"black-square\"></td>";
-                    else
-                        $qr .= "<td class=\"white-square\"></td>";
-                
-                $qr .= "</tr>";
-            }
-
-            $qr .= "</tbody></table>";
+            $qr = sensitive_to_html_qr($ticket_meta["sensitive_decoded"]);
 
             $email_body = str_replace("[ticket_number]", $key + 1, $email_body);
             $email_body = str_replace("[ticket_qr]", $qr, $email_body);
@@ -90,6 +74,28 @@ function send_html_tickets_by_mail($target_user_mail, $tickets_data) {
     }
 
     return false;
+}
+
+function sensitive_to_html_qr($sensitive_decoded) {
+    $qr = "";
+    $int_array = int_array_to_bin($sensitive_decoded);
+    $matrix = get_qr_matrix(base64_encode($int_array));
+    $qr .= "<table><tbody>";
+    
+    foreach($matrix as $row) {
+        $qr .= "<tr>";
+        
+        for($i = 0; $i < $row->count(); $i++)
+            if ($row[$i] == 1)
+                $qr .= "<td class=\"black-square\"></td>";
+            else
+                $qr .= "<td class=\"white-square\"></td>";
+        
+        $qr .= "</tr>";
+    }
+
+    $qr .= "</tbody></table>";
+    return $qr;
 }
 
 function get_customer_name($order) {

@@ -446,51 +446,19 @@ if (is_admin()) {
 
 /**
  * Add a custom action to order actions select box on edit order page
- * Ability to resend html based tickets via e-mail
+ * Ability to manually request tickets from TicketSonic
  *
  * @param array $actions order actions array to display
  * @return array - updated actions
  */
-add_action( "woocommerce_order_actions", "resend_ticket_files_order_action" );
-function resend_ticket_files_order_action($actions) {
-    $actions["wc_resend_ticket_files_order_action"] = __( "Resend ticket files via e-mail", "resend-tickets" );
+add_action( "woocommerce_order_actions", "force_get_new_tickets_order_action" );
+function force_get_new_tickets_order_action($actions) {
+    $actions["wc_force_get_new_tickets_order_action"] = __( "Get tickets from TS", "generate-tickets" );
     return $actions;
 }
 
-add_action( 'woocommerce_order_action_wc_resend_ticket_files_order_action', 'resend_ticket_files_order' );
-function resend_ticket_files_order( $order ) {
-    $tickets_data = $order->get_meta("tickets_data");
-    
-    if (!empty($tickets_data)) {
-        $mail_sent = send_html_tickets_by_mail($order->get_billing_email(), $tickets_data);
-        if (!$mail_sent) {
-            $order->add_order_note( "Error sending tickets via e-mail." );
-
-            return;
-        }
-
-        $order->add_order_note( "Tickets resent by e-mail." );
-    } else {
-        $order->add_order_note( "No generated tickets were found to be sent via email." );
-        return;
-    }
-}
-
-/**
- * Add a custom action to order actions select box on edit order page
- * Ability to manually generate ticket files
- *
- * @param array $actions order actions array to display
- * @return array - updated actions
- */
-add_action( "woocommerce_order_actions", "force_generate_new_tickets_order_action" );
-function force_generate_new_tickets_order_action($actions) {
-    $actions["wc_force_generate_new_tickets_order_action"] = __( "Force generate new tickets", "generate-tickets" );
-    return $actions;
-}
-
-add_action( 'woocommerce_order_action_wc_force_generate_new_tickets_order_action', 'force_generate_new_tickets_order' );
-function force_generate_new_tickets_order( $order ) {
+add_action( 'woocommerce_order_action_wc_force_get_new_tickets_order_action', 'force_get_new_tickets_order' );
+function force_get_new_tickets_order( $order ) {
     $order_id = $order->id;
 
     $url = woo_ts_get_option("external_order_endpoint", "");
@@ -500,25 +468,92 @@ function force_generate_new_tickets_order( $order ) {
     $response = request_create_tickets_order_in_remote($order_id, $url, $email, $key);
 
     if ($response["status"] != "success") {
-        $order->update_status("failed", "Error fetching result for order " . $order_id . ": ". $response["message"]);
+        $order->add_order_note("Error getting new tickets for order " . $order_id . ": ". $response["message"]);
         return;
     }
 
-    $generated_tickets = generate_file_tickets($response["tickets"], $order_id);
+    $order->update_meta_data("ts_response", $response["tickets"]);
+    $order->add_order_note( "Tickets data obtained successfully." );
+
+    $order->save();
+}
+
+/**
+ * Add a custom action to order actions select box on edit order page
+ * Ability to resend html based tickets via e-mail to the order owner
+ *
+ * @param array $actions order actions array to display
+ * @return array - updated actions
+ */
+add_action( "woocommerce_order_actions", "resend_html_tickets_order_action" );
+function resend_html_tickets_order_action($actions) {
+    $actions["wc_resend_html_tickets_order_action"] = __( "Send html based tickets via e-mail", "resend-tickets" );
+    return $actions;
+}
+
+add_action( 'woocommerce_order_action_wc_resend_html_tickets_order_action', 'resend_html_tickets_order' );
+function resend_html_tickets_order( $order ) {
+    if (!$order->meta_exists("ts_response")) {
+        $order->add_order_note( "No ticket data found to generate and send html tickets." );
+
+        return;
+    }
+
+    $ts_response = $order->get_meta("ts_response");
+    
+    $decoded_tickets_data = decode_tickets($ts_response);
+    if ($decoded_tickets_data["status"] != "success") {
+        $order->update_status("failed", $decoded_tickets_data["message"]);
+        return;
+    }
+
+    $order->save();
+    
+    if (!empty($decoded_tickets_data)) {
+        $mail_sent = send_html_tickets_by_mail($order->get_billing_email(), $decoded_tickets_data["payload"]);
+        if (!$mail_sent) {
+            $order->update_status("failed", "Unable to send email with tickets!");
+            write_log("Could not send mail with tickets");
+
+            return;
+        }
+
+        $order->add_order_note( "Tickets sent by e-mail." );
+    }
+}
+
+/**
+ * Add a custom action to order actions select box on edit order page
+ * Ability to manually generate ticket files from existing ticket data
+ *
+ * @param array $actions order actions array to display
+ * @return array - updated actions
+ */
+add_action( "woocommerce_order_actions", "generate_new_ticket_files_from_existing_ticket_data_order_action" );
+function generate_new_ticket_files_from_existing_ticket_data_order_action($actions) {
+    $actions["wc_generate_new_ticket_files_from_existing_ticket_data_order_action"] = __( "Generate ticket files", "generate-ticket-files" );
+    return $actions;
+}
+
+add_action( 'woocommerce_order_action_wc_generate_new_ticket_files_from_existing_ticket_data_order_action', 'generate_new_ticket_files_from_existing_ticket_data' );
+function generate_new_ticket_files_from_existing_ticket_data( $order ) {
+    $order_id = $order->id;
+
+    $order = wc_get_order($order_id);
+    if (!$order->meta_exists("ts_response")) {
+        $order->add_order_note( "No ticket files generated because there is no data." );
+
+        return;
+    }
+
+    $ts_response = $order->get_meta("ts_response");
+    $generated_tickets = generate_file_tickets($ts_response, $order_id);
     if ($generated_tickets["status"] != "success") {
         $order->update_status("failed", $generated_tickets["message"]);
         return;
     }
 
-    $tickets_metadata = get_tickets_meta($response["tickets"]);
-    if ($tickets_metadata["status"] != "success") {
-        $order->update_status("failed", $tickets_metadata["message"]);
-        return;
-    }
-
-    $tickets_data = array_merge($generated_tickets["payload"], $tickets_metadata["payload"]);
-    $order->add_meta_data("tickets_data", $tickets_data);
-
+    $order->update_meta_data("ts_paths", $generated_tickets["payload"]);
     $order->add_order_note( "Tickets generated successfully." );
 
     $order->save();
@@ -542,25 +577,18 @@ function send_html_tickets_to_customer_after_order_completed($order_id) {
         return;
     }
 
-    $generated_tickets = generate_file_tickets($response["tickets"], $order_id);
-    if ($generated_tickets["status"] != "success") {
-        $order->update_status("failed", $generated_tickets["message"]);
+    $decoded_tickets_data = decode_tickets($response["tickets"]);
+    if ($decoded_tickets_data["status"] != "success") {
+        $order->update_status("failed", $decoded_tickets_data["message"]);
         return;
     }
 
-    $tickets_metadata = get_tickets_meta($response["tickets"]);
-    if ($tickets_metadata["status"] != "success") {
-        $order->update_status("failed", $tickets_metadata["message"]);
-        return;
-    }
-
-    $tickets_data = array_merge($generated_tickets["payload"], $tickets_metadata["payload"]);
-    $order->add_meta_data("tickets_data", $tickets_data);
+    $order->update_meta_data("ts_response", $response["tickets"]);
 
     $order->save();
-    
-    if (!empty($tickets_data)) {
-        $mail_sent = send_html_tickets_by_mail($order->get_billing_email(), $tickets_data);
+
+    if (!empty($decoded_tickets_data)) {
+        $mail_sent = send_html_tickets_by_mail($order->get_billing_email(), $decoded_tickets_data["payload"]);
         if (!$mail_sent) {
             $order->update_status("failed", "Unable to send email with tickets!");
             write_log("Could not send mail with tickets");
@@ -575,9 +603,26 @@ function send_html_tickets_to_customer_after_order_completed($order_id) {
 add_action( "woocommerce_admin_order_data_after_order_details", "display_ticket_links_in_order_details" );
 function display_ticket_links_in_order_details($order) {
     print "<br class=\"clear\" />";
+    print "<h4>Tickets</h4>";
+    $ts_response = $order->get_meta("ts_response");
+    if (!empty($ts_response)) {
+        $decoded_tickets_data = decode_tickets($ts_response);
+        foreach($decoded_tickets_data["payload"]["tickets_meta"] as $key => $ticket) {
+            print("<div style='clear: both; margin-bottom: 15px;'>");
+            print("<div style=\"float: left; margin: 5px 5px 0 0;\"><img src=\"" . WOO_TS_PLUGINPATH . "/templates/admin/example_qr.svg\" /></div>");
+            print("<div><span>" . $ticket["title"] . "</span></div>");
+            print("<div><span>" . $ticket["formatted_price"] . "</span></div>");
+            print("</div>");
+        }
+        print "<br class=\"clear\" />";
+    } else {
+        print("<div>No ticket data found for this order</div>");
+    }
+
+    print "<br class=\"clear\" />";
     print "<h4>Ticket Files</h4>";
     
-    $generated_tickets = $order->get_meta("tickets_data");
+    $generated_tickets = $order->get_meta("ts_paths");
     $ticket_files_url_path = $generated_tickets["ticket_file_url_path"];
 
     if (!empty($ticket_files_url_path)) {
@@ -586,7 +631,7 @@ function display_ticket_links_in_order_details($order) {
         }
         print "<br class=\"clear\" />";
     } else {
-        print("<div>No ticket files found for this order</div>");
+        print("<div>No ticket files are generated for this order</div>");
     }
 }
 

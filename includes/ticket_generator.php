@@ -3,7 +3,7 @@
 require("html_generator.php");
 require("mpdf_generator.php");
 
-function generate_file_tickets($tickets_data, $order_id) {
+function generate_file_tickets($ts_response, $order_id) {
     $is_dir_created = wp_mkdir_p(WOO_TS_UPLOADPATH . "/" . $order_id . "/");
     if (!$is_dir_created) {
         return array("status" => "failure", "message" => "Unable to create a folder for storing the ticket files");
@@ -12,7 +12,7 @@ function generate_file_tickets($tickets_data, $order_id) {
     $ticket_files_paths = array();
     $ticket_url_paths = array();
     
-    foreach ($tickets_data as $index => $ticket) {
+    foreach ($ts_response as $index => $ticket) {
         $decoded_barcode = decode_barcode($ticket["encrypted_data"]);
         if ($decoded_barcode["status"] == "failure")
             return $decoded_barcode;
