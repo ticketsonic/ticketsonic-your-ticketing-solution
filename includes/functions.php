@@ -48,7 +48,7 @@ if ( is_admin() ) {
 
 				$ticket_price = sanitize_text_field(  $_POST['ticket_price'] );
 
-				if ( !is_int( intval( sanitize_text_field( $ticket_price ) ) ) ) {
+				if ( ! is_int( intval( sanitize_text_field( $ticket_price ) ) ) ) {
 					woo_ts_admin_notice( 'Ticket price must be an integer number', 'error' );
 
 					return;
@@ -57,7 +57,7 @@ if ( is_admin() ) {
 				$ticket_currency = sanitize_text_field( $_POST['ticket_currency'] );
 
 				$ticket_stock = sanitize_text_field( $_POST['ticket_stock'] );
-				if ( !is_int( intval( sanitize_text_field( $ticket_stock ) ) ) ) {
+				if ( ! is_int( intval( sanitize_text_field( $ticket_stock ) ) ) ) {
 					woo_ts_admin_notice( 'Ticket stock must be an integer number', 'error' );
 
 					return;
@@ -276,7 +276,7 @@ if ( is_admin() ) {
 						return;
 					}
 
-					if ( !is_int( intval( $value['price'] ) ) ) {
+					if ( ! is_int( intval( $value['price'] ) ) ) {
 						$value['price'] = sanitize_text_field( $value['price'] );
 						woo_ts_admin_notice( 'Ticket price must be an integer number', 'error' );
 
@@ -316,7 +316,7 @@ if ( is_admin() ) {
 					return;
 				}
 
-				if ( !is_int( intval( $badge_primary_text_fontsize ) ) ) {
+				if ( ! is_int( intval( $badge_primary_text_fontsize ) ) ) {
 					woo_ts_admin_notice( 'Primary text font size must be an integer number', 'error' );
 					return;
 				}
@@ -327,7 +327,7 @@ if ( is_admin() ) {
 					return;
 				}
 
-				if ( !is_int( intval( $badge_secondary_text_fontsize ) ) ) {
+				if ( ! is_int( intval( $badge_secondary_text_fontsize ) ) ) {
 					woo_ts_admin_notice( 'Secondary text font size must be an integer number', 'error' );
 					return;
 				}
@@ -398,7 +398,7 @@ if ( is_admin() ) {
 					return;
 				}
 
-				if ( !is_int( intval( sanitize_text_field( $ticket_price ) ) ) ) {
+				if ( ! is_int( intval( sanitize_text_field( $ticket_price ) ) ) ) {
 					woo_ts_admin_notice( 'Ticket price must be an integer number', 'error' );
 
 					return;
@@ -493,7 +493,7 @@ function resend_html_tickets_order_action( $actions ) {
 
 add_action( 'woocommerce_order_action_wc_resend_html_tickets_order_action', 'resend_html_tickets_order' );
 function resend_html_tickets_order( $order ) {
-	if ( !$order->meta_exists( 'ts_response' ) ) {
+	if ( ! $order->meta_exists( 'ts_response' ) ) {
 		$order->add_order_note( 'No ticket data found to generate and send html tickets.' );
 
 		return;
@@ -509,9 +509,9 @@ function resend_html_tickets_order( $order ) {
 
 	$order->save();
 
-	if ( !empty( $decoded_tickets_data ) ) {
+	if ( ! empty( $decoded_tickets_data ) ) {
 		$mail_sent = send_html_tickets_by_mail( $order->get_billing_email(), $decoded_tickets_data['payload'] );
-		if ( !$mail_sent ) {
+		if ( ! $mail_sent ) {
 			$order->update_status( 'failed', 'Unable to send email with tickets!' );
 			write_log( 'Could not send mail with tickets' );
 
@@ -540,7 +540,7 @@ function generate_new_ticket_files_from_existing_ticket_data( $order ) {
 	$order_id = $order->id;
 
 	$order = wc_get_order( $order_id );
-	if ( !$order->meta_exists( 'ts_response' ) ) {
+	if ( ! $order->meta_exists( 'ts_response' ) ) {
 		$order->add_order_note( 'No ticket files generated because there is no data.' );
 
 		return;
@@ -587,9 +587,9 @@ function send_html_tickets_to_customer_after_order_completed( $order_id ) {
 
 	$order->save();
 
-	if ( !empty( $decoded_tickets_data ) ) {
+	if ( ! empty( $decoded_tickets_data ) ) {
 		$mail_sent = send_html_tickets_by_mail( $order->get_billing_email(), $decoded_tickets_data['payload'] );
-		if ( !$mail_sent ) {
+		if ( ! $mail_sent ) {
 			$order->update_status( 'failed', 'Unable to send email with tickets!' );
 			write_log( 'Could not send mail with tickets' );
 
@@ -605,7 +605,7 @@ function display_ticket_links_in_order_details( $order ) {
 	print '<br class="clear" />';
 	print '<h4>Tickets</h4>';
 	$ts_response = $order->get_meta( 'ts_response' );
-	if ( !empty( $ts_response ) ) {
+	if ( ! empty( $ts_response ) ) {
 		$decoded_tickets_data = decode_tickets( $ts_response );
 		foreach( $decoded_tickets_data['payload']['tickets_meta'] as $key => $ticket ) {
 			print( '<div style="clear: both; margin-bottom: 15px;">' );
@@ -625,7 +625,7 @@ function display_ticket_links_in_order_details( $order ) {
 	$generated_tickets = $order->get_meta( 'ts_paths' );
 	$ticket_files_url_path = $generated_tickets['ticket_file_url_path'];
 
-	if ( !empty( $ticket_files_url_path ) ) {
+	if ( ! empty( $ticket_files_url_path ) ) {
 		foreach( $ticket_files_url_path as $key => $ticket_file_path ) {
 			print( '<div><a href="' . $ticket_file_path . '">Tickets</a></div>' );
 		}
@@ -637,7 +637,7 @@ function display_ticket_links_in_order_details( $order ) {
 
 add_action( 'admin_notices', 'uploadpath_writable_error_message' );
 function uploadpath_writable_error_message( ) {
-	if ( !is_writable( WOO_TS_UPLOADPATH ) ) {
+	if ( ! is_writable( WOO_TS_UPLOADPATH ) ) {
 		print '<div class="error notice">';
 		print    '<p>Ensure ' . WOO_TS_UPLOADPATH . ' is writable</p>';
 		print '</div>';
