@@ -65,7 +65,7 @@ if ( is_admin() ) {
 
 				$result = request_change_ticket( $url, $email, $key, $ticket_sku, $ticket_title, $ticket_description, $ticket_price, $ticket_currency, $ticket_stock );
 
-				if ( $result['status'] == 'success' ) {
+				if ( 'success' === $result['status'] ) {
 					woo_ts_admin_notice( 'Status: success<br>Ticket with SKU: ' . $ticket_sku . ' successfully sent for processing. You will receive an email when it is processed.', 'notice' );
 				} else {
 					woo_ts_admin_notice( 'Failed to request new event: ' . $result['message'], 'error' );
@@ -128,7 +128,7 @@ if ( is_admin() ) {
 
 				$result = request_change_event( $url, $email, $key, $event_id, $event_title, $event_description, $event_location, $event_start_datetime, $event_badge_data );
 
-				if ( $result['status'] == 'success' ) {
+				if ( 'success' === $result['status'] ) {
 					woo_ts_admin_notice( 'Status: success<br>Event with ID: ' . $event_id . ' successfully sent for processing. You will receive an email when it is processed.', 'notice' );
 				} else {
 					woo_ts_admin_notice( 'Failed to request new event: ' . $result['message'], 'error' );
@@ -178,7 +178,7 @@ if ( is_admin() ) {
 				$event_id = woo_ts_get_option( 'event_id', '' );
 
 				$response = get_tickets_with_remote( $url, $email, $key, $event_id );
-				if ( $response['status'] == 'error' ) {
+				if ( 'error' === $response['status'] ) {
 					woo_ts_admin_notice( 'Error syncing tickets: ' . $response['message'] , 'error' );
 					return;
 				}
@@ -190,7 +190,7 @@ if ( is_admin() ) {
 					$ticket_obj = new WC_Product_Simple();
 
 					// Ticket does not exist so we skip
-					if ( $woo_product_id != 0 ) {
+					if ( 0 !== $woo_product_id ) {
 						$ticket_obj = new WC_Product_Simple( $woo_product_id );
 					}
 
@@ -222,7 +222,7 @@ if ( is_admin() ) {
 
 				$result = array( 'status' => 'success', 'message' => 'Number of imported tickets: ' . $imported_count, 'user_public_key' => $response['user_public_key'] );
 
-				if ( $result['status'] == 'success' ) {
+				if ( 'success' === $result['status'] ) {
 					woo_ts_admin_notice( $result['message'], 'notice' );
 					woo_ts_admin_notice( 'Public Key' . $result['user_public_key'], 'notice' );
 					woo_ts_update_option( 'user_public_key', '-----BEGIN PUBLIC KEY-----\n' . $result['user_public_key'] . '\n-----END PUBLIC KEY-----' );
@@ -350,7 +350,7 @@ if ( is_admin() ) {
 													$badge_text_vertical_location, $badge_primary_text_fontsize,
 													$badge_secondary_text_fontsize, $badge_primary_text_color, $badge_secondary_text_color );
 
-				if ( $result['status'] == 'success' ) {
+				if ( 'success' === $result['status'] ) {
 					woo_ts_admin_notice( 'Status: success<br>Event ID: ' . $result['event_id'] . ' successfully sent for processing. You will receive an email when it is processed.', 'notice' );
 				} else {
 					woo_ts_admin_notice( 'Failed to request new event: ' . $result['message'], 'error' );
@@ -417,7 +417,7 @@ if ( is_admin() ) {
 
 				$result = request_create_new_ticket( $url, $email, $key, $ticket_eventid, $ticket_title, $ticket_description, $ticket_price, $ticket_currency, $ticket_stock );
 
-				if ( $result['status'] == 'success' ) {
+				if ( 'success' === $result['status'] ) {
 					woo_ts_admin_notice( 'Status: success<br>Ticket for event ID: ' . $ticket_eventid . ' successfully sent for processing. You will receive an email when it is processed.', 'notice' );
 				} else {
 					woo_ts_admin_notice( 'Failed to request new event: ' . $result['message'], 'error' );
@@ -465,7 +465,7 @@ function force_get_new_tickets_order( $order ) {
 
 	$response = request_create_tickets_order_in_remote( $order_id, $url, $email, $key );
 
-	if ( $response['status'] != 'success' ) {
+	if ( 'success' !== $response['status'] ) {
 		$order->add_order_note( 'Error getting new tickets for order ' . $order_id . ': '. $response['message'] );
 		return;
 	}
@@ -500,7 +500,7 @@ function resend_html_tickets_order( $order ) {
 	$ts_response = $order->get_meta( 'ts_response' );
 
 	$decoded_tickets_data = decode_tickets( $ts_response );
-	if ( $decoded_tickets_data['status'] != 'success' ) {
+	if ( 'success' !== $decoded_tickets_data['status'] ) {
 		$order->update_status( 'failed', $decoded_tickets_data['message'] );
 		return;
 	}
@@ -546,7 +546,7 @@ function generate_new_ticket_files_from_existing_ticket_data( $order ) {
 
 	$ts_response = $order->get_meta( 'ts_response' );
 	$generated_tickets = generate_file_tickets( $ts_response, $order_id );
-	if ( $generated_tickets['status'] != 'success' ) {
+	if ( 'success' !== $generated_tickets['status'] ) {
 		$order->update_status( 'failed', $generated_tickets['message'] );
 		return;
 	}
@@ -570,13 +570,13 @@ function send_html_tickets_to_customer_after_order_completed( $order_id ) {
 
 	$response = request_create_tickets_order_in_remote( $order_id, $url, $email, $key );
 
-	if ( $response['status'] != 'success' ) {
+	if ( 'success' !== $response['status'] ) {
 		$order->update_status( 'failed', 'Error fetching result for order ' . $order_id . ': '. $response['message'] );
 		return;
 	}
 
 	$decoded_tickets_data = decode_tickets( $response['tickets'] );
-	if ( $decoded_tickets_data['status'] != 'success' ) {
+	if ( 'success' !== $decoded_tickets_data['status'] ) {
 		$order->update_status( 'failed', $decoded_tickets_data['message'] );
 		return;
 	}
@@ -665,7 +665,7 @@ function woo_ts_get_option( $option = null, $default = false, $allow_empty = fal
 	if( isset( $option ) ) {
 		$separator = '_';
 		$output = get_option( WOO_TS_PREFIX . $separator . $option, $default );
-		if( $allow_empty == false && $output != 0 && ( $output == false || $output == '' ) )
+		if( false === $allow_empty && 0 !== $output && ( false === $output || '' === $output ) )
 			$output = $default;
 	}
 	return $output;
