@@ -1,22 +1,22 @@
 <?php
 // Display admin notice on screen load
 function woo_ts_admin_notice( $message = '', $priority = 'updated', $screen = '' ) {
-	if ( $priority == false || $priority == '' )
+	if ( false === $priority || '' === $priority )
 		$priority = 'updated';
-	if ( $message <> '' ) {
+	if ( '' !== $message ) {
 		ob_start();
 		woo_ts_admin_notice_html( $message, $priority, $screen );
 		$output = ob_get_contents();
 		ob_end_clean();
 		// Check if an existing notice is already in queue
 		$existing_notice = get_transient( WOO_TS_PREFIX . '_notice' );
-		if ( $existing_notice !== false ) {
+		if ( false !== $existing_notice ) {
 			$existing_notice = base64_decode( $existing_notice );
 			$output = $existing_notice . $output;
 		}
 		$response = set_transient( WOO_TS_PREFIX . '_notice', base64_encode( $output ), MINUTE_IN_SECONDS );
 		// Check if the Transient was saved
-		if ( $response !== false )
+		if ( false !== $response )
 			add_action( 'admin_notices', 'woo_ts_admin_notice_print' );
 	}
 
@@ -25,15 +25,15 @@ function woo_ts_admin_notice( $message = '', $priority = 'updated', $screen = ''
 // HTML template for admin notice
 function woo_ts_admin_notice_html( $message = '', $priority = 'updated', $screen = '' ) {
 	// Display admin notice on specific screen
-	if ( !empty( $screen ) ) {
+	if ( ! empty( $screen ) ) {
 
 		global $pagenow;
 
 		if ( is_array( $screen ) ) {
-			if ( in_array( $pagenow, $screen ) == false )
+			if ( false === in_array( $pagenow, $screen ) )
 				return;
 		} else {
-			if ( $pagenow <> $screen )
+			if ( $pagenow !== $screen )
 				return;
 		}
 
@@ -49,7 +49,7 @@ function woo_ts_admin_notice_html( $message = '', $priority = 'updated', $screen
 function woo_ts_admin_notice_print() {
 
 	$output = get_transient( WOO_TS_PREFIX . '_notice' );
-	if ( $output !== false ) {
+	if ( false !== $output ) {
 		delete_transient( WOO_TS_PREFIX . '_notice' );
 		$output = base64_decode( $output );
 		echo $output;
@@ -99,16 +99,16 @@ function woo_ts_enqueue_scripts( $hook ) {
 }
 
 function woo_ts_admin_active_tab( $tab_name = null, $tab = null ) {
-	if ( isset( $_GET['tab'] ) && !$tab )
+	if ( isset( $_GET['tab'] ) && ! $tab )
 		$tab = $_GET['tab'];
-	else if ( !isset( $_GET['tab'] ) && woo_ts_get_option( 'skip_overview', false ) )
+	else if ( ! isset( $_GET['tab'] ) && woo_ts_get_option( 'skip_overview', false ) )
 		$tab = 'import';
 	else
 		$tab = 'overview';
 
 	$output = '';
 	if ( isset( $tab_name ) && $tab_name ) {
-		if ( $tab_name == $tab )
+		if ( $tab_name === $tab )
 			$output = ' nav-tab-active';
 	}
 	echo $output;
@@ -122,31 +122,31 @@ function woo_ts_tab_template( $tab = '' ) {
 	if ( ! $tab)
 		$tab = 'overview';
 
-	switch($tab) {
+	switch ( $tab ) {
 		case 'overview':
 			$skip_overview = woo_ts_get_option( 'skip_overview', false );
 			break;
 
 		case 'import':
-			if ( isset( $_GET['import'] ) && $_GET['import'] == WOO_TS_PREFIX )
+			if ( isset( $_GET['import'] ) && WOO_TS_PREFIX === $_GET['import'] )
 				$url = 'import';
-			if ( isset( $_GET['page'] ) && $_GET['page'] == WOO_TS_PREFIX )
+			if ( isset( $_GET['page'] ) && WOO_TS_PREFIX === $_GET['page'] )
 				$url = 'page';
 			break;
 
 		case 'settings':
 			$api_key = woo_ts_get_option( 'api_key', ',' );
-			$api_userid = woo_ts_get_option( 'api_userid', '');
-			$email_subject = woo_ts_get_option( 'email_subject', '');
-			$email_body = woo_ts_get_option( 'email_body', '');
-			$ticket_info_endpoint = woo_ts_get_option( 'ticket_info_endpoint', '');
-			$event_info_endpoint = woo_ts_get_option( 'event_info_endpoint', '');
-			$new_event_endpoint = woo_ts_get_option( 'new_event_endpoint', '');
-			$new_ticket_endpoint = woo_ts_get_option( 'new_ticket_endpoint', '');
-			$change_ticket_endpoint = woo_ts_get_option( 'change_ticket_endpoint', '');
-			$change_event_endpoint = woo_ts_get_option( 'change_event_endpoint', '');
-			$external_order_endpoint = woo_ts_get_option( 'external_order_endpoint', '');
-			$event_id = woo_ts_get_option( 'event_id', '');
+			$api_userid = woo_ts_get_option( 'api_userid', '' );
+			$email_subject = woo_ts_get_option( 'email_subject', '' );
+			$email_body = woo_ts_get_option( 'email_body', '' );
+			$ticket_info_endpoint = woo_ts_get_option( 'ticket_info_endpoint', '' );
+			$event_info_endpoint = woo_ts_get_option( 'event_info_endpoint', '' );
+			$new_event_endpoint = woo_ts_get_option( 'new_event_endpoint', '' );
+			$new_ticket_endpoint = woo_ts_get_option( 'new_ticket_endpoint', '' );
+			$change_ticket_endpoint = woo_ts_get_option( 'change_ticket_endpoint', '' );
+			$change_event_endpoint = woo_ts_get_option( 'change_event_endpoint', '' );
+			$external_order_endpoint = woo_ts_get_option( 'external_order_endpoint', '' );
+			$event_id = woo_ts_get_option( 'event_id', '' );
 			break;
 
 	}
