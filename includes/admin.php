@@ -3,6 +3,7 @@
 function woo_ts_admin_notice( $message = '', $priority = 'updated', $screen = '' ) {
 	if ( false === $priority || '' === $priority )
 		$priority = 'updated';
+
 	if ( '' !== $message ) {
 		ob_start();
 		woo_ts_admin_notice_html( $message, $priority, $screen );
@@ -10,10 +11,12 @@ function woo_ts_admin_notice( $message = '', $priority = 'updated', $screen = ''
 		ob_end_clean();
 		// Check if an existing notice is already in queue
 		$existing_notice = get_transient( WOO_TS_PREFIX . '_notice' );
+
 		if ( false !== $existing_notice ) {
 			$existing_notice = base64_decode( $existing_notice );
 			$output = $existing_notice . $output;
 		}
+
 		$response = set_transient( WOO_TS_PREFIX . '_notice', base64_encode( $output ), MINUTE_IN_SECONDS );
 		// Check if the Transient was saved
 		if ( false !== $response )
@@ -26,7 +29,6 @@ function woo_ts_admin_notice( $message = '', $priority = 'updated', $screen = ''
 function woo_ts_admin_notice_html( $message = '', $priority = 'updated', $screen = '' ) {
 	// Display admin notice on specific screen
 	if ( ! empty( $screen ) ) {
-
 		global $pagenow;
 
 		if ( is_array( $screen ) ) {
@@ -47,14 +49,12 @@ function woo_ts_admin_notice_html( $message = '', $priority = 'updated', $screen
 
 // Grabs the WordPress transient that holds the admin notice and prints it
 function woo_ts_admin_notice_print() {
-
 	$output = get_transient( WOO_TS_PREFIX . '_notice' );
 	if ( false !== $output ) {
 		delete_transient( WOO_TS_PREFIX . '_notice' );
 		$output = base64_decode( $output );
 		echo $output;
 	}
-
 }
 
 function woo_ts_template_header( $title = '', $icon = 'woocommerce' ) { ?>
@@ -74,10 +74,8 @@ function woo_ts_template_footer() { ?>
 
 // Add Product Import to WordPress Administration menu
 function woo_ts_admin_menu() {
-
 	$page = add_submenu_page( 'woocommerce', __( 'TicketSonic', 'woo_ts' ), __( 'TicketSonic', 'woo_ts' ), 'manage_woocommerce', 'woo_ts', 'woo_ts_html_page' );
 	add_action( 'admin_print_styles-' . $page, 'woo_ts_enqueue_scripts' );
-
 }
 add_action( 'admin_menu', 'woo_ts_admin_menu', 11 );
 
@@ -85,12 +83,9 @@ function woo_ts_enqueue_scripts( $hook ) {
 	// Simple check that WooCommerce is activated
 	if ( class_exists( 'WooCommerce' ) ) {
 		global $woocommerce;
-		// Load WooCommerce default Admin styling
 		wp_enqueue_style( 'woocommerce_admin_styles', $woocommerce->plugin_url() . '/assets/css/admin.css' );
-
 	}
 
-	// Common
 	wp_enqueue_style( 'woo_ts_styles', plugins_url( '/templates/admin/import.css', WOO_TS_RELPATH ) );
 	wp_enqueue_script( 'woo_ts_scripts', plugins_url( '/templates/admin/import.js', WOO_TS_RELPATH ), array( 'jquery' ) );
 	wp_enqueue_style( 'dashicons' );
@@ -112,11 +107,9 @@ function woo_ts_admin_active_tab( $tab_name = null, $tab = null ) {
 			$output = ' nav-tab-active';
 	}
 	echo $output;
-
 }
 
 function woo_ts_tab_template( $tab = '' ) {
-
 	global $import;
 
 	if ( ! $tab)
@@ -148,13 +141,12 @@ function woo_ts_tab_template( $tab = '' ) {
 			$external_order_endpoint = woo_ts_get_option( 'external_order_endpoint', '' );
 			$event_id = woo_ts_get_option( 'event_id', '' );
 			break;
-
 	}
+
 	if ( $tab ) {
 		if ( file_exists( WOO_TS_PATH . 'templates/admin/tabs-' . $tab . '.php' ) )
-			include_once( WOO_TS_PATH . 'templates/admin/tabs-' . $tab . '.php' );
+			include_once WOO_TS_PATH . 'templates/admin/tabs-' . $tab . '.php';
 	}
-
 }
 
 ?>
