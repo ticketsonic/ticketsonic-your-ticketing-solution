@@ -123,7 +123,7 @@ if ( is_admin() ) {
 					'badge_primary_text_fontsize' => $badge_primary_text_fontsize,
 					'badge_secondary_text_fontsize' => $badge_secondary_text_fontsize,
 					'badge_primary_text_color' => $badge_primary_text_color,
-					'badge_secondary_text_color' => $badge_secondary_text_color
+					'badge_secondary_text_color' => $badge_secondary_text_color,
 				);
 
 				$result = request_change_event( $url, $email, $key, $event_id, $event_title, $event_description, $event_location, $event_start_datetime, $event_badge_data );
@@ -140,7 +140,7 @@ if ( is_admin() ) {
 				woo_ts_update_option( 'api_key', ( isset( $_POST['api_key'] ) ? sanitize_text_field( $_POST['api_key'] ) : '' ) );
 				woo_ts_update_option( 'api_userid', ( isset( $_POST['api_userid'] ) ? sanitize_text_field( $_POST['api_userid'] ) : '' ) );
 				woo_ts_update_option( 'email_subject', ( isset( $_POST['email_subject'] ) ? sanitize_text_field( $_POST['email_subject'] ) : '' ) );
-				woo_ts_update_option( 'email_body', ( isset( $_POST['email_body'] ) ? wp_kses($_POST['email_body'], allowed_html()) : '' ) );
+				woo_ts_update_option( 'email_body', ( isset( $_POST['email_body'] ) ? wp_kses( $_POST['email_body'], allowed_html() ) : '' ) );
 				woo_ts_update_option( 'ticket_info_endpoint', ( isset( $_POST['ticket_info_endpoint'] ) ? sanitize_text_field( $_POST['ticket_info_endpoint'] ) : '' ) );
 				woo_ts_update_option( 'event_info_endpoint', ( isset( $_POST['event_info_endpoint'] ) ? sanitize_text_field( $_POST['event_info_endpoint'] ) : '' ) );
 				woo_ts_update_option( 'new_event_endpoint', ( isset( $_POST['new_event_endpoint'] ) ? sanitize_text_field( $_POST['new_event_endpoint'] ) : '' ) );
@@ -179,7 +179,7 @@ if ( is_admin() ) {
 
 				$response = get_tickets_with_remote( $url, $email, $key, $event_id );
 				if ( 'error' === $response['status'] ) {
-					woo_ts_admin_notice( 'Error syncing tickets: ' . $response['message'] , 'error' );
+					woo_ts_admin_notice( 'Error syncing tickets: ' . $response['message'], 'error' );
 					return;
 				}
 
@@ -189,7 +189,7 @@ if ( is_admin() ) {
 
 					$ticket_obj = new WC_Product_Simple();
 
-					// Ticket does not exist so we skip
+					// Ticket does not exist so we skip.
 					if ( 0 !== $woo_product_id ) {
 						$ticket_obj = new WC_Product_Simple( $woo_product_id );
 					}
@@ -220,7 +220,11 @@ if ( is_admin() ) {
 					$imported_count++;
 				}
 
-				$result = array( 'status' => 'success', 'message' => 'Number of imported tickets: ' . $imported_count, 'user_public_key' => $response['user_public_key'] );
+				$result = array(
+					'status' => 'success',
+					'message' => 'Number of imported tickets: ' . $imported_count,
+					'user_public_key' => $response['user_public_key']
+				);
 
 				if ( 'success' === $result['status'] ) {
 					woo_ts_admin_notice( $result['message'], 'notice' );
@@ -345,10 +349,22 @@ if ( is_admin() ) {
 
 				upload_custom_badge_background();
 
-				$result = request_create_new_event( $url, $email, $key, $event_title, $event_description, $event_datetime,
-													$event_location, $tickets_data, $badge_text_horizontal_location,
-													$badge_text_vertical_location, $badge_primary_text_fontsize,
-													$badge_secondary_text_fontsize, $badge_primary_text_color, $badge_secondary_text_color );
+				$result = request_create_new_event(
+					$url,
+					$email,
+					$key,
+					$event_title,
+					$event_description,
+					$event_datetime,
+					$event_location,
+					$tickets_data,
+					$badge_text_horizontal_location,
+					$badge_text_vertical_location,
+					$badge_primary_text_fontsize,
+					$badge_secondary_text_fontsize,
+					$badge_primary_text_color,
+					$badge_secondary_text_color
+				);
 
 				if ( 'success' === $result['status'] ) {
 					woo_ts_admin_notice( 'Status: success<br>Event ID: ' . $result['event_id'] . ' successfully sent for processing. You will receive an email when it is processed.', 'notice' );
@@ -427,17 +443,19 @@ if ( is_admin() ) {
 		}
 	}
 
-	// Add plugin ticket term
+	/** Add plugin ticket term. */
 	function woo_ts_structure_init() {
-		wp_insert_term( 'TicketSonic Tickets', 'product_cat',
+		wp_insert_term(
+			'TicketSonic Tickets',
+			'product_cat',
 			array(
 				'description' => 'TicketSonic Tickets imported tickets.',
-				'slug' => 'ticketsonic'
+				'slug'        => 'ticketsonic',
 			)
 		);
 
 		// TODO: Add catch handler
-		// wp_mkdir_p(WOO_TS_TICKETSDIR);
+		// wp_mkdir_p(WOO_TS_TICKETSDIR);.
 		wp_mkdir_p( WOO_TS_UPLOADPATH );
 	}
 }
@@ -466,7 +484,7 @@ function force_get_new_tickets_order( $order ) {
 	$response = request_create_tickets_order_in_remote( $order_id, $url, $email, $key );
 
 	if ( 'success' !== $response['status'] ) {
-		$order->add_order_note( 'Error getting new tickets for order ' . $order_id . ': '. $response['message'] );
+		$order->add_order_note( 'Error getting new tickets for order ' . $order_id . ': ' . $response['message'] );
 		return;
 	}
 
@@ -571,7 +589,7 @@ function send_html_tickets_to_customer_after_order_completed( $order_id ) {
 	$response = request_create_tickets_order_in_remote( $order_id, $url, $email, $key );
 
 	if ( 'success' !== $response['status'] ) {
-		$order->update_status( 'failed', 'Error fetching result for order ' . $order_id . ': '. $response['message'] );
+		$order->update_status( 'failed', 'Error fetching result for order ' . $order_id . ': ' . $response['message'] );
 		return;
 	}
 
@@ -605,7 +623,7 @@ function display_ticket_links_in_order_details( $order ) {
 	$ts_response = $order->get_meta( 'ts_response' );
 	if ( ! empty( $ts_response ) ) {
 		$decoded_tickets_data = decode_tickets( $ts_response );
-		foreach( $decoded_tickets_data['payload']['tickets_meta'] as $key => $ticket ) {
+		foreach ( $decoded_tickets_data['payload']['tickets_meta'] as $key => $ticket ) {
 			print( '<div style="clear: both; margin-bottom: 15px;">' );
 			print( '<div style="float: left; margin: 5px 5px 0 0;"><img src="' . WOO_TS_PLUGINPATH . '/templates/admin/example_qr.svg" /></div>' );
 			print( '<div><span>' . $ticket['title'] . '</span></div>' );
@@ -624,7 +642,7 @@ function display_ticket_links_in_order_details( $order ) {
 	$ticket_files_url_path = $generated_tickets['ticket_file_url_path'];
 
 	if ( ! empty( $ticket_files_url_path ) ) {
-		foreach( $ticket_files_url_path as $key => $ticket_file_path ) {
+		foreach ( $ticket_files_url_path as $key => $ticket_file_path ) {
 			print( '<div><a href="' . $ticket_file_path . '">Tickets</a></div>' );
 		}
 		print '<br class="clear" />';
@@ -634,14 +652,14 @@ function display_ticket_links_in_order_details( $order ) {
 }
 
 add_action( 'admin_notices', 'uploadpath_writable_error_message' );
-function uploadpath_writable_error_message( ) {
+function uploadpath_writable_error_message() {
 	if ( ! is_writable( WOO_TS_UPLOADPATH ) ) {
 		print '<div class="error notice">';
-		print    '<p>Ensure ' . WOO_TS_UPLOADPATH . ' is writable</p>';
+		print '<p>Ensure ' . WOO_TS_UPLOADPATH . ' is writable</p>';
 		print '</div>';
 	} else {
 		print '<div class="notice notice-success">';
-		print    '<p>' . WOO_TS_UPLOADPATH . ' is writable</p>';
+		print '<p>' . WOO_TS_UPLOADPATH . ' is writable</p>';
 		print '</div>';
 	}
 }
@@ -662,10 +680,10 @@ function woo_ts_get_action( $prefer_get = false ) {
 
 function woo_ts_get_option( $option = null, $default = false, $allow_empty = false ) {
 	$output = '';
-	if( isset( $option ) ) {
+	if ( isset( $option ) ) {
 		$separator = '_';
 		$output = get_option( WOO_TS_PREFIX . $separator . $option, $default );
-		if( false === $allow_empty && 0 !== $output && ( false === $output || '' === $output ) )
+		if ( false === $allow_empty && 0 !== $output && ( false === $output || '' === $output ) )
 			$output = $default;
 	}
 	return $output;
@@ -673,7 +691,7 @@ function woo_ts_get_option( $option = null, $default = false, $allow_empty = fal
 
 function woo_ts_update_option( $option = null, $value = null ) {
 	$output = false;
-	if( isset( $option ) && isset( $value ) ) {
+	if ( isset( $option ) && isset( $value ) ) {
 		$separator = '_';
 		$output = update_option( WOO_TS_PREFIX . $separator . $option, $value );
 	}
@@ -688,20 +706,21 @@ function wpse_141088_upload_dir( $dir ) {
 	) + $dir;
 }
 
-add_filter( 'safe_style_css', function( $styles ) {
-	$styles[] = 'display';
-	$styles[] = 'stop-color';
-	$styles[] = 'stop-opacity';
-	$styles[] = 'opacity';
-	$styles[] = 'fill-opacity';
-	$styles[] = 'stroke';
-	$styles[] = 'stroke-width';
-	$styles[] = 'stroke-linejoin';
-	$styles[] = 'stroke-miterlimit';
-	$styles[] = 'stroke-dasharray';
-	$styles[] = 'fill';
-	$styles[] = 'stroke-linecap';
-	return $styles;
-} );
-
-?>
+add_filter(
+	'safe_style_css',
+	function( $styles ) {
+		$styles[] = 'display';
+		$styles[] = 'stop-color';
+		$styles[] = 'stop-opacity';
+		$styles[] = 'opacity';
+		$styles[] = 'fill-opacity';
+		$styles[] = 'stroke';
+		$styles[] = 'stroke-width';
+		$styles[] = 'stroke-linejoin';
+		$styles[] = 'stroke-miterlimit';
+		$styles[] = 'stroke-dasharray';
+		$styles[] = 'fill';
+		$styles[] = 'stroke-linecap';
+		return $styles;
+	}
+);
