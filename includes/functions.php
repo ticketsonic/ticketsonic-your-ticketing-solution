@@ -1,10 +1,10 @@
 <?php
 
-require('ticketsonic.php');
-require('ticket_generator.php');
+require 'ticketsonic.php';
+require 'ticket_generator.php';
 
 if ( is_admin() ) {
-	include_once( WOO_TS_PATH . 'includes/admin.php' );
+	include_once WOO_TS_PATH . 'includes/admin.php';
 
 	function woo_ts_import_init() {
 		global $wpdb;
