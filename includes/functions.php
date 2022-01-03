@@ -46,7 +46,7 @@ if ( is_admin() ) {
 
 				$ticket_description = sanitize_text_field( $_POST['ticket_secondary_text_pl'] );
 
-				$ticket_price = sanitize_text_field(  $_POST['ticket_price'] );
+				$ticket_price = sanitize_text_field( $_POST['ticket_price'] );
 
 				if ( ! is_int( intval( sanitize_text_field( $ticket_price ) ) ) ) {
 					woo_ts_admin_notice( 'Ticket price must be an integer number', 'error' );
@@ -392,7 +392,7 @@ if ( is_admin() ) {
 
 				$ticket_description = sanitize_text_field( $_POST['secondary_text_pl'] );
 
-				$ticket_price = sanitize_text_field(  $_POST['ticket_price'] );
+				$ticket_price = sanitize_text_field( $_POST['ticket_price'] );
 				if ( empty( $ticket_price ) ) {
 					woo_ts_admin_notice( 'Ticket price field have to set', 'error' );
 					return;
