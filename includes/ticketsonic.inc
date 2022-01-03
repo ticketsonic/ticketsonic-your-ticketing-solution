@@ -176,6 +176,14 @@ function badge_background_file_renamer($dir, $name, $ext){
     return "badge_background" . $ext;
 }
 
+function sanitize_or_default( $data, $default = '' ) {
+	if ( isset( $data ) ) {
+		return sanitize_text_field( wp_unslash( $data ) );
+	}
+
+	return sanitize_text_field( wp_unslash( $default ) );
+}
+
 function allowed_html() {
     return array (
         "html" => array (

@@ -32,32 +32,32 @@ if ( is_admin() ) {
 					return;
 				}
 
-				$ticket_sku = sanitize_text_field( $_POST['ticket_sku'] );
+				$ticket_sku = sanitize_or_default( $_POST['ticket_sku'] );
 				if ( empty( $ticket_sku ) ) {
 					woo_ts_admin_notice( 'Sku field have to be set', 'error' );
 					return;
 				}
 
-				$ticket_title = sanitize_text_field( $_POST['ticket_primary_text_pl'] );
+				$ticket_title = sanitize_or_default( $_POST['ticket_primary_text_pl'] );
 				if ( empty( $ticket_title ) ) {
 					woo_ts_admin_notice( 'Ticket title field have to set', 'error' );
 					return;
 				}
 
-				$ticket_description = sanitize_text_field( $_POST['ticket_secondary_text_pl'] );
+				$ticket_description = sanitize_or_default( $_POST['ticket_secondary_text_pl'] );
 
-				$ticket_price = sanitize_text_field( $_POST['ticket_price'] );
+				$ticket_price = sanitize_or_default( $_POST['ticket_price'] );
 
-				if ( ! is_int( intval( sanitize_text_field( $ticket_price ) ) ) ) {
+				if ( ! is_int( intval( sanitize_or_default( $ticket_price ) ) ) ) {
 					woo_ts_admin_notice( 'Ticket price must be an integer number', 'error' );
 
 					return;
 				}
 
-				$ticket_currency = sanitize_text_field( $_POST['ticket_currency'] );
+				$ticket_currency = sanitize_or_default( $_POST['ticket_currency'] );
 
-				$ticket_stock = sanitize_text_field( $_POST['ticket_stock'] );
-				if ( ! is_int( intval( sanitize_text_field( $ticket_stock ) ) ) ) {
+				$ticket_stock = sanitize_or_default( $_POST['ticket_stock'] );
+				if ( ! is_int( intval( sanitize_or_default( $ticket_stock ) ) ) ) {
 					woo_ts_admin_notice( 'Ticket stock must be an integer number', 'error' );
 
 					return;
@@ -92,30 +92,30 @@ if ( is_admin() ) {
 					return;
 				}
 
-				$event_id = sanitize_text_field( $_POST['event_id'] );
+				$event_id = sanitize_or_default( $_POST['event_id'] );
 				if ( empty( $event_id ) ) {
 					woo_ts_admin_notice( 'Event ID have to be set', 'error' );
 					return;
 				}
 
-				$event_title = sanitize_text_field( $_POST['event_primary_text_pl'] );
+				$event_title = sanitize_or_default( $_POST['event_primary_text_pl'] );
 				if ( empty( $event_title ) ) {
 					woo_ts_admin_notice( 'Event title field have to set', 'error' );
 					return;
 				}
 
-				$event_description = sanitize_text_field( $_POST['event_secondary_text_pl'] );
-				$event_location = sanitize_text_field( $_POST['event_location'] );
-				$event_start_datetime = sanitize_text_field( $_POST['event_start_datetime'] );
+				$event_description = sanitize_or_default( $_POST['event_secondary_text_pl'] );
+				$event_location = sanitize_or_default( $_POST['event_location'] );
+				$event_start_datetime = sanitize_or_default( $_POST['event_start_datetime'] );
 
-				$badge_text_horizontal_location = sanitize_text_field( $_POST['badge_text_horizontal_location'] );
-				$badge_text_vertical_location = sanitize_text_field( $_POST['badge_text_vertical_location'] );
+				$badge_text_horizontal_location = sanitize_or_default( $_POST['badge_text_horizontal_location'] );
+				$badge_text_vertical_location = sanitize_or_default( $_POST['badge_text_vertical_location'] );
 
-				$badge_primary_text_fontsize = sanitize_text_field( $_POST['badge_primary_text_fontsize'] );
-				$badge_secondary_text_fontsize = sanitize_text_field( $_POST['badge_secondary_text_fontsize'] );
+				$badge_primary_text_fontsize = sanitize_or_default( $_POST['badge_primary_text_fontsize'] );
+				$badge_secondary_text_fontsize = sanitize_or_default( $_POST['badge_secondary_text_fontsize'] );
 
-				$badge_primary_text_color = sanitize_text_field( $_POST['badge_primary_text_color'] );
-				$badge_secondary_text_color = sanitize_text_field( $_POST['badge_secondary_text_color'] );
+				$badge_primary_text_color = sanitize_or_default( $_POST['badge_primary_text_color'] );
+				$badge_secondary_text_color = sanitize_or_default( $_POST['badge_secondary_text_color'] );
 
 				$event_badge_data = array(
 					'badge_text_horizontal_location' => $badge_text_horizontal_location,
@@ -137,18 +137,18 @@ if ( is_admin() ) {
 				break;
 
 			case 'save-settings':
-				woo_ts_update_option( 'api_key', ( isset( $_POST['api_key'] ) ? sanitize_text_field( $_POST['api_key'] ) : '' ) );
-				woo_ts_update_option( 'api_userid', ( isset( $_POST['api_userid'] ) ? sanitize_text_field( $_POST['api_userid'] ) : '' ) );
-				woo_ts_update_option( 'email_subject', ( isset( $_POST['email_subject'] ) ? sanitize_text_field( $_POST['email_subject'] ) : '' ) );
+				woo_ts_update_option( 'api_key', sanitize_or_default( $_POST['api_key'] ) );
+				woo_ts_update_option( 'api_userid', sanitize_or_default( $_POST['api_userid'] ) );
+				woo_ts_update_option( 'email_subject', sanitize_or_default( $_POST['email_subject'] ) );
 				woo_ts_update_option( 'email_body', ( isset( $_POST['email_body'] ) ? wp_kses( $_POST['email_body'], allowed_html() ) : '' ) );
-				woo_ts_update_option( 'ticket_info_endpoint', ( isset( $_POST['ticket_info_endpoint'] ) ? sanitize_text_field( $_POST['ticket_info_endpoint'] ) : '' ) );
-				woo_ts_update_option( 'event_info_endpoint', ( isset( $_POST['event_info_endpoint'] ) ? sanitize_text_field( $_POST['event_info_endpoint'] ) : '' ) );
-				woo_ts_update_option( 'new_event_endpoint', ( isset( $_POST['new_event_endpoint'] ) ? sanitize_text_field( $_POST['new_event_endpoint'] ) : '' ) );
-				woo_ts_update_option( 'change_event_endpoint', ( isset( $_POST['change_event_endpoint'] ) ? sanitize_text_field( $_POST['change_event_endpoint'] ) : '' ) );
-				woo_ts_update_option( 'new_ticket_endpoint', ( isset( $_POST['new_ticket_endpoint'] ) ? sanitize_text_field( $_POST['new_ticket_endpoint'] ) : '' ) );
-				woo_ts_update_option( 'change_ticket_endpoint', ( isset( $_POST['change_ticket_endpoint'] ) ? sanitize_text_field( $_POST['change_ticket_endpoint'] ) : '' ) );
-				woo_ts_update_option( 'external_order_endpoint', ( isset( $_POST['external_order_endpoint'] ) ? sanitize_text_field( $_POST['external_order_endpoint'] ) : '' ) );
-				woo_ts_update_option( 'event_id', ( isset( $_POST['event_id'] ) ? sanitize_text_field( $_POST['event_id'] ) : '' ) );
+				woo_ts_update_option( 'ticket_info_endpoint', sanitize_or_default( $_POST['ticket_info_endpoint'] ) );
+				woo_ts_update_option( 'event_info_endpoint', sanitize_or_default( $_POST['event_info_endpoint'] ) );
+				woo_ts_update_option( 'new_event_endpoint', sanitize_or_default( $_POST['new_event_endpoint'] ) );
+				woo_ts_update_option( 'change_event_endpoint', sanitize_or_default( $_POST['change_event_endpoint'] ) );
+				woo_ts_update_option( 'new_ticket_endpoint', sanitize_or_default( $_POST['new_ticket_endpoint'] ) );
+				woo_ts_update_option( 'change_ticket_endpoint', sanitize_or_default( $_POST['change_ticket_endpoint'] ) );
+				woo_ts_update_option( 'external_order_endpoint', sanitize_or_default( $_POST['external_order_endpoint'] ) );
+				woo_ts_update_option( 'event_id', sanitize_or_default( $_POST['event_id'] ) );
 
 				upload_custom_ticket_background();
 
@@ -253,67 +253,67 @@ if ( is_admin() ) {
 					return;
 				}
 
-				$event_title = sanitize_text_field( $_POST['event_title'] );
+				$event_title = sanitize_or_default( $_POST['event_title'] );
 				if ( empty( $event_title ) ) {
 					woo_ts_admin_notice( 'Event title field have to set', 'error' );
 					return;
 				}
 
-				$event_description = sanitize_text_field( $_POST['event_description'] );
-				$event_datetime = sanitize_text_field( $_POST['event_datetime'] );
-				$event_location = sanitize_text_field( $_POST['event_location'] );
+				$event_description = sanitize_or_default( $_POST['event_description'] );
+				$event_datetime = sanitize_or_default( $_POST['event_datetime'] );
+				$event_location = sanitize_or_default( $_POST['event_location'] );
 
 				$tickets_data = $_POST['ticket'];
 				foreach ( $tickets_data as $value ) {
 					if ( empty( $value['primary_text_pl'] ) ) {
-						$value['primary_text_pl'] = sanitize_text_field( $value['primary_text_pl'] );
+						$value['primary_text_pl'] = sanitize_or_default( $value['primary_text_pl'] );
 						woo_ts_admin_notice( 'Ticket title must be set', 'error' );
 
 						return;
 					}
 
 					if ( empty( $value['price'] ) ) {
-						$value['price'] = sanitize_text_field( $value['price'] );
+						$value['price'] = sanitize_or_default( $value['price'] );
 						woo_ts_admin_notice( 'Ticket price must be set', 'error' );
 
 						return;
 					}
 
 					if ( ! is_int( intval( $value['price'] ) ) ) {
-						$value['price'] = sanitize_text_field( $value['price'] );
+						$value['price'] = sanitize_or_default( $value['price'] );
 						woo_ts_admin_notice( 'Ticket price must be an integer number', 'error' );
 
 						return;
 					}
 
 					if ( empty( $value['stock'] ) ) {
-						$value['stock'] = sanitize_text_field( $value['stock'] );
+						$value['stock'] = sanitize_or_default( $value['stock'] );
 						woo_ts_admin_notice( 'Ticket stock must be set', 'error' );
 
 						return;
 					}
 
 					if ( empty( $value['currency'] ) ) {
-						$value['currency'] = sanitize_text_field( $value['currency'] );
+						$value['currency'] = sanitize_or_default( $value['currency'] );
 						woo_ts_admin_notice( 'Ticket currency must be set', 'error' );
 
 						return;
 					}
 				}
 
-				$badge_text_horizontal_location = sanitize_text_field( $_POST['badge_text_horizontal_location'] );
+				$badge_text_horizontal_location = sanitize_or_default( $_POST['badge_text_horizontal_location'] );
 				if ( empty( $badge_text_horizontal_location ) ) {
 					woo_ts_admin_notice( 'Badge text horizontal location must be set', 'error' );
 					return;
 				}
 
-				$badge_text_vertical_location = sanitize_text_field( $_POST['badge_text_vertical_location'] );
+				$badge_text_vertical_location = sanitize_or_default( $_POST['badge_text_vertical_location'] );
 				if ( empty( $badge_text_vertical_location ) ) {
 					woo_ts_admin_notice( 'Badge text vertical location must be set', 'error' );
 					return;
 				}
 
-				$badge_primary_text_fontsize = sanitize_text_field( $_POST['badge_primary_text_fontsize'] );
+				$badge_primary_text_fontsize = sanitize_or_default( $_POST['badge_primary_text_fontsize'] );
 				if ( empty( $badge_primary_text_fontsize ) ) {
 					woo_ts_admin_notice( 'Primary text font size must be set', 'error' );
 					return;
@@ -324,7 +324,7 @@ if ( is_admin() ) {
 					return;
 				}
 
-				$badge_secondary_text_fontsize = sanitize_text_field( $_POST['badge_secondary_text_fontsize'] );
+				$badge_secondary_text_fontsize = sanitize_or_default( $_POST['badge_secondary_text_fontsize'] );
 				if ( empty( $badge_secondary_text_fontsize ) ) {
 					woo_ts_admin_notice( 'Primary text font size must be set', 'error' );
 					return;
@@ -335,13 +335,13 @@ if ( is_admin() ) {
 					return;
 				}
 
-				$badge_primary_text_color = sanitize_text_field( $_POST['badge_primary_text_color'] );
+				$badge_primary_text_color = sanitize_or_default( $_POST['badge_primary_text_color'] );
 				if ( empty( $badge_primary_text_color ) ) {
 					woo_ts_admin_notice( 'Primary text color must be set', 'error' );
 					return;
 				}
 
-				$badge_secondary_text_color = sanitize_text_field( $_POST['badge_secondary_text_color'] );
+				$badge_secondary_text_color = sanitize_or_default( $_POST['badge_secondary_text_color'] );
 				if ( empty( $badge_secondary_text_color ) ) {
 					woo_ts_admin_notice( 'Secondary text color must be set', 'error' );
 					return;
@@ -393,39 +393,39 @@ if ( is_admin() ) {
 					return;
 				}
 
-				$ticket_eventid = sanitize_text_field( $_POST['ticket_eventid'] );
+				$ticket_eventid = sanitize_or_default( $_POST['ticket_eventid'] );
 				if ( empty( $ticket_eventid ) ) {
 					woo_ts_admin_notice( 'Ticket event id field have to set', 'error' );
 					return;
 				}
 
-				$ticket_title = sanitize_text_field( $_POST['primary_text_pl'] );
+				$ticket_title = sanitize_or_default( $_POST['primary_text_pl'] );
 				if ( empty( $ticket_title ) ) {
 					woo_ts_admin_notice( 'Ticket title field have to set', 'error' );
 					return;
 				}
 
-				$ticket_description = sanitize_text_field( $_POST['secondary_text_pl'] );
+				$ticket_description = sanitize_or_default( $_POST['secondary_text_pl'] );
 
-				$ticket_price = sanitize_text_field( $_POST['ticket_price'] );
+				$ticket_price = sanitize_or_default( $_POST['ticket_price'] );
 				if ( empty( $ticket_price ) ) {
 					woo_ts_admin_notice( 'Ticket price field have to set', 'error' );
 					return;
 				}
 
-				if ( ! is_int( intval( sanitize_text_field( $ticket_price ) ) ) ) {
+				if ( ! is_int( intval( sanitize_or_default( $ticket_price ) ) ) ) {
 					woo_ts_admin_notice( 'Ticket price must be an integer number', 'error' );
 
 					return;
 				}
 
-				$ticket_currency = sanitize_text_field( $_POST['ticket_currency'] );
+				$ticket_currency = sanitize_or_default( $_POST['ticket_currency'] );
 				if ( empty( $ticket_currency ) ) {
 					woo_ts_admin_notice( 'Ticket currency field have to set', 'error' );
 					return;
 				}
 
-				$ticket_stock = sanitize_text_field( $_POST['ticket_stock'] );
+				$ticket_stock = sanitize_or_default( $_POST['ticket_stock'] );
 				if ( empty( $ticket_stock ) ) {
 					woo_ts_admin_notice( 'Ticket stock field have to set', 'error' );
 					return;
@@ -625,9 +625,9 @@ function display_ticket_links_in_order_details( $order ) {
 		$decoded_tickets_data = decode_tickets( $ts_response );
 		foreach ( $decoded_tickets_data['payload']['tickets_meta'] as $key => $ticket ) {
 			print( '<div style="clear: both; margin-bottom: 15px;">' );
-			print( esc_html( '<div style="float: left; margin: 5px 5px 0 0;"><img src="' . WOO_TS_PLUGINPATH . '/templates/admin/example_qr.svg" /></div>' ) );
-			print( esc_html( '<div><span>' . $ticket['title'] . '</span></div>' ) );
-			print( esc_html( '<div><span>' . $ticket['formatted_price'] . '</span></div>' ) );
+			print( '<div style="float: left; margin: 5px 5px 0 0;"><img src="' . esc_attr( WOO_TS_PLUGINPATH ) . '/templates/admin/example_qr.svg" /></div>' );
+			print( '<div><span>' . esc_html( $ticket['title'] ) . '</span></div>' );
+			print( '<div><span>' . esc_html( $ticket['formatted_price'] ) . '</span></div>' );
 			print( '</div>' );
 		}
 		print '<br class="clear" />';
@@ -643,7 +643,7 @@ function display_ticket_links_in_order_details( $order ) {
 
 	if ( ! empty( $ticket_files_url_path ) ) {
 		foreach ( $ticket_files_url_path as $key => $ticket_file_path ) {
-			print( esc_html( '<div><a href="' . $ticket_file_path . '">Tickets</a></div>' ) );
+			print( '<div><a href="' . esc_attr( $ticket_file_path ) . '">Tickets</a></div>' );
 		}
 		print '<br class="clear" />';
 	} else {
@@ -667,13 +667,13 @@ function uploadpath_writable_error_message() {
 
 function woo_ts_get_action( $prefer_get = false ) {
 	if ( isset( $_GET['action'] ) && $prefer_get )
-		return sanitize_text_field( $_GET['action'] );
+		return sanitize_or_default( $_GET['action'] );
 
 	if ( isset( $_POST['action'] ) )
-		return sanitize_text_field( $_POST['action'] );
+		return sanitize_or_default( $_POST['action'] );
 
 	if ( isset( $_GET['action'] ) )
-		return sanitize_text_field( $_GET['action'] );
+		return sanitize_or_default( $_GET['action'] );
 
 	return false;
 }
