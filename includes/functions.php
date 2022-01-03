@@ -625,9 +625,9 @@ function display_ticket_links_in_order_details( $order ) {
 		$decoded_tickets_data = decode_tickets( $ts_response );
 		foreach ( $decoded_tickets_data['payload']['tickets_meta'] as $key => $ticket ) {
 			print( '<div style="clear: both; margin-bottom: 15px;">' );
-			print( '<div style="float: left; margin: 5px 5px 0 0;"><img src="' . WOO_TS_PLUGINPATH . '/templates/admin/example_qr.svg" /></div>' );
-			print( '<div><span>' . $ticket['title'] . '</span></div>' );
-			print( '<div><span>' . $ticket['formatted_price'] . '</span></div>' );
+			print( esc_html( '<div style="float: left; margin: 5px 5px 0 0;"><img src="' . WOO_TS_PLUGINPATH . '/templates/admin/example_qr.svg" /></div>' ) );
+			print( esc_html( '<div><span>' . $ticket['title'] . '</span></div>' ) );
+			print( esc_html( '<div><span>' . $ticket['formatted_price'] . '</span></div>' ) );
 			print( '</div>' );
 		}
 		print '<br class="clear" />';
@@ -643,7 +643,7 @@ function display_ticket_links_in_order_details( $order ) {
 
 	if ( ! empty( $ticket_files_url_path ) ) {
 		foreach ( $ticket_files_url_path as $key => $ticket_file_path ) {
-			print( '<div><a href="' . $ticket_file_path . '">Tickets</a></div>' );
+			print( esc_html( '<div><a href="' . $ticket_file_path . '">Tickets</a></div>' ) );
 		}
 		print '<br class="clear" />';
 	} else {
@@ -655,11 +655,11 @@ add_action( 'admin_notices', 'uploadpath_writable_error_message' );
 function uploadpath_writable_error_message() {
 	if ( ! is_writable( WOO_TS_UPLOADPATH ) ) {
 		print '<div class="error notice">';
-		print '<p>Ensure ' . WOO_TS_UPLOADPATH . ' is writable</p>';
+		print esc_html( '<p>Ensure ' . WOO_TS_UPLOADPATH . ' is writable</p>' );
 		print '</div>';
 	} else {
 		print '<div class="notice notice-success">';
-		print '<p>' . WOO_TS_UPLOADPATH . ' is writable</p>';
+		print esc_html( '<p>' . WOO_TS_UPLOADPATH . ' is writable</p>' );
 		print '</div>';
 	}
 }
