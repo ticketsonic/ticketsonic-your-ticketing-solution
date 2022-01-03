@@ -1,29 +1,29 @@
 <?php
 // Display admin notice on screen load
-function woo_ts_admin_notice( $message = "", $priority = "updated", $screen = "" ) {
-	if( $priority == false || $priority == "" )
-		$priority = "updated";
-	if( $message <> "" ) {
+function woo_ts_admin_notice( $message = '', $priority = 'updated', $screen = '' ) {
+	if( $priority == false || $priority == '' )
+		$priority = 'updated';
+	if( $message <> '' ) {
 		ob_start();
 		woo_ts_admin_notice_html( $message, $priority, $screen );
 		$output = ob_get_contents();
 		ob_end_clean();
 		// Check if an existing notice is already in queue
-		$existing_notice = get_transient( WOO_TS_PREFIX . "_notice" );
+		$existing_notice = get_transient( WOO_TS_PREFIX . '_notice' );
 		if( $existing_notice !== false ) {
 			$existing_notice = base64_decode( $existing_notice );
 			$output = $existing_notice . $output;
 		}
-		$response = set_transient( WOO_TS_PREFIX . "_notice", base64_encode( $output ), MINUTE_IN_SECONDS );
+		$response = set_transient( WOO_TS_PREFIX . '_notice', base64_encode( $output ), MINUTE_IN_SECONDS );
 		// Check if the Transient was saved
 		if( $response !== false )
-			add_action( "admin_notices", "woo_ts_admin_notice_print" );
+			add_action( 'admin_notices', 'woo_ts_admin_notice_print' );
 	}
 
 }
 
 // HTML template for admin notice
-function woo_ts_admin_notice_html( $message = "", $priority = "updated", $screen = "" ) {
+function woo_ts_admin_notice_html( $message = '', $priority = 'updated', $screen = '' ) {
 	// Display admin notice on specific screen
 	if( !empty( $screen ) ) {
 
@@ -48,16 +48,16 @@ function woo_ts_admin_notice_html( $message = "", $priority = "updated", $screen
 // Grabs the WordPress transient that holds the admin notice and prints it
 function woo_ts_admin_notice_print() {
 
-	$output = get_transient( WOO_TS_PREFIX . "_notice" );
+	$output = get_transient( WOO_TS_PREFIX . '_notice' );
 	if( $output !== false ) {
-		delete_transient( WOO_TS_PREFIX . "_notice" );
+		delete_transient( WOO_TS_PREFIX . '_notice' );
 		$output = base64_decode( $output );
 		echo $output;
 	}
 
 }
 
-function woo_ts_template_header( $title = "", $icon = "woocommerce" ) { ?>
+function woo_ts_template_header( $title = '', $icon = 'woocommerce' ) { ?>
 <div id="woo-pi" class="wrap">
 	<div id="icon-<?php echo $icon; ?>" class="icon32 icon32-woocommerce-importer"><br /></div>
 	<h2><?php echo $title; ?></h2>
@@ -75,84 +75,84 @@ function woo_ts_template_footer() { ?>
 // Add Product Import to WordPress Administration menu
 function woo_ts_admin_menu() {
 
-	$page = add_submenu_page( "woocommerce", __( "TicketSonic", "woo_ts" ), __( "TicketSonic", "woo_ts" ), "manage_woocommerce", "woo_ts", "woo_ts_html_page" );
-	add_action( "admin_print_styles-" . $page, "woo_ts_enqueue_scripts" );
+	$page = add_submenu_page( 'woocommerce', __( 'TicketSonic', 'woo_ts' ), __( 'TicketSonic', 'woo_ts' ), 'manage_woocommerce', 'woo_ts', 'woo_ts_html_page' );
+	add_action( 'admin_print_styles-' . $page, 'woo_ts_enqueue_scripts' );
 
 }
-add_action( "admin_menu", "woo_ts_admin_menu", 11 );
+add_action( 'admin_menu', 'woo_ts_admin_menu', 11 );
 
 function woo_ts_enqueue_scripts( $hook ) {
 	// Simple check that WooCommerce is activated
-	if( class_exists( "WooCommerce" ) ) {
+	if( class_exists( 'WooCommerce' ) ) {
 		global $woocommerce;
 		// Load WooCommerce default Admin styling
-		wp_enqueue_style( "woocommerce_admin_styles", $woocommerce->plugin_url() . "/assets/css/admin.css" );
+		wp_enqueue_style( 'woocommerce_admin_styles', $woocommerce->plugin_url() . '/assets/css/admin.css' );
 
 	}
 
 	// Common
-	wp_enqueue_style( "woo_ts_styles", plugins_url( "/templates/admin/import.css", WOO_TS_RELPATH ) );
-	wp_enqueue_script( "woo_ts_scripts", plugins_url( "/templates/admin/import.js", WOO_TS_RELPATH ), array( "jquery" ) );
-	wp_enqueue_style( "dashicons" );
-	wp_enqueue_script( "jquery-toggleblock", plugins_url( "/js/toggleblock.js", WOO_TS_RELPATH ), array( "jquery" ) );
-	wp_enqueue_style( "woo_vm_styles", plugins_url( "/templates/admin/woocommerce-admin_dashboard_vm-plugins.css", WOO_TS_RELPATH ) );
+	wp_enqueue_style( 'woo_ts_styles', plugins_url( '/templates/admin/import.css', WOO_TS_RELPATH ) );
+	wp_enqueue_script( 'woo_ts_scripts', plugins_url( '/templates/admin/import.js', WOO_TS_RELPATH ), array( 'jquery' ) );
+	wp_enqueue_style( 'dashicons' );
+	wp_enqueue_script( 'jquery-toggleblock', plugins_url( '/js/toggleblock.js', WOO_TS_RELPATH ), array( 'jquery' ) );
+	wp_enqueue_style( 'woo_vm_styles', plugins_url( '/templates/admin/woocommerce-admin_dashboard_vm-plugins.css', WOO_TS_RELPATH ) );
 }
 
 function woo_ts_admin_active_tab( $tab_name = null, $tab = null ) {
-	if( isset( $_GET["tab"] ) && !$tab )
-		$tab = $_GET["tab"];
-	else if( !isset( $_GET["tab"] ) && woo_ts_get_option( "skip_overview", false ) )
-		$tab = "import";
+	if( isset( $_GET['tab'] ) && !$tab )
+		$tab = $_GET['tab'];
+	else if( !isset( $_GET['tab'] ) && woo_ts_get_option( 'skip_overview', false ) )
+		$tab = 'import';
 	else
-		$tab = "overview";
+		$tab = 'overview';
 
-	$output = "";
+	$output = '';
 	if( isset( $tab_name ) && $tab_name ) {
 		if( $tab_name == $tab )
-			$output = " nav-tab-active";
+			$output = ' nav-tab-active';
 	}
 	echo $output;
 
 }
 
-function woo_ts_tab_template( $tab = "" ) {
+function woo_ts_tab_template( $tab = '' ) {
 
 	global $import;
 
 	if (!$tab)
-		$tab = "overview";
+		$tab = 'overview';
 
 	switch($tab) {
-		case "overview":
-			$skip_overview = woo_ts_get_option( "skip_overview", false );
+		case 'overview':
+			$skip_overview = woo_ts_get_option( 'skip_overview', false );
 			break;
 
-		case "import":
-			if( isset( $_GET["import"] ) && $_GET["import"] == WOO_TS_PREFIX )
-				$url = "import";
-			if( isset( $_GET["page"] ) && $_GET["page"] == WOO_TS_PREFIX )
-				$url = "page";
+		case 'import':
+			if( isset( $_GET['import'] ) && $_GET['import'] == WOO_TS_PREFIX )
+				$url = 'import';
+			if( isset( $_GET['page'] ) && $_GET['page'] == WOO_TS_PREFIX )
+				$url = 'page';
 			break;
 
-		case "settings":
-			$api_key = woo_ts_get_option( "api_key", "," );
-			$api_userid = woo_ts_get_option( "api_userid", "");
-			$email_subject = woo_ts_get_option( "email_subject", "");
-			$email_body = woo_ts_get_option( "email_body", "");
-			$ticket_info_endpoint = woo_ts_get_option( "ticket_info_endpoint", "");
-			$event_info_endpoint = woo_ts_get_option( "event_info_endpoint", "");
-			$new_event_endpoint = woo_ts_get_option( "new_event_endpoint", "");
-			$new_ticket_endpoint = woo_ts_get_option( "new_ticket_endpoint", "");
-			$change_ticket_endpoint = woo_ts_get_option( "change_ticket_endpoint", "");
-			$change_event_endpoint = woo_ts_get_option( "change_event_endpoint", "");
-			$external_order_endpoint = woo_ts_get_option( "external_order_endpoint", "");
-			$event_id = woo_ts_get_option( "event_id", "");
+		case 'settings':
+			$api_key = woo_ts_get_option( 'api_key', ',' );
+			$api_userid = woo_ts_get_option( 'api_userid', '');
+			$email_subject = woo_ts_get_option( 'email_subject', '');
+			$email_body = woo_ts_get_option( 'email_body', '');
+			$ticket_info_endpoint = woo_ts_get_option( 'ticket_info_endpoint', '');
+			$event_info_endpoint = woo_ts_get_option( 'event_info_endpoint', '');
+			$new_event_endpoint = woo_ts_get_option( 'new_event_endpoint', '');
+			$new_ticket_endpoint = woo_ts_get_option( 'new_ticket_endpoint', '');
+			$change_ticket_endpoint = woo_ts_get_option( 'change_ticket_endpoint', '');
+			$change_event_endpoint = woo_ts_get_option( 'change_event_endpoint', '');
+			$external_order_endpoint = woo_ts_get_option( 'external_order_endpoint', '');
+			$event_id = woo_ts_get_option( 'event_id', '');
 			break;
 
 	}
 	if( $tab ) {
-		if( file_exists( WOO_TS_PATH . "templates/admin/tabs-" . $tab . ".php" ) )
-			include_once( WOO_TS_PATH . "templates/admin/tabs-" . $tab . ".php" );
+		if( file_exists( WOO_TS_PATH . 'templates/admin/tabs-' . $tab . '.php' ) )
+			include_once( WOO_TS_PATH . 'templates/admin/tabs-' . $tab . '.php' );
 	}
 
 }
