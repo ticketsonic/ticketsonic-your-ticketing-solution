@@ -12,14 +12,14 @@ if ( is_admin() ) {
 		@ob_start();
 
 		$action = woo_ts_get_action();
-		switch( $action ) {
+		switch ( $action ) {
 			case 'ticket-change':
 				$url = woo_ts_get_option( 'change_ticket_endpoint', '' );
 				if ( empty( $url ) ) {
 					woo_ts_admin_notice( 'Change Ticket Endpoint have to set in Settings', 'error' );
 					return;
 				}
-				
+
 				$email = woo_ts_get_option( 'api_userid', '' );
 				if ( empty( $email ) ) {
 					woo_ts_admin_notice( 'Partner E-mail have to set in Settings', 'error' );
@@ -63,7 +63,6 @@ if ( is_admin() ) {
 					return;
 				}
 
-				
 				$result = request_change_ticket( $url, $email, $key, $ticket_sku, $ticket_title, $ticket_description, $ticket_price, $ticket_currency, $ticket_stock );
 
 				if ( $result['status'] == 'success' ) {
@@ -80,7 +79,7 @@ if ( is_admin() ) {
 					woo_ts_admin_notice( 'Change Event Endpoint have to set in Settings', 'error' );
 					return;
 				}
-				
+
 				$email = woo_ts_get_option( 'api_userid', '' );
 				if ( empty( $email ) ) {
 					woo_ts_admin_notice( 'Partner E-mail have to set in Settings', 'error' );
@@ -126,7 +125,7 @@ if ( is_admin() ) {
 					'badge_primary_text_color' => $badge_primary_text_color,
 					'badge_secondary_text_color' => $badge_secondary_text_color
 				);
-				
+
 				$result = request_change_event( $url, $email, $key, $event_id, $event_title, $event_description, $event_location, $event_start_datetime, $event_badge_data );
 
 				if ( $result['status'] == 'success' ) {
@@ -163,7 +162,7 @@ if ( is_admin() ) {
 					woo_ts_admin_notice( 'Ticket Info Endpoint have to set in Settings', 'error' );
 					return;
 				}
-				
+
 				$email = woo_ts_get_option( 'api_userid', '' );
 				if ( empty( $email ) ) {
 					woo_ts_admin_notice( 'Partner E-mail have to set in Settings', 'error' );
@@ -177,32 +176,32 @@ if ( is_admin() ) {
 				}
 
 				$event_id = woo_ts_get_option( 'event_id', '' );
-				
+
 				$response = get_tickets_with_remote( $url, $email, $key, $event_id );
 				if ( $response['status'] == 'error' ) {
 					woo_ts_admin_notice( 'Error syncing tickets: ' . $response['message'] , 'error' );
 					return;
 				}
-			
+
 				$imported_count = 0;
 				foreach ( $response['tickets'] as $key => $ticket ) {
 					$woo_product_id = wc_get_product_id_by_sku( $ticket['sku'] );
-			
+
 					$ticket_obj = new WC_Product_Simple();
-			
+
 					// Ticket does not exist so we skip
 					if ( $woo_product_id != 0 ) {
 						$ticket_obj = new WC_Product_Simple( $woo_product_id );
 					}
-			
+
 					$ticket_obj->set_sku( $ticket['sku'] );
 					$ticket_obj->set_name( $ticket['primary_text_pl'] );
 					$ticket_obj->set_description( $ticket['secondary_text_pl'] );
 					$ticket_obj->set_status( 'publish' );
 					$ticket_obj->set_catalog_visibility( 'visible' );
-					
+
 					$price = (int) $ticket['price'] / 100;
-					$ticket_obj->set_price($price );
+					$ticket_obj->set_price( $price );
 					$ticket_obj->set_regular_price( $price );
 					$ticket_obj->set_manage_stock( true );
 					$ticket_obj->set_stock_quantity( $ticket['stock'] );
@@ -210,17 +209,17 @@ if ( is_admin() ) {
 					$ticket_obj->set_sold_individually( false );
 					$ticket_obj->set_downloadable( true );
 					$ticket_obj->set_virtual( true );
-			
+
 					$ticketsonic_term = get_term_by( 'slug', 'ticketsonic', 'product_cat' );
 					if ( $ticketsonic_term ) {
 						$ticket_obj->set_category_ids( array( $ticketsonic_term->term_id ) );
 					}
-			
+
 					$woo_ticket_id = $ticket_obj->save();
-			
+
 					$imported_count++;
 				}
-			
+
 				$result = array( 'status' => 'success', 'message' => 'Number of imported tickets: ' . $imported_count, 'user_public_key' => $response['user_public_key'] );
 
 				if ( $result['status'] == 'success' ) {
@@ -237,7 +236,7 @@ if ( is_admin() ) {
 					woo_ts_admin_notice( 'New Event Endpoint have to set in Settings', 'error' );
 					return;
 				}
-				
+
 				$email = woo_ts_get_option( 'api_userid', '' );
 				if ( empty( $email ) ) {
 					woo_ts_admin_notice( 'Partner E-mail have to set in Settings', 'error' );
@@ -259,7 +258,7 @@ if ( is_admin() ) {
 				$event_description = sanitize_text_field( $_POST['event_description'] );
 				$event_datetime = sanitize_text_field( $_POST['event_datetime'] );
 				$event_location = sanitize_text_field( $_POST['event_location'] );
-				
+
 				$tickets_data = $_POST['ticket'];
 				foreach ( $tickets_data as $value ) {
 					if ( empty( $value['primary_text_pl'] ) ) {
@@ -309,7 +308,7 @@ if ( is_admin() ) {
 					woo_ts_admin_notice( 'Badge text vertical location must be set', 'error' );
 					return;
 				}
-				
+
 				$badge_primary_text_fontsize = sanitize_text_field( $_POST['badge_primary_text_fontsize'] );
 				if ( empty( $badge_primary_text_fontsize ) ) {
 					woo_ts_admin_notice( 'Primary text font size must be set', 'error' );
@@ -345,7 +344,7 @@ if ( is_admin() ) {
 				}
 
 				upload_custom_badge_background();
-				
+
 				$result = request_create_new_event( $url, $email, $key, $event_title, $event_description, $event_datetime,
 													$event_location, $tickets_data, $badge_text_horizontal_location,
 													$badge_text_vertical_location, $badge_primary_text_fontsize,
@@ -365,7 +364,7 @@ if ( is_admin() ) {
 					woo_ts_admin_notice( 'New Ticket Endpoint have to set in Settings', 'error' );
 					return;
 				}
-				
+
 				$email = woo_ts_get_option( 'api_userid', '' );
 				if ( empty( $email ) ) {
 					woo_ts_admin_notice( 'Partner E-mail have to set in Settings', 'error' );
@@ -416,7 +415,6 @@ if ( is_admin() ) {
 					return;
 				}
 
-				
 				$result = request_create_new_ticket( $url, $email, $key, $ticket_eventid, $ticket_title, $ticket_description, $ticket_price, $ticket_currency, $ticket_stock );
 
 				if ( $result['status'] == 'success' ) {
@@ -430,7 +428,7 @@ if ( is_admin() ) {
 	}
 
 	// Add plugin ticket term
-	function woo_ts_structure_init( ) {
+	function woo_ts_structure_init() {
 		wp_insert_term( 'TicketSonic Tickets', 'product_cat',
 			array(
 				'description' => 'TicketSonic Tickets imported tickets.',
