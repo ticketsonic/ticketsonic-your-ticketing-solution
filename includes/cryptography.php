@@ -118,5 +118,3 @@ function int_array_to_bin( $str ) {
 
 	return implode( '', $result );
 }
-
-?>
