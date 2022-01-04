@@ -42,7 +42,7 @@ if ( is_admin() ) {
 
 	function woo_ts_admin_init() {
 		// Check the User has the manage_woocommerce_products capability.
-		if ( current_user_can( 'manage_woocommerce' ) == false )
+		if ( current_user_can( 'manage_woocommerce' ) === false )
 			return;
 
 		woo_ts_import_init();
@@ -53,7 +53,7 @@ if ( is_admin() ) {
 
 	function woo_ts_html_page() {
 		// Check the User has the manage_woocommerce capability.
-		if ( current_user_can( 'manage_woocommerce' ) == false )
+		if ( current_user_can( 'manage_woocommerce' ) === false )
 			return;
 
 		$title = __( 'TicketSonic', 'woo_ts' );
