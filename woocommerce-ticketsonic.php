@@ -1,18 +1,21 @@
 <?php
+
 /**
-Plugin Name: WooCommerce - TicketSonic
-Plugin URI: https://github.com/ticketsonic/woocommerce-ticketsonic
-Description: Sync Tickets into your WooCommerce store from the TicketSonic system
-Version: 0.1
-Author: Martin Vassilev
-Author URI: https://github.com/ticketsonic/
-License: GPL2
+ * Plugin Name: WooCommerce - TicketSonic
+ * Plugin URI: https://github.com/ticketsonic/woocommerce-ticketsonic
+ * Description: Sync Tickets into your WooCommerce store from the TicketSonic system
+ * Version: 0.1
+ * Author: Martin Vassilev
+ * Author URI: https://github.com/ticketsonic/
+ * License: GPL2
 
-Text Domain: woo-ts
-Domain Path: /languages/
+ * Text Domain: woo-ts
+ * Domain Path: /languages/
 
-WC requires at least: 2.3
-WC tested up to: 3.6
+ * WC requires at least: 2.3
+ * WC tested up to: 3.6
+ *
+ * @package woocommerce-ticketsonic
  */
 
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
