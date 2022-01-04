@@ -84,7 +84,7 @@ function parse_raw_recrypted_ticket( $raw_decrypted_ticket ) {
 			$c = ( $c + ord( $raw_decrypted_ticket[ $i ] ) ) & 0xFFFF;
 		}
 
-		if ( $c != $checksum ) {
+		if ( $c !== $checksum ) {
 			$result['error'] = 1;
 		}
 	}
