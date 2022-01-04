@@ -8,7 +8,7 @@ Author: Martin Vassilev
 Author URI: https://github.com/ticketsonic/
 License: GPL2
 
-Text Domain: woocommerce-ticketsonic
+Text Domain: woo-ts
 Domain Path: /languages/
 
 WC requires at least: 2.3
@@ -32,49 +32,49 @@ define( "WOO_TS_UPLOADURLPATH", $uploads_dir["baseurl"] . "/" . WOO_TS_DIRNAME )
 include_once( WOO_TS_PATH . "includes/functions.php" );
 
 if( is_admin() ) {
-    function woo_ts_register_importer() {
-        register_importer( "woo_ts", __( "Tickets", "woocommerce-ticketsonic" ), __( "<strong>Tickets Importer</strong> - Import Tickets into WooCommerce from TicketSonic.", "woo_ts" ), "woo_ts_html_page" );
-    }
-    add_action( "admin_init", "woo_ts_register_importer" );
+	function woo_ts_register_importer() {
+		register_importer( "woo_ts", __( "Tickets", "woocommerce-ticketsonic" ), __( "<strong>Tickets Importer</strong> - Import Tickets into WooCommerce from TicketSonic.", "woo_ts" ), "woo_ts_html_page" );
+	}
+	add_action( "admin_init", "woo_ts_register_importer" );
 
-    // Initial scripts and import process
-    function woo_ts_admin_init() {
-        // Check the User has the manage_woocommerce_products capability
-        if( current_user_can( "manage_woocommerce" ) == false )
-            return;
+	// Initial scripts and import process
+	function woo_ts_admin_init() {
+		// Check the User has the manage_woocommerce_products capability
+		if( current_user_can( "manage_woocommerce" ) == false )
+			return;
 
-        woo_ts_import_init();
-        woo_ts_structure_init();
+		woo_ts_import_init();
+		woo_ts_structure_init();
 
-    }
-    add_action( "admin_init", "woo_ts_admin_init" );
+	}
+	add_action( "admin_init", "woo_ts_admin_init" );
 
-    function woo_ts_html_page() {
-        // Check the User has the manage_woocommerce capability
-        if( current_user_can( "manage_woocommerce" ) == false )
-            return;
+	function woo_ts_html_page() {
+		// Check the User has the manage_woocommerce capability
+		if( current_user_can( "manage_woocommerce" ) == false )
+			return;
 
-        $title = __( "TicketSonic", "woo_ts" );
+		$title = __( "TicketSonic", "woo_ts" );
 
-        woo_ts_template_header( $title );
-        woo_ts_manage_form();
-        woo_ts_template_footer();
-    }
+		woo_ts_template_header( $title );
+		woo_ts_manage_form();
+		woo_ts_template_footer();
+	}
 
-    // HTML template for Import screen
-    function woo_ts_manage_form() {
-        $tab = false;
-        if( isset( $_GET["tab"] ) ) {
-            $tab = sanitize_text_field( $_GET["tab"] );
-        } else if( woo_ts_get_option( "skip_overview", false ) ) {
-            // If Skip Overview is set then jump to Export screen
-            $tab = "import";
-        }
-        $url = add_query_arg( "page", "woo_ts" );
+	// HTML template for Import screen
+	function woo_ts_manage_form() {
+		$tab = false;
+		if( isset( $_GET["tab"] ) ) {
+			$tab = sanitize_text_field( $_GET["tab"] );
+		} else if( woo_ts_get_option( "skip_overview", false ) ) {
+			// If Skip Overview is set then jump to Export screen
+			$tab = "import";
+		}
+		$url = add_query_arg( "page", "woo_ts" );
 
-        include_once( WOO_TS_PATH . "templates/admin/tabs.php" );
-    }
-    /* End of: WordPress Administration */
+		include_once( WOO_TS_PATH . "templates/admin/tabs.php" );
+	}
+	/* End of: WordPress Administration */
 }
 
 ?>
