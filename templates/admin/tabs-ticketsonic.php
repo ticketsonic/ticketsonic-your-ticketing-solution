@@ -1,33 +1,33 @@
 <?php
 
-require_once WOO_TS_PATH . "/includes/ticketsonic.php";
+require_once WOO_TS_PATH . '/includes/ticketsonic.php';
 
-$url = woo_ts_get_option("event_info_endpoint", "");
+$url = woo_ts_get_option('event_info_endpoint', '');
 if (empty($url)) {
-	woo_ts_admin_notice("Event Info Endpoint have to set in Settings", "error");
+	woo_ts_admin_notice('Event Info Endpoint have to set in Settings', 'error');
 
 	return;
 }
 
-$email = woo_ts_get_option("api_userid", "");
+$email = woo_ts_get_option('api_userid', '');
 if (empty($email)) {
-	woo_ts_admin_notice("Partner E-mail have to set in Settings", "error");
+	woo_ts_admin_notice('Partner E-mail have to set in Settings', 'error');
 
 return;
 }
 
-$key = woo_ts_get_option("api_key", "");
+$key = woo_ts_get_option('api_key', '');
 if (empty($key)) {
-	woo_ts_admin_notice("Partner API Key have to set in Settings", "error");
+	woo_ts_admin_notice('Partner API Key have to set in Settings', 'error');
 
 	return;
 }
 
 $raw_events = get_events_data_from_remote($url, $email, $key);
 
-$url = woo_ts_get_option("ticket_info_endpoint", "");
+$url = woo_ts_get_option('ticket_info_endpoint', '');
 if (empty($url)) {
-	woo_ts_admin_notice("Event Info Endpoint have to set in Settings", "error");
+	woo_ts_admin_notice('Event Info Endpoint have to set in Settings', 'error');
 
 	return;
 }
@@ -52,12 +52,12 @@ $raw_tickets = get_event_ticket_data_from_remote($url, $email, $key, null);
 				</tr>
 			</thead>    
 			<tbody>
-				<?php if (count($raw_events["events"]) > 0): ?>
-					<?php foreach ($raw_events["events"] as $key => $event): ?>
-						<?php $badge_data = json_decode($event["badge_data"]); ?>
+				<?php if (count($raw_events['events']) > 0): ?>
+					<?php foreach ($raw_events['events'] as $key => $event): ?>
+						<?php $badge_data = json_decode($event['badge_data']); ?>
 						<tr id="row-<?php print $key; ?>">
-							<td class="event-id"><?php print $event["event_id"]; ?></td>
-							<td class="title"><?php print $event["title"]; ?></td>
+							<td class="event-id"><?php print $event['event_id']; ?></td>
+							<td class="title"><?php print $event['title']; ?></td>
 							<td class="htext-loc"><?php print $badge_data->badge_text_horizontal_location; ?></td>
 							<td class="vtext-loc"><?php print $badge_data->badge_text_vertical_location; ?></td>
 							<td class="htext-fontsize"><?php print $badge_data->badge_primary_text_fontsize; ?></td>
@@ -89,15 +89,15 @@ $raw_tickets = get_event_ticket_data_from_remote($url, $email, $key, null);
 				</tr>
 			</thead>
 			<tbody>
-				<?php if (count($raw_tickets["tickets"]) > 0): ?>
-					<?php foreach ($raw_tickets["tickets"] as $key => $ticket): ?>
+				<?php if (count($raw_tickets['tickets']) > 0): ?>
+					<?php foreach ($raw_tickets['tickets'] as $key => $ticket): ?>
 					<tr id="row-<?php print $key; ?>">
-						<td class="sku"><?php print $ticket["sku"]; ?></td>
-						<td class="ticket-title"><?php print $ticket["primary_text_pl"]; ?></td>
-						<td class="price"><?php printf("%2.2f", $ticket["price"] / 100); ?></td>
-						<td class="currency"><?php print $ticket["currency"]; ?></td>
-						<td class="stock"><?php print $ticket["stock"]; ?></td>
-						<td class="event_id"><?php print $ticket["event_id"]; ?></td>
+						<td class="sku"><?php print $ticket['sku']; ?></td>
+						<td class="ticket-title"><?php print $ticket['primary_text_pl']; ?></td>
+						<td class="price"><?php printf('%2.2f', $ticket['price'] / 100); ?></td>
+						<td class="currency"><?php print $ticket['currency']; ?></td>
+						<td class="stock"><?php print $ticket['stock']; ?></td>
+						<td class="event_id"><?php print $ticket['event_id']; ?></td>
 						<td class="edit-ticket-row"><a>Edit</a></td>
 					</tr>
 					<?php endforeach; ?>
