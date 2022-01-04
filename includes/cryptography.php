@@ -6,7 +6,8 @@ function parse_raw_recrypted_ticket( $raw_decrypted_ticket ) {
 	$checksumpos = 0;
 	$i = 0;
 	try {
-		while ( $i < strlen( $raw_decrypted_ticket ) ) {
+		$raw_decrypted_ticket_length = strlen( $raw_decrypted_ticket );
+		while ( $i < $raw_decrypted_ticket_length ) {
 			$label = $raw_decrypted_ticket[ $i++ ];
 			$len = ord( $raw_decrypted_ticket[ $i++ ] );
 			switch ( $label ) {
