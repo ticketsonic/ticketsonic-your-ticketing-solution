@@ -1,15 +1,15 @@
 <?php
 
 function parse_raw_recrypted_ticket( $raw_decrypted_ticket ) {
-	$result = array();
-	$checksum = 0;
+	$result      = array();
+	$checksum    = 0;
 	$checksumpos = 0;
-	$i = 0;
+	$i           = 0;
 	try {
 		$raw_decrypted_ticket_length = strlen( $raw_decrypted_ticket );
 		while ( $i < $raw_decrypted_ticket_length ) {
 			$label = $raw_decrypted_ticket[ $i++ ];
-			$len = ord( $raw_decrypted_ticket[ $i++ ] );
+			$len   = ord( $raw_decrypted_ticket[ $i++ ] );
 			switch ( $label ) {
 				case 'V':
 					$result['version'] = bin_to_int_data( substr( $raw_decrypted_ticket, $i, $len ) );
@@ -56,7 +56,7 @@ function parse_raw_recrypted_ticket( $raw_decrypted_ticket ) {
 					break;
 
 				case 'X':
-					$temp = substr( $raw_decrypted_ticket, $i, $len );
+					$temp          = substr( $raw_decrypted_ticket, $i, $len );
 					$delimiter_pos = strpos( $temp, '=' );
 
 					$result[ 'extension.' . substr( $temp, 0, $delimiter_pos ) ] = substr( $temp, $delimiter_pos + 1 );
@@ -64,11 +64,11 @@ function parse_raw_recrypted_ticket( $raw_decrypted_ticket ) {
 
 				case 'C':
 					$checksumpos = $i - 2;
-					$checksum = bin_to_int_data( substr( $raw_decrypted_ticket, $i, $len ) );
+					$checksum    = bin_to_int_data( substr( $raw_decrypted_ticket, $i, $len ) );
 					break;
 
 				default:
-					$result[ $label ] = substr( $raw_decrypted_ticket, $i, $len );
+					$result[ $label ]  = substr( $raw_decrypted_ticket, $i, $len );
 					$result['warning'] = 'Unrecognized label';
 					break;
 			}
