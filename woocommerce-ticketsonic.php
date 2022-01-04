@@ -76,5 +76,3 @@ if( is_admin() ) {
 	}
 	/* End of: WordPress Administration */
 }
-
-?>
