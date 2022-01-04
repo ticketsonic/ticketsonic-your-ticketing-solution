@@ -18,7 +18,7 @@
  * @package woocommerce-ticketsonic
  */
 
-if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+if ( ! defined( 'ABSPATH' ) ) exit;
 
 define( 'WOO_TS_FILE', __FILE__ );
 define( 'WOO_TS_DIRNAME', basename( dirname( __FILE__ ) ) );
@@ -32,7 +32,7 @@ $uploads_dir = wp_get_upload_dir();
 define( 'WOO_TS_UPLOADPATH', $uploads_dir['basedir'] . '/' . WOO_TS_DIRNAME );
 define( 'WOO_TS_UPLOADURLPATH', $uploads_dir['baseurl'] . '/' . WOO_TS_DIRNAME );
 
-include_once( WOO_TS_PATH . 'includes/functions.php' );
+require_once WOO_TS_PATH . 'includes/functions.php';
 
 if ( is_admin() ) {
 	function woo_ts_register_importer() {
@@ -47,7 +47,6 @@ if ( is_admin() ) {
 
 		woo_ts_import_init();
 		woo_ts_structure_init();
-
 	}
 	add_action( 'admin_init', 'woo_ts_admin_init' );
 
@@ -73,7 +72,7 @@ if ( is_admin() ) {
 		}
 		$url = add_query_arg( 'page', 'woo_ts' );
 
-		include_once( WOO_TS_PATH . 'templates/admin/tabs.php' );
+		include_once WOO_TS_PATH . 'templates/admin/tabs.php';
 	}
 	/* End of: WordPress Administration */
 }
