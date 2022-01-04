@@ -9,6 +9,7 @@ function woo_ts_admin_notice( $message = '', $priority = 'updated', $screen = ''
 		woo_ts_admin_notice_html( $message, $priority, $screen );
 		$output = ob_get_contents();
 		ob_end_clean();
+
 		// Check if an existing notice is already in queue
 		$existing_notice = get_transient( WOO_TS_PREFIX . '_notice' );
 
@@ -18,6 +19,7 @@ function woo_ts_admin_notice( $message = '', $priority = 'updated', $screen = ''
 		}
 
 		$response = set_transient( WOO_TS_PREFIX . '_notice', base64_encode( $output ), MINUTE_IN_SECONDS );
+
 		// Check if the Transient was saved
 		if ( false !== $response )
 			add_action( 'admin_notices', 'woo_ts_admin_notice_print' );
@@ -128,18 +130,18 @@ function woo_ts_tab_template( $tab = '' ) {
 			break;
 
 		case 'settings':
-			$api_key = woo_ts_get_option( 'api_key', ',' );
-			$api_userid = woo_ts_get_option( 'api_userid', '' );
-			$email_subject = woo_ts_get_option( 'email_subject', '' );
-			$email_body = woo_ts_get_option( 'email_body', '' );
-			$ticket_info_endpoint = woo_ts_get_option( 'ticket_info_endpoint', '' );
-			$event_info_endpoint = woo_ts_get_option( 'event_info_endpoint', '' );
-			$new_event_endpoint = woo_ts_get_option( 'new_event_endpoint', '' );
-			$new_ticket_endpoint = woo_ts_get_option( 'new_ticket_endpoint', '' );
-			$change_ticket_endpoint = woo_ts_get_option( 'change_ticket_endpoint', '' );
-			$change_event_endpoint = woo_ts_get_option( 'change_event_endpoint', '' );
+			$api_key                 = woo_ts_get_option( 'api_key', ',' );
+			$api_userid              = woo_ts_get_option( 'api_userid', '' );
+			$email_subject           = woo_ts_get_option( 'email_subject', '' );
+			$email_body              = woo_ts_get_option( 'email_body', '' );
+			$ticket_info_endpoint    = woo_ts_get_option( 'ticket_info_endpoint', '' );
+			$event_info_endpoint     = woo_ts_get_option( 'event_info_endpoint', '' );
+			$new_event_endpoint      = woo_ts_get_option( 'new_event_endpoint', '' );
+			$new_ticket_endpoint     = woo_ts_get_option( 'new_ticket_endpoint', '' );
+			$change_ticket_endpoint  = woo_ts_get_option( 'change_ticket_endpoint', '' );
+			$change_event_endpoint   = woo_ts_get_option( 'change_event_endpoint', '' );
 			$external_order_endpoint = woo_ts_get_option( 'external_order_endpoint', '' );
-			$event_id = woo_ts_get_option( 'event_id', '' );
+			$event_id                = woo_ts_get_option( 'event_id', '' );
 			break;
 	}
 
