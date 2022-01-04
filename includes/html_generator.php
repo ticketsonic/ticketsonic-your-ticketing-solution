@@ -19,7 +19,7 @@ class HTML_Generator {
 
 		$result = file_put_contents( $ticket_file_abs_path, $this->html );
 
-		if ( $result === false ) {
+		if ( false === $result ) {
 			return array( 'status' => 'failure' );
 		}
 
@@ -32,7 +32,7 @@ class HTML_Generator {
 		foreach ( $data as $key => $row ) {
 			$output .= '<tr>';
 			for ( $i = 0; $i < $row->count(); $i++ )
-				if ( $row[ $i ] == 1 )
+				if ( 1 === $row[ $i ] )
 					$output .= '<td class="black-square"></td>';
 				else
 					$output .= '<td class="white-square"></td>';
