@@ -1,5 +1,5 @@
 <?php
-/*
+/**
 Plugin Name: WooCommerce - TicketSonic
 Plugin URI: https://github.com/ticketsonic/woocommerce-ticketsonic
 Description: Sync Tickets into your WooCommerce store from the TicketSonic system
@@ -13,7 +13,7 @@ Domain Path: /languages/
 
 WC requires at least: 2.3
 WC tested up to: 3.6
-*/
+ */
 
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
@@ -37,9 +37,8 @@ if ( is_admin() ) {
 	}
 	add_action( 'admin_init', 'woo_ts_register_importer' );
 
-	// Initial scripts and import process
 	function woo_ts_admin_init() {
-		// Check the User has the manage_woocommerce_products capability
+		// Check the User has the manage_woocommerce_products capability.
 		if ( current_user_can( 'manage_woocommerce' ) == false )
 			return;
 
@@ -50,7 +49,7 @@ if ( is_admin() ) {
 	add_action( 'admin_init', 'woo_ts_admin_init' );
 
 	function woo_ts_html_page() {
-		// Check the User has the manage_woocommerce capability
+		// Check the User has the manage_woocommerce capability.
 		if ( current_user_can( 'manage_woocommerce' ) == false )
 			return;
 
@@ -61,13 +60,12 @@ if ( is_admin() ) {
 		woo_ts_template_footer();
 	}
 
-	// HTML template for Import screen
 	function woo_ts_manage_form() {
 		$tab = false;
 		if ( isset( $_GET['tab'] ) ) {
 			$tab = sanitize_text_field( $_GET['tab'] );
 		} else if ( woo_ts_get_option( 'skip_overview', false ) ) {
-			// If Skip Overview is set then jump to Export screen
+			// If Skip Overview is set then jump to Export screen.
 			$tab = 'import';
 		}
 		$url = add_query_arg( 'page', 'woo_ts' );
