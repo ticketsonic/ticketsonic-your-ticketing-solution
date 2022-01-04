@@ -10,71 +10,71 @@ function parse_raw_recrypted_ticket($raw_decrypted_ticket) {
 			$label = $raw_decrypted_ticket[$i++];
 			$len = ord($raw_decrypted_ticket[$i++]);
 			switch ($label) {
-				case "V":
-					$result["version"] = bin_to_int_data(substr($raw_decrypted_ticket, $i, $len));
+				case 'V':
+					$result['version'] = bin_to_int_data(substr($raw_decrypted_ticket, $i, $len));
 					break;
 
-				case "H":
-					$result["barcode"] = substr($raw_decrypted_ticket, $i, $len);
+				case 'H':
+					$result['barcode'] = substr($raw_decrypted_ticket, $i, $len);
 					break;
 
-				case "$":
-					$result["price"] = bin_to_int_data(substr($raw_decrypted_ticket, $i, $len));
+				case '$':
+					$result['price'] = bin_to_int_data(substr($raw_decrypted_ticket, $i, $len));
 					break;
 
-				case "I":
-					$result["product_id"] = bin_to_int_data(substr($raw_decrypted_ticket, $i, $len));
+				case 'I':
+					$result['product_id'] = bin_to_int_data(substr($raw_decrypted_ticket, $i, $len));
 					break;
 
-				case "E":
-					$result["event_id"] = bin_to_int_data(substr($raw_decrypted_ticket, $i, $len));
+				case 'E':
+					$result['event_id'] = bin_to_int_data(substr($raw_decrypted_ticket, $i, $len));
 					break;
 
-				case "S":
-					$result["segment1"] = bin_to_int_data(substr($raw_decrypted_ticket, $i, $len));
+				case 'S':
+					$result['segment1'] = bin_to_int_data(substr($raw_decrypted_ticket, $i, $len));
 					break;
 
-				case "B":
-					$result["segment2"] = bin_to_int_data(substr($raw_decrypted_ticket, $i, $len));
+				case 'B':
+					$result['segment2'] = bin_to_int_data(substr($raw_decrypted_ticket, $i, $len));
 					break;
 
-				case "R":
-					$result["segment3"] = bin_to_int_data(substr($raw_decrypted_ticket, $i, $len));
+				case 'R':
+					$result['segment3'] = bin_to_int_data(substr($raw_decrypted_ticket, $i, $len));
 					break;
 
-				case "P":
-					$result["segment4"] = bin_to_int_data(substr($raw_decrypted_ticket, $i, $len));
+				case 'P':
+					$result['segment4'] = bin_to_int_data(substr($raw_decrypted_ticket, $i, $len));
 					break;
 
-				case "T":
-					$result["start_time"] = bin_to_int_data(substr($raw_decrypted_ticket, $i, $len));
+				case 'T':
+					$result['start_time'] = bin_to_int_data(substr($raw_decrypted_ticket, $i, $len));
 					break;
 
-				case "F":
-					$result["end_time"] = bin_to_int_data(substr($raw_decrypted_ticket, $i, $len));
+				case 'F':
+					$result['end_time'] = bin_to_int_data(substr($raw_decrypted_ticket, $i, $len));
 					break;
 
-				case "X":
+				case 'X':
 					$temp = substr($raw_decrypted_ticket, $i, $len);
-					$delimiter_pos = strpos($temp, "=");
+					$delimiter_pos = strpos($temp, '=');
 
-					$result["extension." . substr($temp, 0, $delimiter_pos)] = substr($temp, $delimiter_pos + 1);
+					$result['extension.' . substr($temp, 0, $delimiter_pos)] = substr($temp, $delimiter_pos + 1);
 					break;
 
-				case "C":
+				case 'C':
 					$checksumpos = $i - 2;
 					$checksum = bin_to_int_data(substr($raw_decrypted_ticket, $i, $len));
 					break;
 				
 				default:
 					$result[$label] = substr($raw_decrypted_ticket, $i, $len);
-					$result["warning"] = "Unrecognized label";
+					$result['warning'] = 'Unrecognized label';
 					break;
 			}
 			$i += $len;
 		}
 	} catch (Exception $e) {
-		$result["error"] = 1;
+		$result['error'] = 1;
 	}
 
 	if ($checksumpos > 0) {
@@ -84,7 +84,7 @@ function parse_raw_recrypted_ticket($raw_decrypted_ticket) {
 		}
 		
 		if ($c != $checksum) {
-			$result["error"] = 1;
+			$result['error'] = 1;
 		}
 	}
 
@@ -115,7 +115,7 @@ function int_array_to_bin($str) {
 		$result[] = chr($str[$i]);
 	}
 
-	return implode("", $result);
+	return implode('', $result);
 }
 
 ?>
