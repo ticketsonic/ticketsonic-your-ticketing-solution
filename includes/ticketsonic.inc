@@ -15,13 +15,18 @@ function decode_tickets( $tickets_data ) {
 			'title' => $woo_product->get_name(),
 			'description' => $woo_product->get_description(),
 			'formatted_price' => $decoded_ticket['payload']['formatted_price'],
-			'sensitive_decoded' => bin_to_int_array( $decoded_ticket['payload']['sensitive_decoded'] )
+			'sensitive_decoded' => bin_to_int_array( $decoded_ticket['payload']['sensitive_decoded'] ),
 		);
 
 		$tickets_meta[] = $ticket_meta;
 	}
 
-	return array( 'status' => 'success', 'payload' => array( 'tickets_meta' => $tickets_meta ) );
+	return array(
+		'status' => 'success',
+		'payload' => array(
+			'tickets_meta' => $tickets_meta,
+		),
+	);
 }
 
 function decode_barcode( $encrypted_data ) {
@@ -37,7 +42,10 @@ function decode_barcode( $encrypted_data ) {
 	$result['decrypted_ticket'] = parse_raw_recrypted_ticket( $sensitive_decrypted );
 	$result['formatted_price'] = floatval( $result['decrypted_ticket']['price'] ) / 100 . ' ' . currency_to_ascii( get_woocommerce_currency() );
 
-	return array( 'status' => 'success', 'payload' => $result );
+	return array(
+		'status' => 'success',
+		'payload' => $result,
+	);
 }
 
 function send_html_tickets_by_mail( $target_user_mail, $tickets_data ) {
@@ -128,7 +136,7 @@ function currency_to_ascii( $currency_code ) {
 		'BGN' => 'BGN',
 		'USD' => 'USD',
 		'EUR' => 'EUR',
-		'GBP' => 'GBP'
+		'GBP' => 'GBP',
 	);
 
 	return $currencies[ $currency_code ];
@@ -139,8 +147,19 @@ function upload_custom_ticket_background() {
 	include_once( ABSPATH . 'wp-admin/includes/file.php' );
 	include_once( ABSPATH . 'wp-admin/includes/media.php' );
 
-	$allowed_file_types = array( 'jpg' => 'image/jpeg', 'jpeg' => 'image/jpeg', 'gif' => 'image/gif', 'png' => 'image/png' );
-	$upload_overrides = array( 'test_form' => false, 'unique_filename_callback' => 'filename_renamer', 'mimes' => $allowed_file_types );
+	$allowed_file_types = array(
+		'jpg' => 'image/jpeg',
+		'jpeg' => 'image/jpeg',
+		'gif' => 'image/gif',
+		'png' => 'image/png',
+	);
+
+	$upload_overrides = array(
+		'test_form' => false,
+		'unique_filename_callback' => 'filename_renamer',
+		'mimes' => $allowed_file_types,
+	);
+
 	$uploadedfile = $_FILES['fileToUpload'];
 
 	$movefile = wp_handle_upload( $uploadedfile, $upload_overrides );
@@ -156,8 +175,17 @@ function upload_custom_badge_background() {
 	include_once( ABSPATH . 'wp-admin/includes/file.php' );
 	include_once( ABSPATH . 'wp-admin/includes/media.php' );
 
-	$allowed_file_types = array( 'jpg' => 'image/jpeg', 'jpeg' => 'image/jpeg' );
-	$upload_overrides = array( 'test_form' => false, 'unique_filename_callback' => 'badge_background_file_renamer', 'mimes' => $allowed_file_types );
+	$allowed_file_types = array(
+		'jpg' => 'image/jpeg',
+		'jpeg' => 'image/jpeg',
+	);
+
+	$upload_overrides = array(
+		'test_form' => false,
+		'unique_filename_callback' => 'badge_background_file_renamer',
+		'mimes' => $allowed_file_types,
+	);
+
 	$badge_file = $_FILES['badge_file'];
 
 	$movefile = wp_handle_upload( $badge_file, $upload_overrides );
@@ -284,7 +312,7 @@ function allowed_html() {
 			'height' => array(),
 			'xmlns' => array(),
 			'xmlns:xlink' => array(),
-			'xmlns:bx' => array()
+			'xmlns:bx' => array(),
 		),
 		'defs' => array(
 			'href' => array(),
@@ -306,7 +334,7 @@ function allowed_html() {
 			'y2' => array(),
 			'gradienttransform' => array(),
 			'xlink:href' => array(),
-			'bx:pinned' => array()
+			'bx:pinned' => array(),
 		),
 		'path' => array(
 			'd' => array(),
@@ -331,9 +359,7 @@ function allowed_html() {
 			'class' => array(),
 			'style' => array(),
 			'transform' => array(),
-			'id' => array()
-		)
+			'id' => array(),
+		),
 	);
 }
-
-?>
