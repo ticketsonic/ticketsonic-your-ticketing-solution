@@ -148,5 +148,3 @@ function woo_ts_tab_template( $tab = '' ) {
 			include_once WOO_TS_PATH . 'templates/admin/tabs-' . $tab . '.php';
 	}
 }
-
-?>
