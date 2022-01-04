@@ -117,7 +117,7 @@
 					<label for="badge_background"><?php _e('Badge Background', 'woo_ts' ); ?></label>
 				</th>
 				<td>
-					<img style="width: 150px;" src="<?php print WOO_TS_UPLOADURLPATH; ?>/badge_background.jpg"/>
+					<img style="width: 150px;" src="<?php print ( esc_attr( WOO_TS_UPLOADURLPATH ) ); ?>/badge_background.jpg"/>
 					<br>
 					<input type="file" name="badge_file" id="badge_file">
 					<p class="description"><?php _e( 'Only jpeg files are accepted', 'woo_ts' ); ?>.</p>

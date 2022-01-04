@@ -26,7 +26,7 @@
 					<label for="ticket_info_endpoint"><?php _e('Get Ticket Info Endpoint', 'woo_ts' ); ?></label>
 				</th>
 				<td>
-					<input type="text" size="50" id="ticket_info_endpoint" name="ticket_info_endpoint" value="<?php echo $ticket_info_endpoint; ?>" class="text" />
+					<input type="text" size="50" id="ticket_info_endpoint" name="ticket_info_endpoint" value="<?php print ( esc_attr( $ticket_info_endpoint ) ); ?>" class="text" />
 					<p class="description"><?php _e( 'Ticket Endpoint', 'woo_ts' ); ?>.</p>
 				</td>
 			</tr>
@@ -36,7 +36,7 @@
 					<label for="event_info_endpoint"><?php _e('Event Info Endpoint', 'woo_ts' ); ?></label>
 				</th>
 				<td>
-					<input type="text" size="50" id="event_info_endpoint" name="event_info_endpoint" value="<?php echo $event_info_endpoint; ?>" class="text" />
+					<input type="text" size="50" id="event_info_endpoint" name="event_info_endpoint" value="<?php print ( esc_attr( $event_info_endpoint ) ); ?>" class="text" />
 					<p class="description"><?php _e( 'Event Info Endpoint', 'woo_ts' ); ?>.</p>
 				</td>
 			</tr>
@@ -46,7 +46,7 @@
 					<label for="change_event_endpoint"><?php _e('Change Event Endpoint', 'woo_ts' ); ?></label>
 				</th>
 				<td>
-					<input type="text" size="50" id="change_event_endpoint" name="change_event_endpoint" value="<?php echo $change_event_endpoint; ?>" class="text" />
+					<input type="text" size="50" id="change_event_endpoint" name="change_event_endpoint" value="<?php print ( esc_attr( $change_event_endpoint ) ); ?>" class="text" />
 					<p class="description"><?php _e( 'Endpoint for requesting changes in event', 'woo_ts' ); ?>.</p>
 				</td>
 			</tr>
@@ -56,7 +56,7 @@
 					<label for="new_event_endpoint"><?php _e('New Event Endpoint', 'woo_ts' ); ?></label>
 				</th>
 				<td>
-					<input type="text" size="50" id="new_event_endpoint" name="new_event_endpoint" value="<?php echo $new_event_endpoint; ?>" class="text" />
+					<input type="text" size="50" id="new_event_endpoint" name="new_event_endpoint" value="<?php print ( esc_attr( $new_event_endpoint ) ); ?>" class="text" />
 					<p class="description"><?php _e( 'Event Endpoint', 'woo_ts' ); ?>.</p>
 				</td>
 			</tr>
@@ -66,7 +66,7 @@
 					<label for="new_ticket_endpoint"><?php _e('New Ticket Endpoint', 'woo_ts' ); ?></label>
 				</th>
 				<td>
-					<input type="text" size="50" id="new_ticket_endpoint" name="new_ticket_endpoint" value="<?php echo $new_ticket_endpoint; ?>" class="text" />
+					<input type="text" size="50" id="new_ticket_endpoint" name="new_ticket_endpoint" value="<?php print ( esc_attr( $new_ticket_endpoint ) ); ?>" class="text" />
 					<p class="description"><?php _e( 'Ticket Endpoint', 'woo_ts' ); ?>.</p>
 				</td>
 			</tr>
@@ -76,7 +76,7 @@
 					<label for="change_ticket_endpoint"><?php _e('Change Ticket Endpoint', 'woo_ts' ); ?></label>
 				</th>
 				<td>
-					<input type="text" size="50" id="change_ticket_endpoint" name="change_ticket_endpoint" value="<?php echo $change_ticket_endpoint; ?>" class="text" />
+					<input type="text" size="50" id="change_ticket_endpoint" name="change_ticket_endpoint" value="<?php print ( esc_attr( $change_ticket_endpoint ) ); ?>" class="text" />
 					<p class="description"><?php _e( 'Ticket Endpoint', 'woo_ts' ); ?>.</p>
 				</td>
 			</tr>
@@ -86,7 +86,7 @@
 					<label for="external_order_endpoint"><?php _e('Order Endpoint', 'woo_ts' ); ?></label>
 				</th>
 				<td>
-					<input type="text" size="50" id="external_order_endpoint" name="external_order_endpoint" value="<?php echo $external_order_endpoint; ?>" class="text" />
+					<input type="text" size="50" id="external_order_endpoint" name="external_order_endpoint" value="<?php print ( esc_attr( $external_order_endpoint ) ); ?>" class="text" />
 					<p class="description"><?php _e( 'Order Endpoint', 'woo_ts' ); ?>.</p>
 				</td>
 			</tr>
@@ -96,7 +96,7 @@
 					<label for="event_id"><?php _e('Event ID', 'woo_ts' ); ?></label>
 				</th>
 				<td>
-					<input type="text" size="50" id="event_id" name="event_id" value="<?php echo $event_id; ?>" class="text" />
+					<input type="text" size="50" id="event_id" name="event_id" value="<?php print ( esc_attr( $event_id ) ); ?>" class="text" />
 					<p class="description"><?php _e( 'Event ID', 'woo_ts' ); ?>.</p>
 				</td>
 			</tr>
@@ -106,7 +106,7 @@
 					<label for="api_userid"><?php _e('Partner E-mail', 'woo_ts' ); ?></label>
 				</th>
 				<td>
-					<input type="text" size="30" id="api_userid" name="api_userid" value="<?php echo $api_userid; ?>" class="text" />
+					<input type="text" size="30" id="api_userid" name="api_userid" value="<?php print ( esc_attr( $api_userid ) ); ?>" class="text" />
 					<p class="description"><?php _e( 'Partner E-mail', 'woo_ts' ); ?>.</p>
 				</td>
 			</tr>
@@ -115,7 +115,7 @@
 					<label for="api_key"><?php _e('Partner API Key', 'woo_ts' ); ?></label>
 				</th>
 				<td>
-					<input type="text" size="30" id="api_key" name="api_key" value="<?php echo $api_key; ?>" class="text" />
+					<input type="text" size="30" id="api_key" name="api_key" value="<?php print ( esc_attr( $api_key ) ); ?>" class="text" />
 					<p class="description"><?php _e( 'Partner API Key', 'woo_ts' ); ?>.</p>
 				</td>
 			</tr>
@@ -124,7 +124,7 @@
 					<label for="pdf_background"><?php _e('PDF Background', 'woo_ts' ); ?></label>
 				</th>
 				<td>
-					<img style="width: 150px;" src="<?php print WOO_TS_UPLOADURLPATH; ?>/pdf_background.jpg"/>
+					<img style="width: 150px;" src="<?php print ( esc_attr( WOO_TS_UPLOADURLPATH ) ); ?>/pdf_background.jpg"/>
 					<input type="file" name="fileToUpload" id="fileToUpload">
 					<p class="description"><?php _e( 'PDF Background', 'woo_ts' ); ?>.</p>
 				</td>
@@ -134,7 +134,7 @@
 					<label for="email_subject"><?php _e('E-mail Subject', 'woo_ts' ); ?></label>
 				</th>
 				<td>
-					<input type="text" size="30" id="email_subject" name="email_subject" value="<?php echo $email_subject; ?>" class="text" />
+					<input type="text" size="30" id="email_subject" name="email_subject" value="<?php print ( esc_attr( $email_subject ) ); ?>" class="text" />
 					<p class="description"><?php _e( 'E-mail Subject', 'woo_ts' ); ?>.</p>
 				</td>
 			</tr>
@@ -143,7 +143,7 @@
 					<label for="email_body"><?php _e('E-mail Body', 'woo_ts' ); ?></label>
 				</th>
 				<td>
-					<textarea id="email_body" name="email_body" rows="100" cols="150"><?php echo $email_body; ?></textarea>
+					<textarea id="email_body" name="email_body" rows="100" cols="150"><?php print ( esc_attr( $email_body ) ); ?></textarea>
 					<p class="description"><?php _e( 'E-mail Body', 'woo_ts' ); ?>.</p>
 				</td>
 			</tr>
