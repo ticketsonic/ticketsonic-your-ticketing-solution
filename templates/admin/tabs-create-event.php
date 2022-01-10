@@ -152,7 +152,7 @@
 
 			<tr>
 				<th>
-					<label for="badge_primary_text_fontsize"><?php _e('Primary text font size', 'woo_ts' ); ?></label>
+					<label for="badge_primary_text_fontsize"><?php _e( 'Primary text font size', 'woo_ts' ); ?></label>
 				</th>
 				<td>
 					<input type="text" size="50" id="badge_primary_text_fontsize" name="badge_primary_text_fontsize" value="100" class="text" />
