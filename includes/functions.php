@@ -529,7 +529,6 @@ function resend_html_tickets_order( $order ) {
 		$mail_sent = send_html_tickets_by_mail( $order->get_billing_email(), $decoded_tickets_data['payload'] );
 		if ( ! $mail_sent ) {
 			$order->update_status( 'failed', 'Unable to send email with tickets!' );
-			write_log( 'Could not send mail with tickets' );
 
 			return;
 		}
@@ -607,7 +606,6 @@ function send_html_tickets_to_customer_after_order_completed( $order_id ) {
 		$mail_sent = send_html_tickets_by_mail( $order->get_billing_email(), $decoded_tickets_data['payload'] );
 		if ( ! $mail_sent ) {
 			$order->update_status( 'failed', 'Unable to send email with tickets!' );
-			write_log( 'Could not send mail with tickets' );
 
 			return;
 		}
