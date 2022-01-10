@@ -3,9 +3,9 @@
 /**
  * Plugin Name: WooCommerce - TicketSonic
  * Plugin URI: https://github.com/ticketsonic/woocommerce-ticketsonic
- * Description: Sync Tickets into your WooCommerce store from the TicketSonic system
- * Version: 0.1
- * Author: Martin Vassilev
+ * Description: Integrate your WooCommerce store with TicketSonic and become a full featured ticket seller
+ * Version: 1.0
+ * Author: TicketSonic
  * Author URI: https://github.com/ticketsonic/
  * License: GPL2
 
@@ -36,7 +36,7 @@ require_once WOO_TS_PATH . 'includes/functions.php';
 
 if ( is_admin() ) {
 	function woo_ts_register_importer() {
-		register_importer( 'woo_ts', __( 'Tickets', 'woocommerce-ticketsonic' ), __( '<strong>Tickets Importer</strong> - Import Tickets into WooCommerce from TicketSonic.', 'woo_ts' ), 'woo_ts_html_page' );
+		register_importer( 'woo_ts', __( 'Tickets', 'woo-ts' ), __( '<strong>TicketSonic Integrator</strong> - Integrate you WooCommerce store with TicketSonic.', 'woo-ts' ), 'woo_ts_html_page' );
 	}
 	add_action( 'admin_init', 'woo_ts_register_importer' );
 
