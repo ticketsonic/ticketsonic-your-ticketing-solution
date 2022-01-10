@@ -655,11 +655,11 @@ add_action( 'admin_notices', 'uploadpath_writable_error_message' );
 function uploadpath_writable_error_message() {
 	if ( ! is_writable( WOO_TS_UPLOADPATH ) ) {
 		print '<div class="error notice">';
-		print esc_html( '<p>Ensure ' . WOO_TS_UPLOADPATH . ' is writable</p>' );
+		print '<p>Ensure ' . esc_html( WOO_TS_UPLOADPATH ) . ' is writable</p>';
 		print '</div>';
 	} else {
 		print '<div class="notice notice-success">';
-		print esc_html( '<p>' . WOO_TS_UPLOADPATH . ' is writable</p>' );
+		print '<p>' . esc_html( WOO_TS_UPLOADPATH ) . ' is writable</p>';
 		print '</div>';
 	}
 }
