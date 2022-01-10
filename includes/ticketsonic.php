@@ -34,11 +34,6 @@ function request_create_new_event( $url, $email, $key, $event_title, $event_desc
 
 	$response = post_request_to_remote( $url, $headers, $body );
 
-	if ( $response['status'] === 'error' ) {
-		woo_ts_admin_notice( 'Error sending new event request: ' . $response['message'], 'error' );
-		return;
-	}
-
 	return $response;
 }
 
@@ -58,11 +53,6 @@ function request_create_new_ticket( $url, $email, $key, $ticket_eventid, $ticket
 		'stock'             => $ticket_stock,
 	);
 	$response = post_request_to_remote( $url, $headers, $body );
-
-	if ( $response['status'] === 'error' ) {
-		woo_ts_admin_notice( 'Error sending new ticket request: ' . $response['message'], 'error' );
-		return;
-	}
 
 	return $response;
 }
@@ -84,11 +74,6 @@ function request_change_ticket( $url, $email, $key, $ticket_sku, $ticket_title, 
 	);
 	$response = post_request_to_remote( $url, $headers, $body );
 
-	if ( $response['status'] === 'error' ) {
-		woo_ts_admin_notice( 'Error sending new ticket request: ' . $response['message'], 'error' );
-		return;
-	}
-
 	return $response;
 }
 
@@ -107,11 +92,6 @@ function request_change_event( $url, $email, $key, $event_id, $event_title, $eve
 		'badge_data'        => json_encode( $event_badge_data ),
 	);
 	$response = post_request_to_remote( $url, $headers, $body );
-
-	if ( $response['status'] === 'error' ) {
-		woo_ts_admin_notice( 'Error sending new ticket request: ' . $response['message'], 'error' );
-		return;
-	}
 
 	return $response;
 }
