@@ -24,28 +24,28 @@ class MPDF_Generator {
 	}
 
 	function generate_file( $name, $description, $price, $sensitive_decoded, $ticket_file_abs_path ) {
-		$this->AddPage();
-		$this->SetBackground();
+		$this->add_page();
+		$this->set_background();
 
-		$this->SetText( $name, $description, $price );
-		$this->SetQR( get_qr_matrix( base64_encode( $sensitive_decoded ) ) );
+		$this->set_text( $name, $description, $price );
+		$this->set_qr( get_qr_matrix( base64_encode( $sensitive_decoded ) ) );
 
-		$result = $this->Output( 'F', $ticket_file_abs_path );
+		$result = $this->output( 'F', $ticket_file_abs_path );
 		return $result;
 	}
 
-	function AddPage() {
+	function add_page() {
 		$this->mpdf->AddPage();
 	}
 
-	function SetBackground() {
+	function set_background() {
 		$uploads_dir = wp_get_upload_dir();
 		$image_path  = $uploads_dir['basedir'] . '/woocommerce-ticketsonic/pdf_background.jpg';
 		if ( file_exists( $image_path ) )
 			$this->mpdf->Image( $image_path, 0, 0, $this->w, $this->h, 'jpg', '', true, false );
 	}
 
-	function SetText( $event_titme, $ticket_title, $ticket_price ) {
+	function set_text( $event_titme, $ticket_title, $ticket_price ) {
 		$this->mpdf->WriteText( 20, 35, $event_titme );
 
 		$this->mpdf->WriteText( 20, 45, $ticket_title );
@@ -53,7 +53,7 @@ class MPDF_Generator {
 		$this->mpdf->WriteText( 20, 55, $ticket_price );
 	}
 
-	function SetQR( $data ) {
+	function set_qr( $data ) {
 		$this->mpdf->SetFillColor( 0, 0, 0 );
 
 		foreach ( $data as $key => $row ) {
@@ -67,7 +67,7 @@ class MPDF_Generator {
 		}
 	}
 
-	function Output( $type, $path ) {
+	function output( $type, $path ) {
 		$result = array( 'status' => 'success' );
 		try {
 			$this->mpdf->Output( $path, $type );
