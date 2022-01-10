@@ -455,7 +455,6 @@ if ( is_admin() ) {
 		);
 
 		// TODO: Add catch handler
-		// wp_mkdir_p(WOO_TS_TICKETSDIR);.
 		wp_mkdir_p( WOO_TS_UPLOADPATH );
 	}
 }
