@@ -121,16 +121,6 @@
 			</tr>
 			<tr>
 				<th>
-					<label for="pdf_background"><?php _e('PDF Background', 'woo_ts' ); ?></label>
-				</th>
-				<td>
-					<img style="width: 150px;" src="<?php print ( esc_attr( WOO_TS_UPLOADURLPATH ) ); ?>/pdf_background.jpg"/>
-					<input type="file" name="fileToUpload" id="fileToUpload">
-					<p class="description"><?php _e( 'PDF Background', 'woo_ts' ); ?>.</p>
-				</td>
-			</tr>
-			<tr>
-				<th>
 					<label for="email_subject"><?php _e('E-mail Subject', 'woo_ts' ); ?></label>
 				</th>
 				<td>

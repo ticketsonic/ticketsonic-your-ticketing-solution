@@ -150,8 +150,6 @@ if ( is_admin() ) {
 				woo_ts_update_option( 'external_order_endpoint', sanitize_or_default( $_POST['external_order_endpoint'] ) );
 				woo_ts_update_option( 'event_id', sanitize_or_default( $_POST['event_id'] ) );
 
-				upload_custom_ticket_background();
-
 				$message = __( 'Settings saved.', 'woo-ts' );
 				woo_ts_admin_notice( $message );
 				break;
