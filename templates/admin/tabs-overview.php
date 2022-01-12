@@ -20,6 +20,13 @@
 		<!-- <span><a href="#"><attr title="<?php _e( 'Dismiss this message', 'woo_ts' ); ?>"><?php _e( 'Dismiss', 'woo_ts' ); ?></attr></a></span> -->
 		<?php _e( 'Welcome', 'woo_ts' ); ?>
 	</h3>
-	<p><?php _e( 'Import Tickets into WooCommerce from TicketSonic.', 'woo_ts' ); ?></p>
+	<p><?php _e( 'Import Tickets into WooCommerce from TicketSonic and start selling on your own!', 'woo_ts' ); ?></p>
+	<?php 
+	if ( ! is_writable( WOO_TS_UPLOADPATH ) ) {
+		print '<p>Ensure ' . esc_html( WOO_TS_UPLOADPATH ) . ' is writable</p>';
+	} else {
+		print '<p>' . esc_html( WOO_TS_UPLOADPATH ) . ' is writable</p>';
+	}
+	?>
 </div>
 <!-- .overview-right -->

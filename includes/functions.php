@@ -648,20 +648,6 @@ function display_ticket_links_in_order_details( $order ) {
 	}
 }
 
-add_action( 'admin_notices', 'uploadpath_writable_error_message' );
-function uploadpath_writable_error_message() {
-	if ( ! is_writable( WOO_TS_UPLOADPATH ) ) {
-		print '<div class="error notice">';
-		print '<p>Ensure ' . esc_html( WOO_TS_UPLOADPATH ) . ' is writable</p>';
-		print '</div>';
-	} else {
-		print '<div class="notice notice-success">';
-		print '<p>' . esc_html( WOO_TS_UPLOADPATH ) . ' is writable</p>';
-		print '</div>';
-	}
-}
-
-
 function woo_ts_get_action( $prefer_get = false ) {
 	if ( isset( $_GET['action'] ) && $prefer_get )
 		return sanitize_or_default( $_GET['action'] );
