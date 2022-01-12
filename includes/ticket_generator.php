@@ -1,7 +1,6 @@
 <?php
 
 require 'html_generator.php';
-require 'mpdf_generator.php';
 
 function generate_file_tickets( $ts_response, $order_id ) {
 	$is_dir_created = wp_mkdir_p( WOO_TS_UPLOADPATH . '/' . $order_id . '/' );

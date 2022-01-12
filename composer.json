@@ -1,8 +1,6 @@
 {
     "require": {
-        "mpdf/mpdf": "^8.0",
         "guzzlehttp/guzzle": "^6.5",
-        "phpunit/phpunit": "^7.5",
         "bacon/bacon-qr-code": "^2.0"
     }
 }
