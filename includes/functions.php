@@ -14,7 +14,7 @@ if ( is_admin() ) {
 		$action = woo_ts_get_action();
 		switch ( $action ) {
 			case 'ticket-change':
-				$url = woo_ts_get_option( 'change_ticket_endpoint', '' );
+				$url = woo_ts_get_option( 'change_ticket_endpoint', 'https://www.ticketsonic.com:9507/v1/ticket/edit' );
 				if ( empty( $url ) ) {
 					woo_ts_admin_notice( 'Change Ticket Endpoint have to set in Settings', 'error' );
 					return;
@@ -74,7 +74,7 @@ if ( is_admin() ) {
 				break;
 
 			case 'event-change':
-				$url = woo_ts_get_option( 'change_event_endpoint', '' );
+				$url = woo_ts_get_option( 'change_event_endpoint', 'https://www.ticketsonic.com:9507/v1/event/edit' );
 				if ( empty( $url ) ) {
 					woo_ts_admin_notice( 'Change Event Endpoint have to set in Settings', 'error' );
 					return;
@@ -157,7 +157,7 @@ if ( is_admin() ) {
 				break;
 
 			case 'sync_with_ts':
-				$url = woo_ts_get_option( 'ticket_info_endpoint', '' );
+				$url = woo_ts_get_option( 'ticket_info_endpoint', 'https://www.ticketsonic.com:9507/v1/ticket/list' );
 				if ( empty( $url ) ) {
 					woo_ts_admin_notice( 'Ticket Info Endpoint have to set in Settings', 'error' );
 					return;
@@ -235,7 +235,7 @@ if ( is_admin() ) {
 				break;
 
 			case 'create-event':
-				$url = woo_ts_get_option( 'new_event_endpoint', '' );
+				$url = woo_ts_get_option( 'new_event_endpoint', 'https://www.ticketsonic.com:9507/v1/event/new' );
 				if ( empty( $url ) ) {
 					woo_ts_admin_notice( 'New Event Endpoint have to set in Settings', 'error' );
 					return;
@@ -375,7 +375,7 @@ if ( is_admin() ) {
 				break;
 
 			case 'create-ticket':
-				$url = woo_ts_get_option( 'new_ticket_endpoint', '' );
+				$url = woo_ts_get_option( 'new_ticket_endpoint', 'https://www.ticketsonic.com:9507/v1/ticket/new' );
 				if ( empty( $url ) ) {
 					woo_ts_admin_notice( 'New Ticket Endpoint have to set in Settings', 'error' );
 					return;
@@ -476,7 +476,7 @@ add_action( 'woocommerce_order_action_wc_force_get_new_tickets_order_action', 'f
 function force_get_new_tickets_order( $order ) {
 	$order_id = $order->id;
 
-	$url   = woo_ts_get_option( 'external_order_endpoint', '' );
+	$url   = woo_ts_get_option( 'external_order_endpoint', 'https://www.ticketsonic.com:9507/v1/order/new' );
 	$email = woo_ts_get_option( 'api_userid', '' );
 	$key   = woo_ts_get_option( 'api_key', '' );
 
@@ -580,7 +580,7 @@ function send_html_tickets_to_customer_after_order_completed( $order_id ) {
 		return;
 	}
 
-	$url   = woo_ts_get_option( 'external_order_endpoint', '' );
+	$url   = woo_ts_get_option( 'external_order_endpoint', 'https://www.ticketsonic.com:9507/v1/order/new' );
 	$email = woo_ts_get_option( 'api_userid', '' );
 	$key   = woo_ts_get_option( 'api_key', '' );
 

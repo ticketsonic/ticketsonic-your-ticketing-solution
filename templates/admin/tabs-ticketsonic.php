@@ -2,7 +2,7 @@
 
 require_once WOO_TS_PATH . '/includes/ticketsonic.php';
 
-$url = woo_ts_get_option( 'event_info_endpoint', '' );
+$url = woo_ts_get_option( 'event_info_endpoint', 'https://www.ticketsonic.com:9507/v1/event/list' );
 if ( empty( $url ) ) {
 	woo_ts_admin_notice( 'Event Info Endpoint have to set in Settings', 'error' );
 
@@ -25,7 +25,7 @@ if ( empty( $key ) ) {
 
 $raw_events = get_events_data_from_remote( $url, $email, $key );
 
-$url = woo_ts_get_option( 'ticket_info_endpoint', '' );
+$url = woo_ts_get_option( 'ticket_info_endpoint', 'https://www.ticketsonic.com:9507/v1/ticket/list' );
 if ( empty( $url ) ) {
 	woo_ts_admin_notice( 'Event Info Endpoint have to set in Settings', 'error' );
 

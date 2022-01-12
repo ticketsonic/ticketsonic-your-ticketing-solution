@@ -130,17 +130,17 @@ function woo_ts_tab_template( $tab = '' ) {
 			break;
 
 		case 'settings':
-			$api_key                 = woo_ts_get_option( 'api_key', ',' );
+			$api_key                 = woo_ts_get_option( 'api_key', '' );
 			$api_userid              = woo_ts_get_option( 'api_userid', '' );
 			$email_subject           = woo_ts_get_option( 'email_subject', '' );
 			$email_body              = woo_ts_get_option( 'email_body', '' );
-			$ticket_info_endpoint    = woo_ts_get_option( 'ticket_info_endpoint', '' );
-			$event_info_endpoint     = woo_ts_get_option( 'event_info_endpoint', '' );
-			$new_event_endpoint      = woo_ts_get_option( 'new_event_endpoint', '' );
-			$new_ticket_endpoint     = woo_ts_get_option( 'new_ticket_endpoint', '' );
-			$change_ticket_endpoint  = woo_ts_get_option( 'change_ticket_endpoint', '' );
-			$change_event_endpoint   = woo_ts_get_option( 'change_event_endpoint', '' );
-			$external_order_endpoint = woo_ts_get_option( 'external_order_endpoint', '' );
+			$ticket_info_endpoint    = woo_ts_get_option( 'ticket_info_endpoint', 'https://www.ticketsonic.com:9507/v1/ticket/list' );
+			$event_info_endpoint     = woo_ts_get_option( 'event_info_endpoint', 'https://www.ticketsonic.com:9507/v1/event/list' );
+			$new_event_endpoint      = woo_ts_get_option( 'new_event_endpoint', 'https://www.ticketsonic.com:9507/v1/event/new' );
+			$new_ticket_endpoint     = woo_ts_get_option( 'new_ticket_endpoint', 'https://www.ticketsonic.com:9507/v1/ticket/new' );
+			$change_ticket_endpoint  = woo_ts_get_option( 'change_ticket_endpoint', 'https://www.ticketsonic.com:9507/v1/ticket/edit' );
+			$change_event_endpoint   = woo_ts_get_option( 'change_event_endpoint', 'https://www.ticketsonic.com:9507/v1/event/edit' );
+			$external_order_endpoint = woo_ts_get_option( 'external_order_endpoint', 'https://www.ticketsonic.com:9507/v1/order/new' );
 			$event_id                = woo_ts_get_option( 'event_id', '' );
 			break;
 	}
