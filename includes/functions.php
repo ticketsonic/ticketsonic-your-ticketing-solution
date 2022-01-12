@@ -702,6 +702,10 @@ add_filter(
 		$styles[] = 'stroke-dasharray';
 		$styles[] = 'fill';
 		$styles[] = 'stroke-linecap';
+		$styles[] = 'border-top-left-radius';
+		$styles[] = 'border-top-right-radius';
+		$styles[] = 'border-bottom-left-radius';
+		$styles[] = 'border-bottom-right-radius';
 		return $styles;
 	}
 );

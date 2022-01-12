@@ -132,8 +132,6 @@ function woo_ts_tab_template( $tab = '' ) {
 		case 'settings':
 			$api_key                 = woo_ts_get_option( 'api_key', '' );
 			$api_userid              = woo_ts_get_option( 'api_userid', '' );
-			$email_subject           = woo_ts_get_option( 'email_subject', '' );
-			$email_body              = woo_ts_get_option( 'email_body', '' );
 			$ticket_info_endpoint    = woo_ts_get_option( 'ticket_info_endpoint', 'https://www.ticketsonic.com:9507/v1/ticket/list' );
 			$event_info_endpoint     = woo_ts_get_option( 'event_info_endpoint', 'https://www.ticketsonic.com:9507/v1/event/list' );
 			$new_event_endpoint      = woo_ts_get_option( 'new_event_endpoint', 'https://www.ticketsonic.com:9507/v1/event/new' );
@@ -142,6 +140,59 @@ function woo_ts_tab_template( $tab = '' ) {
 			$change_event_endpoint   = woo_ts_get_option( 'change_event_endpoint', 'https://www.ticketsonic.com:9507/v1/event/edit' );
 			$external_order_endpoint = woo_ts_get_option( 'external_order_endpoint', 'https://www.ticketsonic.com:9507/v1/order/new' );
 			$event_id                = woo_ts_get_option( 'event_id', '' );
+			$email_subject           = woo_ts_get_option( 'email_subject', 'Ticket #[ticket_number] - [ticket_title] for the Your Event is ready' );
+			$email_body              = woo_ts_get_option(
+				'email_body',
+				'
+				<html lang="en">
+					<head>
+						<style type="text/css">
+						table {
+								border-spacing: 0;
+						}
+						td.black-square {
+							background-color: black;
+							width: 2px;
+							height: 4px;
+						}
+
+						td.white-square {
+							background-color: white;
+							width: 2px;
+							height: 4px;
+						}
+						</style>
+					</head>
+					<body style="width: 100%;margin: 50px;padding: 0px;-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;background-color: #dbe5ea;">
+						<div style="width: 500px; margin: auto;">
+							<div id="header">
+								<div style="background-color: 537895; border-top-left-radius: 5px;border-top-right-radius: 5px; height: 50px; text-align: center;">
+								</div>
+							</div>
+							<div id="body" style="background: white; padding: 10px;">
+								<div style="float: left; height: 140px; margin-right: 20px;;">
+									[ticket_qr]
+								</div>
+								<div style="height: 140px">
+									<div style="margin: 10px">
+										[ticket_title]
+									</div>
+									<div style="margin: 10px">
+										[ticket_description]
+									</div>
+									<div style="margin: 10px">
+										[ticket_price]
+									</div>
+								</div>
+							</div>
+							<div id="footer" style="border-top: 1px solid lightgray;">
+								<div style="background-color: white; border-bottom-left-radius: 5px; border-bottom-right-radius: 5px; color: gray; font-family: Helvetica, Arial, sans-serif; font-size: 12px; height: 50px; line-height: 50px; text-align: center;">©2022 Demo Conference</div>
+							</div>
+						</div>
+					</body>
+				</html>'
+			);
+
 			break;
 	}
 
