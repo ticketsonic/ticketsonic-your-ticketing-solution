@@ -30,7 +30,7 @@ You have to be able to use composer
   ```sh
   composer install
   ```
-
+Ensure wp-content/uploads dir is writable. In most cases it is by default. The plugin will create a subdirectory called woocommerce-ticketsonic and it will be used for storage of ticket files when the admin manually generates ones.
 ### Installation
 
 1. Get a API credentials at [https://www.ticketsonic.com/user/registration](https://www.ticketsonic.com/user/registration)
