@@ -42,7 +42,7 @@ Ensure wp-content/uploads dir is writable. In most cases it is by default. The p
    ```sh
    composer install
    ```
-4. Enter your API in `/wp-admin/admin.php?page=woo_ts&tab=settings`
+4. Enter your API credentials in `/wp-admin/admin.php?page=woo_ts&tab=settings`
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
