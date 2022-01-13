@@ -53,7 +53,8 @@ Ensure wp-content/uploads dir is writable. In most cases it is by default. The p
 
 Once installed the plugin page is available as one of the WooCommerce menu items.
 
-<img width="820" alt="Screenshot 2022-01-11 at 17 33 37" src="https://user-images.githubusercontent.com/7579600/148972942-613ff5e0-c689-4315-b2af-359e27c38d65.png">
+<img width="918" alt="TS Screenshot" src="https://user-images.githubusercontent.com/88324390/149328283-d8fee905-48ca-441b-aca2-046cf276ff7a.png">
+
 
 The settings that have to be set are the API credentials, the e-mail subject and body.
 Once the settings are set you have to sync the tickets from TicketSonic with your WooCommerce store and be ready for sales!
