@@ -16,9 +16,20 @@ $j(function() {
 		$j("#new-event-popup").hide();
 	});
 
+	$j("#new-ticket-button").click(function(){
+		$j(".popups-overlay").show();
+		$j("#new-ticket-popup").show();
+	});
+
+	$j("#cancel-new-ticket-request-button").click(function(){
+		$j(".popups-overlay").hide();
+		$j("#new-ticket-popup").hide();
+	});
+
 	$j(".close-form").click(function(){
 		$j(".popups-overlay").hide();
 		$j("#new-event-popup").hide();
+		$j("#new-ticket-popup").hide();
 	});
 
 	// Upload methods
