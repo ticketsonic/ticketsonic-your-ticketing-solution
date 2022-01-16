@@ -64,8 +64,13 @@ $j(function() {
 	});
 
 	i = 1;
-	$j("#new-ticket-button").click(function () {
-		$j("form#create table tbody").append(`
+	$j("#new-event-ticket-button").click(function () {
+		$j("#new-ticket-anchor").before(`<table class="form-table"><tbody>
+		<tr id="new-event-ticket-settings">
+							<td colspan="2" style="padding:0;">
+								<h3><div class="dashicons dashicons-admin-settings"></div>&nbsp;#${i+1} Ticket Section</h3>
+							</td>
+						</tr>
 		<tr>
 				<th>
 					<label for="ticket_title${i}">Ticket title${i+1}</label>
@@ -113,7 +118,7 @@ $j(function() {
 				<td>
 					<input type="text" size="50" id="ticket_stock${i}" name="ticket[${i}][stock]" value="" class="text" />
 				</td>
-			</tr>
+			</tr></tbody></table>
 		`);
 		i++;
 	});

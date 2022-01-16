@@ -134,6 +134,12 @@ $raw_tickets = get_event_ticket_data_from_remote( $url, $email, $key, null );
 
 						<?php do_action( 'woo_ts_export_settings_general' ); ?>
 
+						<tr id="new-event-ticket-settings">
+							<td colspan="2" style="padding:0;">
+								<h3><div class="dashicons dashicons-admin-settings"></div>&nbsp;<?php _e( 'Event Section', 'woo_ts' ); ?></h3>
+							</td>
+						</tr>
+
 						<tr>
 							<th>
 								<label for="event_title"><?php _e('Event title', 'woo_ts' ); ?></label>
@@ -160,11 +166,13 @@ $raw_tickets = get_event_ticket_data_from_remote( $url, $email, $key, null );
 								<input type="text" size="50" id="event_location" name="event_location" value="" class="text" />
 							</td>
 						</tr>
-
-						<tr id="general-settings">
+					</tbody>
+				</table>
+				<table class="form-table">
+					<tbody>
+						<tr id="new-event-ticket-settings">
 							<td colspan="2" style="padding:0;">
-								<h3><div class="dashicons dashicons-admin-settings"></div>&nbsp;<?php _e( 'Create tickets for the event', 'woo_ts' ); ?></h3>
-								<p class="description"><?php _e( 'Press the Add new ticket button to assign additional tickets.', 'woo_ts' ); ?></p>
+								<h3><div class="dashicons dashicons-admin-settings"></div>&nbsp;<?php _e( '#1 Ticket Section', 'woo_ts' ); ?></h3>
 							</td>
 						</tr>
 
@@ -216,14 +224,14 @@ $raw_tickets = get_event_ticket_data_from_remote( $url, $email, $key, null );
 								<input type="text" size="50" id="ticket_stock0" name="ticket[0][stock]" value="" class="text" />
 							</td>
 						</tr>
-						<tr>
-							<td>
-								<p class="submit">
-									<input type="button" id="new-ticket-button" class="button button-primary" value="Add new ticket">
-								</p>
-							</td>
-						</tr>
-
+					</tbody>
+				</table>
+				<div id="new-ticket-anchor"></div>
+				<p class="submit">
+					<input type="button" id="new-event-ticket-button" class="button button-primary" value="Add new ticket">
+				</p>
+				<table class="form-table">
+					<tbody>
 						<tr id="badge-settings">
 							<td colspan="2" style="padding:0;">
 								<h3><div class="dashicons dashicons-admin-settings"></div>&nbsp;<?php _e( 'Badge settings', 'woo_ts' ); ?></h3>
@@ -343,7 +351,7 @@ $raw_tickets = get_event_ticket_data_from_remote( $url, $email, $key, null );
 
 						<?php do_action( 'woo_ts_export_settings_general' ); ?>
 
-						<tr id="general-settings">
+						<tr id="ticket-settings">
 							<td colspan="2" style="padding:0;">
 								<h3><div class="dashicons dashicons-admin-settings"></div>&nbsp;<?php _e( 'Create tickets for the event', 'woo_ts' ); ?></h3>
 								<p class="description"><?php _e( 'Press the Add new ticket button to assign additional tickets.', 'woo_ts' ); ?></p>
