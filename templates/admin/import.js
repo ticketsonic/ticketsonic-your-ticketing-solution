@@ -9,6 +9,7 @@ $j(function() {
 	$j("#new-event-button").click(function(){
 		$j(".popups-overlay").show();
 		$j("#new-event-popup").show();
+		$j("html, body").animate({ scrollTop: 0 }, "slow");
 	});
 
 	$j("#cancel-new-event-request-button").click(function(){
@@ -19,6 +20,7 @@ $j(function() {
 	$j("#new-ticket-button").click(function(){
 		$j(".popups-overlay").show();
 		$j("#new-ticket-popup").show();
+		$j("html, body").animate({ scrollTop: 0 }, "slow");
 	});
 
 	$j("#cancel-new-ticket-request-button").click(function(){
