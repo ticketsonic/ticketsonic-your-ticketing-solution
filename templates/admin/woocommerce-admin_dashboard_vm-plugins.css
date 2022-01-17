@@ -61,7 +61,6 @@
     background: lightgray;
     width: 600px;
     margin: auto 0;
-    padding: 20px;
     border: 1px solid gray;
     left: 0;
     right: 0;
@@ -110,9 +109,72 @@
 }
 
 .form-title-bar {
+	margin: 20px 0;
 	text-align: center;
 }
 
 .tb-close-icon {
-	color: 888;
+	color: #444;
+}
+
+.close-icon {
+	cursor: pointer;
+	text-align: center;
+    line-height: 29px;
+    width: 29px;
+    height: 29px;
+}
+
+.close-icon:before {
+	content: "\f158";
+	font: normal 20px/29px dashicons;
+	speak: never;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-fon;
+}
+
+.right {
+	float: right;
+}
+
+.center {
+	text-align: center;
+}
+
+.popup-form .form-table th {
+    padding: 20px;
+}
+
+.popup-form .table-ticket.form-table th, .popup-form .table-event.form-table th, .popup-form .form-badge.form-table th {
+    padding: 5px;
+}
+
+.popup-form .table-ticket.form-table td, .popup-form .table-event.form-table td, .popup-form .form-badge.form-table td {
+    padding: 5px;
+}
+
+.form-table {
+	margin: 30px auto;
+	width: 90%;
+}
+
+.table-ticket h3 {
+	float: left;
+	margin: 0;
+}
+
+.popup-form hr {
+	border: 1px solid gray;
+	width: 90%;
+	margin: 0 auto;
+}
+
+.form-subsection-title {
+	color: #1d2327;
+    font-size: 1.3em;
+    margin: 1em 0;
+}
+
+.form-table.submit-button td {
+	padding: 0;
 }

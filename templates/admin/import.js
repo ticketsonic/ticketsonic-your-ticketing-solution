@@ -65,15 +65,16 @@ $j(function() {
 
 	i = 1;
 	$j("#new-event-ticket-button").click(function () {
-		$j("#new-ticket-anchor").before(`<table class="form-table"><tbody>
+		$j("#new-ticket-anchor").before(`<hr/><table class="form-table table-ticket"><tbody>
 		<tr id="new-event-ticket-settings">
-							<td colspan="2" style="padding:0;">
-								<h3><div class="dashicons dashicons-admin-settings"></div>&nbsp;#${i+1} Ticket Section</h3>
+							<td colspan="2" class="center">
+								<h3><div class="dashicons dashicons-admin-settings"></div>&nbsp;Ticket #${i+1}</h3>
+								<span class="close-icon right"></span>
 							</td>
 						</tr>
-		<tr>
+			<tr>
 				<th>
-					<label for="ticket_title${i}">Ticket title${i+1}</label>
+					<label for="ticket_title${i}">Title</label>
 				</th>
 				<td>
 					<input type="text" size="50" id="ticket_title${i}" name="ticket[${i}][primary_text_pl]" value="" class="text" />
@@ -82,7 +83,7 @@ $j(function() {
 
 			<tr>
 				<th>
-					<label for="ticket_description${i}">Ticket description${i+1}</label>
+					<label for="ticket_description${i}">Description</label>
 				</th>
 				<td>
 					<input type="text" size="50" id="ticket_description${i}" name="ticket[${i}][secondary_text_pl]" value="" class="text" />
@@ -91,7 +92,7 @@ $j(function() {
 
 			<tr>
 				<th>
-					<label for="ticket_price${i}">Ticket price${i+1}</label>
+					<label for="ticket_price${i}">Price</label>
 				</th>
 				<td>
 					<input type="text" size="50" id="ticket_price${i}" name="ticket[${i}][price]" value="" class="text" />
@@ -100,7 +101,7 @@ $j(function() {
 
 			<tr>
 				<th>
-					<label for="ticket_currency${i}">Ticket currency${i+1}</label>
+					<label for="ticket_currency${i}">Currency</label>
 				</th>
 				<td>
 					<select name="ticket[${i}][currency]" id="ticket_currency${i}">
@@ -113,7 +114,7 @@ $j(function() {
 
 			<tr>
 				<th>
-					<label for="ticket_stock${i}">Ticket stock${i+1}</label>
+					<label for="ticket_stock${i}">Stock</label>
 				</th>
 				<td>
 					<input type="text" size="50" id="ticket_stock${i}" name="ticket[${i}][stock]" value="" class="text" />

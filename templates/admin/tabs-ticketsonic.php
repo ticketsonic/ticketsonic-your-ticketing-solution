@@ -118,16 +118,16 @@ $raw_tickets = get_event_ticket_data_from_remote( $url, $email, $key, null );
 <div class="popups">
 	<div class="popups-overlay"></div>
 	<div id="new-event-popup" class="popup">
+		<button type="button" class="close-form">
+			<span class="screen-reader-text">Close</span>
+			<span class="tb-close-icon"></span>
+		</button>
 		<div class="form-title-bar">
 			<span class="popup-title">Request new event</span>
-			<button type="button" class="close-form">
-				<span class="screen-reader-text">Close</span>
-				<span class="tb-close-icon"></span>
-			</button>
 		</div>
 		<div class="popup-form" id="submit-new-event-request">
 			<form id="submit-new-event-request-form" enctype="multipart/form-data" method="post">
-				<table class="form-table">
+				<table class="form-table table-event">
 					<tbody>
 
 						<?php do_action( 'woo_ts_export_settings_before' ); ?>
@@ -135,14 +135,14 @@ $raw_tickets = get_event_ticket_data_from_remote( $url, $email, $key, null );
 						<?php do_action( 'woo_ts_export_settings_general' ); ?>
 
 						<tr id="new-event-ticket-settings">
-							<td colspan="2" style="padding:0;">
-								<h3><div class="dashicons dashicons-admin-settings"></div>&nbsp;<?php _e( 'Event Section', 'woo_ts' ); ?></h3>
+							<td colspan="2">
+								<h3><div class="dashicons dashicons-admin-settings"></div>&nbsp;Event</h3>
 							</td>
 						</tr>
 
 						<tr>
 							<th>
-								<label for="event_title"><?php _e('Event title', 'woo_ts' ); ?></label>
+								<label for="event_title"><?php _e('Title', 'woo_ts' ); ?></label>
 							</th>
 							<td>
 								<input type="text" size="50" id="event_title" name="event_title" value="" class="text" />
@@ -151,7 +151,7 @@ $raw_tickets = get_event_ticket_data_from_remote( $url, $email, $key, null );
 
 						<tr>
 							<th>
-								<label for="event_description"><?php _e('Event description', 'woo_ts' ); ?></label>
+								<label for="event_description"><?php _e('Description', 'woo_ts' ); ?></label>
 							</th>
 							<td>
 								<input type="text" size="50" id="event_description" name="event_description" value="" class="text" />
@@ -160,7 +160,7 @@ $raw_tickets = get_event_ticket_data_from_remote( $url, $email, $key, null );
 
 						<tr>
 							<th>
-								<label for="event_location"><?php _e('Event location', 'woo_ts' ); ?></label>
+								<label for="event_location"><?php _e('Location', 'woo_ts' ); ?></label>
 							</th>
 							<td>
 								<input type="text" size="50" id="event_location" name="event_location" value="" class="text" />
@@ -168,17 +168,18 @@ $raw_tickets = get_event_ticket_data_from_remote( $url, $email, $key, null );
 						</tr>
 					</tbody>
 				</table>
-				<table class="form-table">
+				<hr />
+				<table class="form-table table-ticket">
 					<tbody>
 						<tr id="new-event-ticket-settings">
-							<td colspan="2" style="padding:0;">
-								<h3><div class="dashicons dashicons-admin-settings"></div>&nbsp;<?php _e( '#1 Ticket Section', 'woo_ts' ); ?></h3>
+							<td colspan="2">
+								<h3><div class="dashicons dashicons-admin-settings"></div>&nbsp;Ticket #1</h3>
 							</td>
 						</tr>
 
 						<tr>
 							<th>
-								<label for="ticket_title0"><?php _e('Ticket title1', 'woo_ts' ); ?></label>
+								<label for="ticket_title0"><?php _e('Title', 'woo_ts' ); ?></label>
 							</th>
 							<td>
 								<input type="text" size="50" id="ticket_title0" name="ticket[0][primary_text_pl]" value="" class="text" />
@@ -187,7 +188,7 @@ $raw_tickets = get_event_ticket_data_from_remote( $url, $email, $key, null );
 
 						<tr>
 							<th>
-								<label for="ticket_description0"><?php _e('Ticket description1', 'woo_ts' ); ?></label>
+								<label for="ticket_description0"><?php _e('Description', 'woo_ts' ); ?></label>
 							</th>
 							<td>
 								<input type="text" size="50" id="ticket_description0" name="ticket[0][secondary_text_pl]" value="" class="text" />
@@ -196,7 +197,7 @@ $raw_tickets = get_event_ticket_data_from_remote( $url, $email, $key, null );
 
 						<tr>
 							<th>
-								<label for="ticket_price0"><?php _e('Ticket price1', 'woo_ts' ); ?></label>
+								<label for="ticket_price0"><?php _e('Price', 'woo_ts' ); ?></label>
 							</th>
 							<td>
 								<input type="text" size="50" id="ticket_price0" name="ticket[0][price]" value="" class="text" />
@@ -205,7 +206,7 @@ $raw_tickets = get_event_ticket_data_from_remote( $url, $email, $key, null );
 
 						<tr>
 							<th>
-								<label for="ticket_currency0"><?php _e('Ticket currency1', 'woo_ts' ); ?></label>
+								<label for="ticket_currency0"><?php _e('Currency', 'woo_ts' ); ?></label>
 							</th>
 							<td>
 								<select name="ticket[0][currency]" id="ticket_currency0">
@@ -218,7 +219,7 @@ $raw_tickets = get_event_ticket_data_from_remote( $url, $email, $key, null );
 
 						<tr>
 							<th>
-								<label for="ticket_stock0"><?php _e('Ticket stock1', 'woo_ts' ); ?></label>
+								<label for="ticket_stock0"><?php _e('Stock', 'woo_ts' ); ?></label>
 							</th>
 							<td>
 								<input type="text" size="50" id="ticket_stock0" name="ticket[0][stock]" value="" class="text" />
@@ -227,12 +228,21 @@ $raw_tickets = get_event_ticket_data_from_remote( $url, $email, $key, null );
 					</tbody>
 				</table>
 				<div id="new-ticket-anchor"></div>
-				<p class="submit">
-					<input type="button" id="new-event-ticket-button" class="button button-primary" value="Add new ticket">
-				</p>
-				<table class="form-table">
+				<table class="form-table submit-button">
 					<tbody>
-						<tr id="badge-settings">
+						<tr id="new-event-ticket-settings">
+							<td colspan="2">
+								<p class="submit">
+									<input type="button" id="new-event-ticket-button" class="button button-primary" value="Add new ticket">
+								</p>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				<hr />
+				<table class="form-table form-badge">
+					<tbody>
+						<tr>
 							<td colspan="2" style="padding:0;">
 								<h3><div class="dashicons dashicons-admin-settings"></div>&nbsp;<?php _e( 'Badge settings', 'woo_ts' ); ?></h3>
 								<p class="description"><?php _e( 'Set badge background and text location for autoprinting badges.', 'woo_ts' ); ?></p>
@@ -314,11 +324,19 @@ $raw_tickets = get_event_ticket_data_from_remote( $url, $email, $key, null );
 						</tr>
 					</tbody>
 				</table>
-
-				<p class="submit">
-				<input type="submit" name="submit" id="submit-new-event-request-button" class="button button-primary" value="<?php _e( 'Request new event', 'woo_ts' ); ?>" />
-				<span id="cancel-new-event-request-button" class="button button-primary">Cancel</span>
-				</p>
+				<hr />
+				<table class="form-table submit-button">
+					<tbody>
+						<tr id="new-event-ticket-settings">
+							<td colspan="2">
+								<p class="submit">
+								<input type="submit" name="submit" id="submit-new-event-request-button" class="button button-primary" value="<?php _e( 'Request new event', 'woo_ts' ); ?>" />
+								<span id="cancel-new-event-request-button" class="button button-primary">Cancel</span>
+								</p>
+							</td>
+						</tr>
+					</tbody>
+				</table>
 				<input type="hidden" name="action" value="create-event" />
 			</form>
 		</div>
