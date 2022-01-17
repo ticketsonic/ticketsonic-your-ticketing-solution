@@ -34,6 +34,10 @@ $j(function() {
 		$j("#new-ticket-popup").hide();
 	});
 
+	$j(document).on("click", ".close-icon", function() {
+		$j(this).closest("table.table-ticket").remove();
+	});
+
 	// Upload methods
 	$j("input[name=upload_method]").click(function () {
 		$j(".upload-method").hide();
@@ -65,7 +69,7 @@ $j(function() {
 
 	i = 1;
 	$j("#new-event-ticket-button").click(function () {
-		$j("#new-ticket-anchor").before(`<hr/><table class="form-table table-ticket"><tbody>
+		$j("#new-ticket-anchor").before(`<table class="form-table table-ticket"><tbody>
 		<tr id="new-event-ticket-settings">
 							<td colspan="2" class="center">
 								<h3><div class="dashicons dashicons-admin-settings"></div>&nbsp;Ticket #${i+1}</h3>

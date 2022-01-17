@@ -168,7 +168,6 @@ $raw_tickets = get_event_ticket_data_from_remote( $url, $email, $key, null );
 						</tr>
 					</tbody>
 				</table>
-				<hr />
 				<table class="form-table table-ticket">
 					<tbody>
 						<tr id="new-event-ticket-settings">
@@ -239,8 +238,7 @@ $raw_tickets = get_event_ticket_data_from_remote( $url, $email, $key, null );
 						</tr>
 					</tbody>
 				</table>
-				<hr />
-				<table class="form-table form-badge">
+				<table class="form-table table-badge">
 					<tbody>
 						<tr>
 							<td colspan="2" style="padding:0;">
@@ -324,7 +322,6 @@ $raw_tickets = get_event_ticket_data_from_remote( $url, $email, $key, null );
 						</tr>
 					</tbody>
 				</table>
-				<hr />
 				<table class="form-table submit-button">
 					<tbody>
 						<tr id="new-event-ticket-settings">

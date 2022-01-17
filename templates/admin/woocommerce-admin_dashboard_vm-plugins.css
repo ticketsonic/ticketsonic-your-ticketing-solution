@@ -153,20 +153,21 @@
     padding: 5px;
 }
 
+.popup-form .table-event.form-table td.padded, .popup-form .table-ticket.form-table td.padded {
+	padding-bottom: 20px;
+}
+
 .form-table {
 	margin: 30px auto;
 	width: 90%;
 }
 
-.table-ticket h3 {
-	float: left;
-	margin: 0;
+.table-ticket.form-table, .table-badge.form-table {
+    border-top: 1px solid gray;
 }
 
-.popup-form hr {
-	border: 1px solid gray;
-	width: 90%;
-	margin: 0 auto;
+.table-ticket h3 {
+	float: left;
 }
 
 .form-subsection-title {
