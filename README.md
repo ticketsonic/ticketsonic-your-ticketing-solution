@@ -64,7 +64,13 @@ Once installed the plugin page is available as one of the WooCommerce menu items
 <img width="918" alt="TS Screenshot" src="https://user-images.githubusercontent.com/88324390/149328283-d8fee905-48ca-441b-aca2-046cf276ff7a.png">
 
 
-The settings that have to be set are the API credentials, the e-mail subject and body.
+The settings that have to be set are:
+* Event ID - when syncing with TicketSonic only the tickets related to the event with the set EventID will be synced as WooCommerce Product. Leave empty to sync all tickets from TicketSonic/
+* API credentials - the API key identifier available at your [TicketSonic account](https://www.ticketsonic.com/user)
+
+You can customize the e-mail containing the tickets that will be sent upon successful ticket purchase
+* E-mail subject - set the subject of the e-mail. The following tokens could be used [ticket_number], [ticket_title], [ticket_description], [ticket_price] for the current ticket number, its title, description and formatted price.
+* E-mail body - set the content of the e-mail. The following tokens could be used [ticket_qr], [ticket_number], [ticket_title], [ticket_description], [ticket_price] for the ticket QR code, current ticket number, its title, description and formatted price.
 Once the settings are set you have to sync the tickets from TicketSonic with your WooCommerce store and be ready for sales!
 
 _For more examples, please refer to the [Developer Documentation](https://www.ticketsonic.com/developer)_
