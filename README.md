@@ -65,12 +65,12 @@ Once installed the plugin page is available as one of the WooCommerce menu items
 
 
 The settings that have to be set are:
-* Event ID - when syncing with TicketSonic only the tickets related to the event with the set EventID will be synced as WooCommerce Product. Leave empty to sync all tickets from TicketSonic/
-* API credentials - the API key identifier available at your [TicketSonic account](https://www.ticketsonic.com/user)
+* **Event ID** - when syncing with TicketSonic only the tickets related to the event with the set EventID will be synced as WooCommerce Product. Leave empty to sync all tickets from TicketSonic/
+* **API credentials** - the API key identifier available at your [TicketSonic account](https://www.ticketsonic.com/user)
 
 You can customize the e-mail containing the tickets that will be sent upon successful ticket purchase
-* E-mail subject - set the subject of the e-mail. The following tokens could be used [ticket_number], [ticket_title], [ticket_description], [ticket_price] for the current ticket number, its title, description and formatted price.
-* E-mail body - set the content of the e-mail. The following tokens could be used [ticket_qr], [ticket_number], [ticket_title], [ticket_description], [ticket_price] for the ticket QR code, current ticket number, its title, description and formatted price.
+* **E-mail subject** - set the subject of the e-mail. The following tokens could be used [ticket_number], [ticket_title], [ticket_description], [ticket_price] for the current ticket number, its title, description and formatted price.
+* **E-mail body** - set the html contents of the e-mail. The following tokens could be used [ticket_qr], [ticket_number], [ticket_title], [ticket_description], [ticket_price] for the ticket QR code, current ticket number, its title, description and formatted price.
 
 Once the settings are set you have to sync the tickets from TicketSonic with your WooCommerce store and be ready for sales!
 You should go to `/wp-admin/admin.php?page=woo_ts&tab=sync` and click the Sync button
