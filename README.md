@@ -57,21 +57,23 @@ You have to be able to use composer
 
 
 <!-- USAGE EXAMPLES -->
-## Usage
+## Settings
 
 Once installed the plugin page is available as one of the WooCommerce menu items.
 
 <img width="1007" alt="TS Screenshot" src="https://user-images.githubusercontent.com/7579600/151234980-51be9eb3-4636-4e46-a735-7c8a9120e70c.png">
 
-
+### General settings
 The settings that have to be set are:
 * **Event ID** - when syncing with TicketSonic only the tickets related to the event with the set EventID will be synced as WooCommerce Product. Leave empty to sync all tickets from TicketSonic/
 * **API credentials** - the API key identifier available at your [TicketSonic account](https://www.ticketsonic.com/user)
 
+### E-mail settings
 You can customize the e-mail containing the tickets that will be sent upon successful ticket purchase
 * **E-mail subject** - set the subject of the e-mail. The following tokens could be used [ticket_number], [ticket_title], [ticket_description], [ticket_price] for the current ticket number, its title, description and formatted price.
 * **E-mail body** - set the html contents of the e-mail. The following tokens could be used [ticket_qr], [ticket_number], [ticket_title], [ticket_description], [ticket_price] for the ticket QR code, current ticket number, its title, description and formatted price.
 
+## Syncing
 Once the settings are set you have to sync the tickets from TicketSonic with your WooCommerce store and be ready for sales!
 You should go to `/wp-admin/admin.php?page=woo_ts&tab=sync` and click the Sync button
 <img width="629" alt="Screenshot 2022-01-26 at 21 44 25" src="https://user-images.githubusercontent.com/7579600/151235406-4601584c-87b6-4b7f-bb07-ad8b121d038f.png">
