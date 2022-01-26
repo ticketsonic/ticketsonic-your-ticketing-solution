@@ -33,23 +33,23 @@ You have to be able to use composer
 
 * [WordPress installation](https://wordpress.org)
 * [WooCommerce Plugin](https://wordpress.org/plugins/woocommerce) installed and activated
-Ensure wp-content/uploads dir is writable. In most cases it is by default. The plugin will create a subdirectory called woocommerce-ticketsonic and it will be used for storage of ticket files when the admin manually generates ones.
+* Ensure wp-content/uploads dir is writable. In most cases it is by default. The plugin will create a subdirectory called woocommerce-ticketsonic and it will be used for storage of ticket files when the admin manually generates ones.
 ### Installation
 
-1. Enable the TicketSonic plugin
-2. Get a API credentials at [https://www.ticketsonic.com/user/registration](https://www.ticketsonic.com/user/registration)
-3. Go to the TicketSonic plugin
+1. Get a API credentials at [https://www.ticketsonic.com/user/registration](https://www.ticketsonic.com/user/registration)
+2. Go to the TicketSonic plugin
    ```sh
    cd <WordPress folder>/wp-content/plugins
-4. Clone the repo
+3. Clone the repo
    ```sh
    git clone https://github.com/ticketsonic/woocommerce-ticketsonic.git .
    ```
    Or get it from the WordPress plugins page and unpack at the plugins folder
-5. Install dependencies
+4. Install dependencies
    ```sh
    composer install
    ```
+5. Enable the TicketSonic plugin
 6. Enter your API credentials in `/wp-admin/admin.php?page=woo_ts&tab=settings`
 
 <p align="right">(<a href="#top">back to top</a>)</p>
