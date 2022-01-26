@@ -31,8 +31,8 @@ You have to be able to use composer
   composer install
   ```
 
-* WordPress installation(https://wordpress.org)
-* WooCommerce Plugin(https://wordpress.org/plugins/woocommerce) installed and activated
+* [WordPress installation](https://wordpress.org)
+* [WooCommerce Plugin](https://wordpress.org/plugins/woocommerce) installed and activated
 Ensure wp-content/uploads dir is writable. In most cases it is by default. The plugin will create a subdirectory called woocommerce-ticketsonic and it will be used for storage of ticket files when the admin manually generates ones.
 ### Installation
 
