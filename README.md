@@ -30,34 +30,54 @@ You have to be able to use composer
   ```sh
   composer install
   ```
-Ensure wp-content/uploads dir is writable. In most cases it is by default. The plugin will create a subdirectory called woocommerce-ticketsonic and it will be used for storage of ticket files when the admin manually generates ones.
+
+* [WordPress installation](https://wordpress.org)
+* [WooCommerce Plugin](https://wordpress.org/plugins/woocommerce) installed and activated
+* Ensure wp-content/uploads dir is writable. In most cases it is by default. The plugin will create a subdirectory called woocommerce-ticketsonic and it will be used for storage of ticket files when the admin manually generates ones.
 ### Installation
 
 1. Get a API credentials at [https://www.ticketsonic.com/user/registration](https://www.ticketsonic.com/user/registration)
-2. Clone the repo
+2. Go to the TicketSonic plugin
    ```sh
-   git clone https://github.com/ticketsonic/woocommerce-ticketsonic.git
+   cd <WordPress folder>/wp-content/plugins
+3. Clone the repo
+   ```sh
+   git clone https://github.com/ticketsonic/woocommerce-ticketsonic.git .
    ```
-3. Install dependencies
+   Or get it from the WordPress plugins page and unpack at the plugins folder
+4. Install dependencies
    ```sh
    composer install
    ```
-4. Enter your API credentials in `/wp-admin/admin.php?page=woo_ts&tab=settings`
+5. Enable the TicketSonic plugin
+6. Enter your API credentials in `/wp-admin/admin.php?page=woo_ts&tab=settings`
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 
 
 <!-- USAGE EXAMPLES -->
-## Usage
+## Settings
 
 Once installed the plugin page is available as one of the WooCommerce menu items.
 
-<img width="918" alt="TS Screenshot" src="https://user-images.githubusercontent.com/88324390/149328283-d8fee905-48ca-441b-aca2-046cf276ff7a.png">
+<img width="1007" alt="TS Screenshot" src="https://user-images.githubusercontent.com/7579600/151234980-51be9eb3-4636-4e46-a735-7c8a9120e70c.png">
 
+### General settings
+The settings that have to be set are:
+* **Event ID** - when syncing with TicketSonic only the tickets related to the event with the set EventID will be synced as WooCommerce Product. Leave empty to sync all tickets from TicketSonic/
+* **API credentials** - the API key identifier available at your [TicketSonic account](https://www.ticketsonic.com/user)
 
-The settings that have to be set are the API credentials, the e-mail subject and body.
+### E-mail settings
+You can customize the e-mail containing the tickets that will be sent upon successful ticket purchase
+* **E-mail subject** - set the subject of the e-mail. The following tokens could be used [ticket_number], [ticket_title], [ticket_description], [ticket_price] for the current ticket number, its title, description and formatted price.
+* **E-mail body** - set the html contents of the e-mail. The following tokens could be used [ticket_qr], [ticket_number], [ticket_title], [ticket_description], [ticket_price] for the ticket QR code, current ticket number, its title, description and formatted price.
+
+## Syncing
 Once the settings are set you have to sync the tickets from TicketSonic with your WooCommerce store and be ready for sales!
+You should go to `/wp-admin/admin.php?page=woo_ts&tab=sync` and click the Sync button
+<img width="629" alt="Screenshot 2022-01-26 at 21 44 25" src="https://user-images.githubusercontent.com/7579600/151235406-4601584c-87b6-4b7f-bb07-ad8b121d038f.png">
+
 
 _For more examples, please refer to the [Developer Documentation](https://www.ticketsonic.com/developer)_
 
