@@ -1,9 +1,9 @@
 <?php
 
 /**
- * Plugin Name: WooCommerce - TicketSonic
+ * Plugin Name: TicketSonic - your Ticketing Engine
  * Plugin URI: https://github.com/ticketsonic/woocommerce-ticketsonic
- * Description: Integrate your WooCommerce store with TicketSonic and become a full featured ticket seller
+ * Description: TicketSonic is the ticketing engine effortlessly enabling every web and mobile to become an independent ticket seller
  * Version: 1.0
  * Author: TicketSonic
  * Author URI: https://github.com/ticketsonic/
@@ -13,7 +13,7 @@
  * Domain Path: /languages/
 
  * WC requires at least: 2.3
- * WC tested up to: 3.6
+ * WC tested up to: 6.1.1
  *
  * @package woocommerce-ticketsonic
  */

@@ -261,7 +261,7 @@ if ( is_admin() ) {
 				$event_datetime    = sanitize_or_default( $_POST['event_datetime'] );
 				$event_location    = sanitize_or_default( $_POST['event_location'] );
 
-				$tickets_data = $_POST['ticket'];
+				$tickets_data = sanitize_or_default( $_POST['ticket'] );
 				foreach ( $tickets_data as $value ) {
 					if ( empty( $value['primary_text_pl'] ) ) {
 						$value['primary_text_pl'] = sanitize_or_default( $value['primary_text_pl'] );

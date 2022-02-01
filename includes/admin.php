@@ -42,8 +42,8 @@ function woo_ts_admin_notice_html( $message = '', $priority = 'updated', $screen
 		}
 
 	} ?>
-<div id="message" class="<?php echo $priority; ?>">
-	<p><?php echo $message; ?></p>
+<div id="message" class="<?php echo esc_attr( $priority ); ?>">
+	<p><?php echo esc_html( $message ); ?></p>
 </div>
 <?php
 
@@ -55,14 +55,14 @@ function woo_ts_admin_notice_print() {
 	if ( false !== $output ) {
 		delete_transient( WOO_TS_PREFIX . '_notice' );
 		$output = base64_decode( $output );
-		echo $output;
+		echo esc_html( $output );
 	}
 }
 
 function woo_ts_template_header( $title = '', $icon = 'woocommerce' ) { ?>
 <div id="woo-pi" class="wrap">
-	<div id="icon-<?php echo $icon; ?>" class="icon32 icon32-woocommerce-importer"><br /></div>
-	<h2><?php echo $title; ?></h2>
+	<div id="icon-<?php echo esc_attr( $icon ); ?>" class="icon32 icon32-woocommerce-importer"><br /></div>
+	<h2><?php echo esc_html( $title ); ?></h2>
 <?php
 
 }
