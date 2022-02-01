@@ -162,12 +162,24 @@
 	width: 90%;
 }
 
+.table-first {
+	margin-top: 0;
+}
+
+#new-event-popup .form-title-bar {
+	margin-bottom: 0px;
+}
+
+#new-event-popup .form-title-bar .popup-title {
+	font-size: 1.7em;
+}
+
 .table-ticket.form-table, .table-badge.form-table {
     border-top: 1px solid gray;
 }
 
-.table-ticket h3 {
-	float: left;
+.form-table th {
+	vertical-align: baseline;
 }
 
 .form-subsection-title {
