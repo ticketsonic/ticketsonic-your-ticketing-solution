@@ -1,6 +1,6 @@
 {
     "require": {
-        "guzzlehttp/guzzle": "^6.5",
+        "guzzlehttp/guzzle": "^7.4",
         "bacon/bacon-qr-code": "^2.0"
     }
 }
