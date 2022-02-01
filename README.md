@@ -4,7 +4,7 @@
 
 **TicketSonic** is the ticketing engine that integrates with your platform behind the scenes enabling you to become a full featured ticket seller.
 
-**WooCommerce TicketSonic** is a WooCommerce based plugin for integrating the TicketSonic Engine with any WooCommerce platform.
+This is a WooCommerce based plugin for integrating the TicketSonic Engine with any WooCommerce platform.
 
 What you get from this plugin?
 * No more redirects to third party ticketing providers
