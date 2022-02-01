@@ -5,12 +5,6 @@
 	<h3><div class="dashicons dashicons-admin-settings"></div>&nbsp;<a href="<?php print ( esc_attr( add_query_arg( 'tab', 'settings' ) ) ); ?>"><?php _e( 'Settings', 'ts_yte' ); ?></a></h3>
 	<p><?php _e( 'Manage credentials data to gain access to TicketSonic.', 'ts_yte' ); ?></p>
 
-	<h3><div class="dashicons dashicons-admin-settings"></div>&nbsp;<a href="<?php print ( esc_attr( add_query_arg( 'tab', 'create-event' ) ) ); ?>"><?php _e( 'Request New Event', 'ts_yte' ); ?></a></h3>
-	<p><?php _e( 'Sends a new request to TicketSonic for a new event.', 'ts_yte' ); ?></p>
-
-	<h3><div class="dashicons dashicons-admin-settings"></div>&nbsp;<a href="<?php print ( esc_attr( add_query_arg( 'tab', 'create-ticket' ) ) ); ?>"><?php _e( 'Request New Ticket', 'ts_yte' ); ?></a></h3>
-	<p><?php _e( 'Sends a new request to TicketSonic for a new ticket associated to a existing event.', 'ts_yte' ); ?></p>
-
 	<h3><div class="dashicons dashicons-admin-settings"></div>&nbsp;<a href="<?php print ( esc_attr( add_query_arg( 'tab', 'ticketsonic' ) ) ); ?>"><?php _e( 'TicketSonic', 'ts_yte' ); ?></a></h3>
 	<p><?php _e( 'Preview live data in TicketSonic.', 'ts_yte' ); ?></p>
 </div>
