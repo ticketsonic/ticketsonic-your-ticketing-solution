@@ -20,59 +20,59 @@
 
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-define( 'WOO_TS_FILE', __FILE__ );
-define( 'WOO_TS_DIRNAME', basename( dirname( __FILE__ ) ) );
-define( 'WOO_TS_RELPATH', basename( dirname( __FILE__ ) ) . '/' . basename( __FILE__ ) );
-define( 'WOO_TS_PATH', plugin_dir_path( __FILE__ ) );
-define( 'WOO_TS_PREFIX', 'woo_ts' );
-define( 'WOO_TS_PLUGINPATH', WP_PLUGIN_URL . '/' . basename( dirname( __FILE__ ) ) );
+define( 'TS_YTE_FILE', __FILE__ );
+define( 'TS_YTE_DIRNAME', basename( dirname( __FILE__ ) ) );
+define( 'TS_YTE_RELPATH', basename( dirname( __FILE__ ) ) . '/' . basename( __FILE__ ) );
+define( 'TS_YTE_PATH', plugin_dir_path( __FILE__ ) );
+define( 'TS_YTE_PREFIX', 'ts_yte' );
+define( 'TS_YTE_PLUGINPATH', WP_PLUGIN_URL . '/' . basename( dirname( __FILE__ ) ) );
 
 $uploads_dir = wp_get_upload_dir();
 
-define( 'WOO_TS_UPLOADPATH', $uploads_dir['basedir'] . '/' . WOO_TS_DIRNAME );
-define( 'WOO_TS_UPLOADURLPATH', $uploads_dir['baseurl'] . '/' . WOO_TS_DIRNAME );
+define( 'TS_YTE_UPLOADPATH', $uploads_dir['basedir'] . '/' . TS_YTE_DIRNAME );
+define( 'TS_YTE_UPLOADURLPATH', $uploads_dir['baseurl'] . '/' . TS_YTE_DIRNAME );
 
-require_once WOO_TS_PATH . 'includes/functions.php';
+require_once TS_YTE_PATH . 'includes/functions.php';
 
 if ( is_admin() ) {
-	function woo_ts_register_importer() {
-		register_importer( 'woo_ts', __( 'Tickets', 'woo-ts' ), __( '<strong>TicketSonic Integrator</strong> - Integrate you WooCommerce store with TicketSonic.', 'woo-ts' ), 'woo_ts_html_page' );
+	function ts_yte_register_importer() {
+		register_importer( 'ts_yte', __( 'Tickets', 'woo-ts' ), __( '<strong>TicketSonic Integrator</strong> - Integrate you WooCommerce store with TicketSonic.', 'woo-ts' ), 'ts_yte_html_page' );
 	}
-	add_action( 'admin_init', 'woo_ts_register_importer' );
+	add_action( 'admin_init', 'ts_yte_register_importer' );
 
-	function woo_ts_admin_init() {
+	function ts_yte_admin_init() {
 		// Check the User has the manage_woocommerce_products capability.
 		if ( current_user_can( 'manage_woocommerce' ) === false )
 			return;
 
-		woo_ts_import_init();
-		woo_ts_structure_init();
+		ts_yte_import_init();
+		ts_yte_structure_init();
 	}
-	add_action( 'admin_init', 'woo_ts_admin_init' );
+	add_action( 'admin_init', 'ts_yte_admin_init' );
 
-	function woo_ts_html_page() {
+	function ts_yte_html_page() {
 		// Check the User has the manage_woocommerce capability.
 		if ( current_user_can( 'manage_woocommerce' ) === false )
 			return;
 
-		$title = __( 'TicketSonic', 'woo_ts' );
+		$title = __( 'TicketSonic', 'ts_yte' );
 
-		woo_ts_template_header( $title );
-		woo_ts_manage_form();
-		woo_ts_template_footer();
+		ts_yte_template_header( $title );
+		ts_yte_manage_form();
+		ts_yte_template_footer();
 	}
 
-	function woo_ts_manage_form() {
+	function ts_yte_manage_form() {
 		$tab = false;
 		if ( isset( $_GET['tab'] ) ) {
 			$tab = sanitize_text_field( $_GET['tab'] );
-		} else if ( woo_ts_get_option( 'skip_overview', false ) ) {
+		} else if ( ts_yte_get_option( 'skip_overview', false ) ) {
 			// If Skip Overview is set then jump to Export screen.
 			$tab = 'import';
 		}
-		$url = add_query_arg( 'page', 'woo_ts' );
+		$url = add_query_arg( 'page', 'ts_yte' );
 
-		include_once WOO_TS_PATH . 'templates/admin/tabs.php';
+		include_once TS_YTE_PATH . 'templates/admin/tabs.php';
 	}
 	/* End of: WordPress Administration */
 }

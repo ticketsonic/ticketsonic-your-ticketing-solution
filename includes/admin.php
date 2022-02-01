@@ -1,34 +1,7 @@
 <?php
-// Display admin notice on screen load
-function woo_ts_admin_notice( $message = '', $priority = 'updated', $screen = '' ) {
-	if ( false === $priority || '' === $priority )
-		$priority = 'updated';
-
-	if ( '' !== $message ) {
-		ob_start();
-		woo_ts_admin_notice_html( $message, $priority, $screen );
-		$output = ob_get_contents();
-		ob_end_clean();
-
-		// Check if an existing notice is already in queue
-		$existing_notice = get_transient( WOO_TS_PREFIX . '_notice' );
-
-		if ( false !== $existing_notice ) {
-			$existing_notice = base64_decode( $existing_notice );
-			$output = $existing_notice . $output;
-		}
-
-		$response = set_transient( WOO_TS_PREFIX . '_notice', base64_encode( $output ), MINUTE_IN_SECONDS );
-
-		// Check if the Transient was saved
-		if ( false !== $response )
-			add_action( 'admin_notices', 'woo_ts_admin_notice_print' );
-	}
-
-}
 
 // HTML template for admin notice
-function woo_ts_admin_notice_html( $message = '', $priority = 'updated', $screen = '' ) {
+function ts_yte_admin_notice_html( $message = '', $priority = 'updated', $screen = '' ) {
 	// Display admin notice on specific screen
 	if ( ! empty( $screen ) ) {
 		global $pagenow;
@@ -49,17 +22,7 @@ function woo_ts_admin_notice_html( $message = '', $priority = 'updated', $screen
 
 }
 
-// Grabs the WordPress transient that holds the admin notice and prints it
-function woo_ts_admin_notice_print() {
-	$output = get_transient( WOO_TS_PREFIX . '_notice' );
-	if ( false !== $output ) {
-		delete_transient( WOO_TS_PREFIX . '_notice' );
-		$output = base64_decode( $output );
-		echo esc_html( $output );
-	}
-}
-
-function woo_ts_template_header( $title = '', $icon = 'woocommerce' ) { ?>
+function ts_yte_template_header( $title = '', $icon = 'woocommerce' ) { ?>
 <div id="woo-pi" class="wrap">
 	<div id="icon-<?php echo esc_attr( $icon ); ?>" class="icon32 icon32-woocommerce-importer"><br /></div>
 	<h2><?php echo esc_html( $title ); ?></h2>
@@ -67,7 +30,7 @@ function woo_ts_template_header( $title = '', $icon = 'woocommerce' ) { ?>
 
 }
 
-function woo_ts_template_footer() { ?>
+function ts_yte_template_footer() { ?>
 </div>
 <!-- .wrap -->
 <?php
@@ -75,29 +38,29 @@ function woo_ts_template_footer() { ?>
 }
 
 // Add Product Import to WordPress Administration menu
-function woo_ts_admin_menu() {
-	$page = add_submenu_page( 'woocommerce', __( 'TicketSonic', 'woo_ts' ), __( 'TicketSonic', 'woo_ts' ), 'manage_woocommerce', 'woo_ts', 'woo_ts_html_page' );
-	add_action( 'admin_print_styles-' . $page, 'woo_ts_enqueue_scripts' );
+function ts_yte_admin_menu() {
+	$page = add_submenu_page( 'woocommerce', __( 'TicketSonic', 'ts_yte' ), __( 'TicketSonic', 'ts_yte' ), 'manage_woocommerce', 'ts_yte', 'ts_yte_html_page' );
+	add_action( 'admin_print_styles-' . $page, 'ts_yte_enqueue_scripts' );
 }
-add_action( 'admin_menu', 'woo_ts_admin_menu', 11 );
+add_action( 'admin_menu', 'ts_yte_admin_menu', 11 );
 
-function woo_ts_enqueue_scripts( $hook ) {
+function ts_yte_enqueue_scripts( $hook ) {
 	// Simple check that WooCommerce is activated
 	if ( class_exists( 'WooCommerce' ) ) {
 		global $woocommerce;
 		wp_enqueue_style( 'woocommerce_admin_styles', $woocommerce->plugin_url() . '/assets/css/admin.css' );
 	}
 
-	wp_enqueue_style( 'woo_ts_styles', plugins_url( '/templates/admin/import.css', WOO_TS_RELPATH ) );
-	wp_enqueue_script( 'woo_ts_scripts', plugins_url( '/templates/admin/import.js', WOO_TS_RELPATH ), array( 'jquery' ) );
+	wp_enqueue_style( 'ts_yte_styles', plugins_url( '/templates/admin/import.css', TS_YTE_RELPATH ) );
+	wp_enqueue_script( 'ts_yte_scripts', plugins_url( '/templates/admin/import.js', TS_YTE_RELPATH ), array( 'jquery' ) );
 	wp_enqueue_style( 'dashicons' );
-	wp_enqueue_style( 'woo_vm_styles', plugins_url( '/templates/admin/woocommerce-admin_dashboard_vm-plugins.css', WOO_TS_RELPATH ) );
+	wp_enqueue_style( 'woo_vm_styles', plugins_url( '/templates/admin/woocommerce-admin_dashboard_vm-plugins.css', TS_YTE_RELPATH ) );
 }
 
-function woo_ts_admin_active_tab( $tab_name = null, $tab = null ) {
+function ts_yte_admin_active_tab( $tab_name = null, $tab = null ) {
 	if ( isset( $_GET['tab'] ) && ! $tab )
 		$tab = $_GET['tab'];
-	else if ( ! isset( $_GET['tab'] ) && woo_ts_get_option( 'skip_overview', false ) )
+	else if ( ! isset( $_GET['tab'] ) && ts_yte_get_option( 'skip_overview', false ) )
 		$tab = 'import';
 	else
 		$tab = 'overview';
@@ -110,7 +73,7 @@ function woo_ts_admin_active_tab( $tab_name = null, $tab = null ) {
 	echo $output;
 }
 
-function woo_ts_tab_template( $tab = '' ) {
+function ts_yte_tab_template( $tab = '' ) {
 	global $import;
 
 	if ( ! $tab)
@@ -118,29 +81,29 @@ function woo_ts_tab_template( $tab = '' ) {
 
 	switch ( $tab ) {
 		case 'overview':
-			$skip_overview = woo_ts_get_option( 'skip_overview', false );
+			$skip_overview = ts_yte_get_option( 'skip_overview', false );
 			break;
 
 		case 'import':
-			if ( isset( $_GET['import'] ) && WOO_TS_PREFIX === $_GET['import'] )
+			if ( isset( $_GET['import'] ) && TS_YTE_PREFIX === $_GET['import'] )
 				$url = 'import';
-			if ( isset( $_GET['page'] ) && WOO_TS_PREFIX === $_GET['page'] )
+			if ( isset( $_GET['page'] ) && TS_YTE_PREFIX === $_GET['page'] )
 				$url = 'page';
 			break;
 
 		case 'settings':
-			$api_key                 = woo_ts_get_option( 'api_key', '' );
-			$api_userid              = woo_ts_get_option( 'api_userid', '' );
-			$ticket_info_endpoint    = woo_ts_get_option( 'ticket_info_endpoint', 'https://www.ticketsonic.com:9507/v1/ticket/list' );
-			$event_info_endpoint     = woo_ts_get_option( 'event_info_endpoint', 'https://www.ticketsonic.com:9507/v1/event/list' );
-			$new_event_endpoint      = woo_ts_get_option( 'new_event_endpoint', 'https://www.ticketsonic.com:9507/v1/event/new' );
-			$new_ticket_endpoint     = woo_ts_get_option( 'new_ticket_endpoint', 'https://www.ticketsonic.com:9507/v1/ticket/new' );
-			$change_ticket_endpoint  = woo_ts_get_option( 'change_ticket_endpoint', 'https://www.ticketsonic.com:9507/v1/ticket/edit' );
-			$change_event_endpoint   = woo_ts_get_option( 'change_event_endpoint', 'https://www.ticketsonic.com:9507/v1/event/edit' );
-			$external_order_endpoint = woo_ts_get_option( 'external_order_endpoint', 'https://www.ticketsonic.com:9507/v1/order/new' );
-			$event_id                = woo_ts_get_option( 'event_id', '' );
-			$email_subject           = woo_ts_get_option( 'email_subject', 'Ticket #[ticket_number] - [ticket_title] for the Your Event is ready' );
-			$email_body              = woo_ts_get_option(
+			$api_key                 = ts_yte_get_option( 'api_key', '' );
+			$api_userid              = ts_yte_get_option( 'api_userid', '' );
+			$ticket_info_endpoint    = ts_yte_get_option( 'ticket_info_endpoint', 'https://www.ticketsonic.com:9507/v1/ticket/list' );
+			$event_info_endpoint     = ts_yte_get_option( 'event_info_endpoint', 'https://www.ticketsonic.com:9507/v1/event/list' );
+			$new_event_endpoint      = ts_yte_get_option( 'new_event_endpoint', 'https://www.ticketsonic.com:9507/v1/event/new' );
+			$new_ticket_endpoint     = ts_yte_get_option( 'new_ticket_endpoint', 'https://www.ticketsonic.com:9507/v1/ticket/new' );
+			$change_ticket_endpoint  = ts_yte_get_option( 'change_ticket_endpoint', 'https://www.ticketsonic.com:9507/v1/ticket/edit' );
+			$change_event_endpoint   = ts_yte_get_option( 'change_event_endpoint', 'https://www.ticketsonic.com:9507/v1/event/edit' );
+			$external_order_endpoint = ts_yte_get_option( 'external_order_endpoint', 'https://www.ticketsonic.com:9507/v1/order/new' );
+			$event_id                = ts_yte_get_option( 'event_id', '' );
+			$email_subject           = ts_yte_get_option( 'email_subject', 'Ticket #[ticket_number] - [ticket_title] for the Your Event is ready' );
+			$email_body              = ts_yte_get_option(
 				'email_body',
 				'
 				<html lang="en">
@@ -196,7 +159,7 @@ function woo_ts_tab_template( $tab = '' ) {
 	}
 
 	if ( $tab ) {
-		if ( file_exists( WOO_TS_PATH . 'templates/admin/tabs-' . $tab . '.php' ) )
-			include_once WOO_TS_PATH . 'templates/admin/tabs-' . $tab . '.php';
+		if ( file_exists( TS_YTE_PATH . 'templates/admin/tabs-' . $tab . '.php' ) )
+			include_once TS_YTE_PATH . 'templates/admin/tabs-' . $tab . '.php';
 	}
 }

@@ -1,6 +1,6 @@
 <?php
 
-function parse_raw_recrypted_ticket( $raw_decrypted_ticket ) {
+function ts_yte_parse_raw_recrypted_ticket( $raw_decrypted_ticket ) {
 	$result      = array();
 	$checksum    = 0;
 	$checksumpos = 0;
@@ -12,7 +12,7 @@ function parse_raw_recrypted_ticket( $raw_decrypted_ticket ) {
 			$len   = ord( $raw_decrypted_ticket[ $i++ ] );
 			switch ( $label ) {
 				case 'V':
-					$result['version'] = bin_to_int_data( substr( $raw_decrypted_ticket, $i, $len ) );
+					$result['version'] = ts_yte_bin_to_int_data( substr( $raw_decrypted_ticket, $i, $len ) );
 					break;
 
 				case 'H':
@@ -20,39 +20,39 @@ function parse_raw_recrypted_ticket( $raw_decrypted_ticket ) {
 					break;
 
 				case '$':
-					$result['price'] = bin_to_int_data( substr( $raw_decrypted_ticket, $i, $len ) );
+					$result['price'] = ts_yte_bin_to_int_data( substr( $raw_decrypted_ticket, $i, $len ) );
 					break;
 
 				case 'I':
-					$result['product_id'] = bin_to_int_data( substr( $raw_decrypted_ticket, $i, $len ) );
+					$result['product_id'] = ts_yte_bin_to_int_data( substr( $raw_decrypted_ticket, $i, $len ) );
 					break;
 
 				case 'E':
-					$result['event_id'] = bin_to_int_data( substr( $raw_decrypted_ticket, $i, $len ) );
+					$result['event_id'] = ts_yte_bin_to_int_data( substr( $raw_decrypted_ticket, $i, $len ) );
 					break;
 
 				case 'S':
-					$result['segment1'] = bin_to_int_data( substr( $raw_decrypted_ticket, $i, $len ) );
+					$result['segment1'] = ts_yte_bin_to_int_data( substr( $raw_decrypted_ticket, $i, $len ) );
 					break;
 
 				case 'B':
-					$result['segment2'] = bin_to_int_data( substr( $raw_decrypted_ticket, $i, $len ) );
+					$result['segment2'] = ts_yte_bin_to_int_data( substr( $raw_decrypted_ticket, $i, $len ) );
 					break;
 
 				case 'R':
-					$result['segment3'] = bin_to_int_data( substr( $raw_decrypted_ticket, $i, $len ) );
+					$result['segment3'] = ts_yte_bin_to_int_data( substr( $raw_decrypted_ticket, $i, $len ) );
 					break;
 
 				case 'P':
-					$result['segment4'] = bin_to_int_data( substr( $raw_decrypted_ticket, $i, $len ) );
+					$result['segment4'] = ts_yte_bin_to_int_data( substr( $raw_decrypted_ticket, $i, $len ) );
 					break;
 
 				case 'T':
-					$result['start_time'] = bin_to_int_data( substr( $raw_decrypted_ticket, $i, $len ) );
+					$result['start_time'] = ts_yte_bin_to_int_data( substr( $raw_decrypted_ticket, $i, $len ) );
 					break;
 
 				case 'F':
-					$result['end_time'] = bin_to_int_data( substr( $raw_decrypted_ticket, $i, $len ) );
+					$result['end_time'] = ts_yte_bin_to_int_data( substr( $raw_decrypted_ticket, $i, $len ) );
 					break;
 
 				case 'X':
@@ -64,7 +64,7 @@ function parse_raw_recrypted_ticket( $raw_decrypted_ticket ) {
 
 				case 'C':
 					$checksumpos = $i - 2;
-					$checksum    = bin_to_int_data( substr( $raw_decrypted_ticket, $i, $len ) );
+					$checksum    = ts_yte_bin_to_int_data( substr( $raw_decrypted_ticket, $i, $len ) );
 					break;
 
 				default:
@@ -92,7 +92,7 @@ function parse_raw_recrypted_ticket( $raw_decrypted_ticket ) {
 	return $result;
 }
 
-function bin_to_int_data( $str ) {
+function ts_yte_bin_to_int_data( $str ) {
 	$result = 0;
 	for ( $i = strlen( $str ) - 1; $i >= 0; $i-- ) {
 		$result = ( $result << 8 ) | ord( $str[ $i ] );
@@ -101,7 +101,7 @@ function bin_to_int_data( $str ) {
 	return $result;
 }
 
-function bin_to_int_array( $str ) {
+function ts_yte_bin_to_int_array( $str ) {
 	$result = array();
 	for ( $i = strlen( $str ) - 1; $i >= 0; $i-- ) {
 		$result[] = ord( $str[ $i ] );
@@ -110,7 +110,7 @@ function bin_to_int_array( $str ) {
 	return $result;
 }
 
-function int_array_to_bin( $str ) {
+function ts_yte_int_array_to_bin( $str ) {
 	$result = array();
 	for ( $i = count( $str ) - 1; $i >= 0; $i-- ) {
 		$result[] = chr( $str[ $i ] );

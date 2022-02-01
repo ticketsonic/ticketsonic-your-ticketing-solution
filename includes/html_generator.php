@@ -1,13 +1,13 @@
 <?php
-require_once WOO_TS_PATH . '/vendor/autoload.php';
+require_once TS_YTE_PATH . '/vendor/autoload.php';
 
-class HTML_Generator {
+class TS_YTE_HTML_Generator {
 	private $html = '';
 
 	public $extension = 'html';
 
 	public function __construct() {
-		$this->html = woo_ts_get_option( 'email_body', '' );
+		$this->html = ts_yte_get_option( 'email_body', '' );
 	}
 
 	public function generate_file( $name, $description, $price, $sensitive_decoded, $ticket_file_abs_path ) {
