@@ -66,7 +66,7 @@ if ( is_admin() ) {
 				$result = ts_yte_request_change_ticket( $url, $email, $key, $ticket_sku, $ticket_title, $ticket_description, $ticket_price, $ticket_currency, $ticket_stock );
 
 				if ( 'success' === $result['status'] ) {
-					ts_yte_admin_notice_html( 'Status: success<br>Ticket with SKU: ' . $ticket_sku . ' successfully sent for processing. You will receive an email when it is processed.', 'notice' );
+					ts_yte_admin_notice_html( 'Status: success. Ticket with SKU: ' . $ticket_sku . ' successfully sent for processing. You will receive an email when it is processed.', 'notice' );
 				} else {
 					ts_yte_admin_notice_html( 'Failed to request new event: ' . $result['message'], 'error' );
 				}
@@ -431,7 +431,7 @@ if ( is_admin() ) {
 				$result = ts_yte_request_create_new_ticket( $url, $email, $key, $ticket_eventid, $ticket_title, $ticket_description, $ticket_price, $ticket_currency, $ticket_stock );
 
 				if ( 'success' === $result['status'] ) {
-					ts_yte_admin_notice_html( 'Status: success<br>Ticket for event ID: ' . $ticket_eventid . ' successfully sent for processing. You will receive an email when it is processed.', 'notice' );
+					ts_yte_admin_notice_html( 'Status: success. Ticket for event ID: ' . $ticket_eventid . ' successfully sent for processing. You will receive an email when it is processed.', 'notice' );
 				} else {
 					ts_yte_admin_notice_html( 'Failed to request new event: ' . $result['message'], 'error' );
 				}
