@@ -260,7 +260,8 @@ if ( is_admin() ) {
 				$event_datetime    = ts_yte_sanitize_or_default( $_POST['event_datetime'] );
 				$event_location    = ts_yte_sanitize_or_default( $_POST['event_location'] );
 
-				$tickets_data = ts_yte_sanitize_or_default( $_POST['ticket'] );
+				$ticket_data  = ts_yte_sanitize_or_default( json_encode( $_POST['ticket'] ) );
+				$tickets_data = json_decode( $ticket_data, true );
 				foreach ( $tickets_data as $value ) {
 					if ( empty( $value['primary_text_pl'] ) ) {
 						$value['primary_text_pl'] = ts_yte_sanitize_or_default( $value['primary_text_pl'] );
