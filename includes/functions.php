@@ -226,7 +226,7 @@ if ( is_admin() ) {
 
 				if ( 'success' === $result['status'] ) {
 					ts_yte_admin_notice_html( $result['message'], 'notice' );
-					ts_yte_update_option( 'user_public_key', '-----BEGIN PUBLIC KEY-----\n' . $result['user_public_key'] . '\n-----END PUBLIC KEY-----' );
+					ts_yte_update_option( 'user_public_key', '-----BEGIN PUBLIC KEY-----' . PHP_EOL . $result['user_public_key'] . PHP_EOL . '-----END PUBLIC KEY-----' );
 				}
 
 				break;
