@@ -32,7 +32,6 @@ function ts_yte_decode_tickets( $tickets_data ) {
 function ts_yte_decode_barcode( $encrypted_data ) {
 	$public_key = openssl_pkey_get_public( ts_yte_get_option( 'user_public_key', '' ) );
 	if ( ! $public_key ) {
-		write_log( 'Public key corrupted' );
 		return array(
 			'status'  => 'failure',
 			'message' => 'Public key corrupted',
