@@ -11,7 +11,7 @@ class TS_YTE_HTML_Generator {
 	}
 
 	public function generate_file( $name, $description, $price, $sensitive_decoded, $ticket_file_abs_path ) {
-		$qr = $this->get_html_qr( get_qr_matrix( base64_encode( $sensitive_decoded ) ) );
+		$qr = $this->get_html_qr( ts_yte_get_qr_matrix( base64_encode( $sensitive_decoded ) ) );
 		$this->html = str_replace( '[ticket_qr]', $qr, $this->html );
 		$this->html = str_replace( '[ticket_title]', $name, $this->html );
 		$this->html = str_replace( '[ticket_description]', $description, $this->html );
