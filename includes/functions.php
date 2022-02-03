@@ -547,7 +547,7 @@ function ts_yte_generate_new_ticket_files_from_existing_ticket_data_order_action
 	return $actions;
 }
 
-add_action( 'woocommerce_order_action_wc_generate_new_ticket_files_from_existing_ticket_data_order_action', 'ts_yte_generate_new_ticket_files_from_existing_ticket_data' );
+add_action( 'woocommerce_order_action_wc_ts_yte_generate_new_ticket_files_from_existing_ticket_data_order_action', 'ts_yte_generate_new_ticket_files_from_existing_ticket_data' );
 function ts_yte_generate_new_ticket_files_from_existing_ticket_data( $order ) {
 	$order_id = $order->id;
 
