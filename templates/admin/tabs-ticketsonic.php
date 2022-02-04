@@ -11,14 +11,14 @@ if ( empty( $url ) ) {
 
 $email = ts_yte_get_option( 'api_userid', '' );
 if ( empty( $email ) ) {
-	ts_yte_admin_notice_html( 'Partner E-mail have to set in Settings', 'error' );
+	ts_yte_admin_notice_html( 'API E-mail have to set in Settings', 'error' );
 
 	return;
 }
 
 $key = ts_yte_get_option( 'api_key', '' );
 if ( empty( $key ) ) {
-	ts_yte_admin_notice_html( 'Partner API Key have to set in Settings', 'error' );
+	ts_yte_admin_notice_html( 'API Key have to set in Settings', 'error' );
 
 	return;
 }
