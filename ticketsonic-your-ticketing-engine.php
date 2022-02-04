@@ -87,3 +87,26 @@ function ts_yte_settings_page($links) {
 	$links[] = $settings_link;
 	return $links;
 }
+
+/**
+ * Check for WooCommerce availability.
+ */
+add_action( 'admin_init', 'ts_yte_plugin_has_parents' );
+function ts_yte_plugin_has_parents() {
+	if ( is_admin() && current_user_can( 'activate_plugins' ) && ! is_plugin_active( 'woocommerce/woocommerce.php' ) ) {
+
+		add_action( 'admin_notices', 'ts_yte_plugin_notice' );
+
+		deactivate_plugins( plugin_basename( __FILE__ ) );
+		if ( isset( $_GET['activate'] ) ) {
+			unset( $_GET['activate'] );
+		}
+	}
+}
+
+/**
+ * Display notice regarding the WooCommerce requirement.
+ */
+function ts_yte_plugin_notice() {
+	print( '<div class="error"><p>Sorry, TicketSonic - your Ticketing Engine requires WooCommerce to be installed and activated. You can download WooCommerce <a href="https://woocommerce.com/">here</a>.</p></div>' );
+}
