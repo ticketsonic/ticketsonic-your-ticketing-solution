@@ -70,6 +70,14 @@ $raw_tickets = ts_yte_get_event_ticket_data_from_remote( $url, $email, $key, nul
 					<?php endforeach; ?>
 					<tr>
 						<td><span id="new-event-button" class="button button-primary">Request new event</span></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
 					</tr>
 				<?php endif; ?>
 			</tbody>
@@ -83,7 +91,7 @@ $raw_tickets = ts_yte_get_event_ticket_data_from_remote( $url, $email, $key, nul
 		<table id="tickets" class="wp-list-table widefat fixed striped table-view-list posts">
 			<thead>
 				<tr>
-					<th class="manage-column column-xs">Sku</th>
+					<th class="manage-column column-xs">SKU</th>
 					<th class="manage-column column-xm">Title</th>
 					<th class="manage-column column-xs">Price</th>
 					<th class="manage-column column-xs">Currency</th>
@@ -107,6 +115,12 @@ $raw_tickets = ts_yte_get_event_ticket_data_from_remote( $url, $email, $key, nul
 					<?php endforeach; ?>
 					<tr>
 						<td><span id="new-ticket-button" class="button button-primary">Request new ticket</span></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
 					</tr>
 				<?php endif; ?>
 			</tbody>

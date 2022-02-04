@@ -191,3 +191,23 @@
 .form-table.submit-button td {
 	padding: 0;
 }
+
+.ts-welcome-panel {
+	background: white;
+	padding: 15px;
+	border: 1px solid lightgray;
+	margin: 10px;
+	border-radius: 5px;
+}
+
+.ts-welcome-panel .dashicons-yes {
+	color: green;
+}
+
+.ts-welcome-panel .dashicons-no {
+	color: red;
+}
+
+.ts-welcome-panel h3 {
+	margin-top: 0;
+}

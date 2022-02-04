@@ -9,17 +9,16 @@
 	<p><?php _e( 'Preview live data in TicketSonic.', 'ts_yte' ); ?></p>
 </div>
 <!-- .overview-left -->
-<div class="welcome-panel overview-right">
+<div class="ts-welcome-panel overview-right">
 	<h3>
 		<!-- <span><a href="#"><attr title="<?php _e( 'Dismiss this message', 'ts_yte' ); ?>"><?php _e( 'Dismiss', 'ts_yte' ); ?></attr></a></span> -->
-		<?php _e( 'Welcome', 'ts_yte' ); ?>
+		<?php _e( 'Status', 'ts_yte' ); ?>
 	</h3>
-	<p><?php _e( 'Import Tickets into WooCommerce from TicketSonic and start selling on your own!', 'ts_yte' ); ?></p>
 	<?php 
 	if ( ! is_writable( TS_YTE_UPLOADPATH ) ) {
-		print '<p>Ensure ' . esc_html( TS_YTE_UPLOADPATH ) . ' is writable</p>';
+		print '<span class="dashicons dashicons-no"></span><span> Ensure the plugin upload folder ' . esc_html( TS_YTE_UPLOADPATH ) . ' is writable</span>';
 	} else {
-		print '<p>' . esc_html( TS_YTE_UPLOADPATH ) . ' is writable</p>';
+		print '<span class="dashicons dashicons-yes"></span><span> Plugin upload folder is writable</span>';
 	}
 	?>
 </div>
