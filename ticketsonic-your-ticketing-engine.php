@@ -2,11 +2,11 @@
 
 /**
  * Plugin Name: TicketSonic - your Ticketing Engine
- * Plugin URI: https://github.com/ticketsonic/woocommerce-ticketsonic
+ * Plugin URI: https://github.com/ticketsonic/ticketsonic-your-ticketing-engine
  * Description: TicketSonic is the ticketing engine effortlessly enabling every web and mobile to become an independent ticket seller
  * Version: 1.0
  * Author: TicketSonic
- * Author URI: https://github.com/ticketsonic/
+ * Author URI: https://www.ticketsonic.com
  * License: GPL2
 
  * Text Domain: woo-ts
@@ -15,7 +15,7 @@
  * WC requires at least: 2.3
  * WC tested up to: 6.1.1
  *
- * @package woocommerce-ticketsonic
+ * @package ticketsonic-your-ticketing-engine
  */
 
 if ( ! defined( 'ABSPATH' ) ) exit;
