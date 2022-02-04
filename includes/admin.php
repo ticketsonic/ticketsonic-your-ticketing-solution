@@ -54,7 +54,7 @@ function ts_yte_enqueue_scripts( $hook ) {
 	wp_enqueue_style( 'ts_yte_styles', plugins_url( '/templates/admin/import.css', TS_YTE_RELPATH ) );
 	wp_enqueue_script( 'ts_yte_scripts', plugins_url( '/templates/admin/import.js', TS_YTE_RELPATH ), array( 'jquery' ) );
 	wp_enqueue_style( 'dashicons' );
-	wp_enqueue_style( 'woo_vm_styles', plugins_url( '/templates/admin/woocommerce-admin_dashboard_vm-plugins.css', TS_YTE_RELPATH ) );
+	wp_enqueue_style( 'woo_vm_styles', plugins_url( '/templates/admin/admin.css', TS_YTE_RELPATH ) );
 }
 
 function ts_yte_admin_active_tab( $tab_name = null, $tab = null ) {
