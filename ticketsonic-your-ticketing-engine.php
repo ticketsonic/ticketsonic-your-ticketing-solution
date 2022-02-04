@@ -77,7 +77,9 @@ if ( is_admin() ) {
 	/* End of: WordPress Administration */
 }
 
-// Plugin Settings Page
+/**
+ * Add plugin settings link in the plugins list.
+ */
 add_filter('plugin_action_links_' . plugin_basename(__FILE__), 'ts_yte_settings_page');
 function ts_yte_settings_page($links) {
 	$url = get_admin_url() . "admin.php?page=ts_yte";
