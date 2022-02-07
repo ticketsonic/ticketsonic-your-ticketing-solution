@@ -129,7 +129,7 @@ if ( is_admin() ) {
 				$result = ts_yts_request_change_event( $url, $email, $key, $event_id, $event_title, $event_description, $event_location, $event_start_datetime, $event_badge_data );
 
 				if ( 'success' === $result['status'] ) {
-					ts_yts_admin_notice_html( 'Status: success<br>Event with ID: ' . $event_id . ' successfully sent for processing. You will receive an email when it is processed.', 'notice' );
+					ts_yts_admin_notice_html( 'Status: success. Event with ID: ' . $event_id . ' successfully sent for processing. You will receive an email when it is processed.', 'notice' );
 				} else {
 					ts_yts_admin_notice_html( 'Failed to request new event: ' . $result['message'], 'error' );
 				}
@@ -365,7 +365,7 @@ if ( is_admin() ) {
 				);
 
 				if ( 'success' === $result['status'] ) {
-					ts_yts_admin_notice_html( 'Status: success<br>Event ID: ' . $result['event_id'] . ' successfully sent for processing. You will receive an email when it is processed.', 'notice' );
+					ts_yts_admin_notice_html( 'Status: success. Event ID: ' . $result['event_id'] . ' successfully sent for processing. You will receive an email when it is processed.', 'notice' );
 				} else {
 					ts_yts_admin_notice_html( 'Failed to request new event: ' . $result['message'], 'error' );
 				}
