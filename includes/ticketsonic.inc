@@ -1,10 +1,10 @@
 <?php
 
-function ts_yte_decode_tickets( $tickets_data ) {
+function ts_yts_decode_tickets( $tickets_data ) {
 	$tickets_meta = array();
 
 	foreach ( $tickets_data as $index => $ticket ) {
-		$decoded_ticket = ts_yte_decode_barcode( $ticket['encrypted_data'] );
+		$decoded_ticket = ts_yts_decode_barcode( $ticket['encrypted_data'] );
 		if ( $decoded_ticket['status'] === 'failure' )
 			return $decoded_ticket;
 
@@ -15,7 +15,7 @@ function ts_yte_decode_tickets( $tickets_data ) {
 			'title'             => $woo_product->get_name(),
 			'description'       => $woo_product->get_description(),
 			'formatted_price'   => $decoded_ticket['payload']['formatted_price'],
-			'sensitive_decoded' => ts_yte_bin_to_int_array( $decoded_ticket['payload']['sensitive_decoded'] ),
+			'sensitive_decoded' => ts_yts_bin_to_int_array( $decoded_ticket['payload']['sensitive_decoded'] ),
 		);
 
 		$tickets_meta[] = $ticket_meta;
@@ -29,8 +29,8 @@ function ts_yte_decode_tickets( $tickets_data ) {
 	);
 }
 
-function ts_yte_decode_barcode( $encrypted_data ) {
-	$public_key = openssl_pkey_get_public( ts_yte_get_option( 'user_public_key', '' ) );
+function ts_yts_decode_barcode( $encrypted_data ) {
+	$public_key = openssl_pkey_get_public( ts_yts_get_option( 'user_public_key', '' ) );
 	if ( ! $public_key ) {
 		return array(
 			'status'  => 'failure',
@@ -41,8 +41,8 @@ function ts_yte_decode_barcode( $encrypted_data ) {
 	$result                      = array();
 	$result['sensitive_decoded'] = base64_decode( $encrypted_data );
 	$result['is_decrypted']      = openssl_public_decrypt( $result['sensitive_decoded'], $sensitive_decrypted, $public_key );
-	$result['decrypted_ticket']  = ts_yte_parse_raw_recrypted_ticket( $sensitive_decrypted );
-	$result['formatted_price']   = floatval( $result['decrypted_ticket']['price'] ) / 100 . ' ' . ts_yte_currency_to_ascii( get_woocommerce_currency() );
+	$result['decrypted_ticket']  = ts_yts_parse_raw_recrypted_ticket( $sensitive_decrypted );
+	$result['formatted_price']   = floatval( $result['decrypted_ticket']['price'] ) / 100 . ' ' . ts_yts_currency_to_ascii( get_woocommerce_currency() );
 
 	return array(
 		'status'  => 'success',
@@ -50,7 +50,7 @@ function ts_yte_decode_barcode( $encrypted_data ) {
 	);
 }
 
-function ts_yte_send_html_tickets_by_mail( $target_user_mail, $tickets_data ) {
+function ts_yts_send_html_tickets_by_mail( $target_user_mail, $tickets_data ) {
 	$tickets_meta = $tickets_data['tickets_meta'];
 	if ( ! empty( $tickets_meta ) ) {
 		$headers = array( 'Content-Type: text/html; charset=UTF-8' );
@@ -60,11 +60,11 @@ function ts_yte_send_html_tickets_by_mail( $target_user_mail, $tickets_data ) {
 			$ticket_description = $ticket_meta['description'];
 			$ticket_price       = $ticket_meta['formatted_price'];
 
-			$email_body    = ts_yte_get_option( 'email_body', '' );
-			$email_subject = ts_yte_get_option( 'email_subject', '' );
+			$email_body    = ts_yts_get_option( 'email_body', '' );
+			$email_subject = ts_yts_get_option( 'email_subject', '' );
 			$qr            = null;
 
-			$qr = ts_yte_sensitive_to_html_qr( $ticket_meta['sensitive_decoded'] );
+			$qr = ts_yts_sensitive_to_html_qr( $ticket_meta['sensitive_decoded'] );
 
 			$email_body = str_replace( '[ticket_number]', $key + 1, $email_body );
 			$email_body = str_replace( '[ticket_qr]', $qr, $email_body );
@@ -86,10 +86,10 @@ function ts_yte_send_html_tickets_by_mail( $target_user_mail, $tickets_data ) {
 	return false;
 }
 
-function ts_yte_sensitive_to_html_qr( $sensitive_decoded ) {
+function ts_yts_sensitive_to_html_qr( $sensitive_decoded ) {
 	$qr        = '';
-	$int_array = ts_yte_int_array_to_bin( $sensitive_decoded );
-	$matrix    = ts_yte_get_qr_matrix( base64_encode( $int_array ) );
+	$int_array = ts_yts_int_array_to_bin( $sensitive_decoded );
+	$matrix    = ts_yts_get_qr_matrix( base64_encode( $int_array ) );
 	$qr       .= '<table><tbody>';
 
 	foreach ( $matrix as $row ) {
@@ -108,22 +108,22 @@ function ts_yte_sensitive_to_html_qr( $sensitive_decoded ) {
 	return $qr;
 }
 
-function ts_yte_get_customer_name( $order ) {
+function ts_yts_get_customer_name( $order ) {
 	return $order->get_billing_first_name() . ' ' . $order->get_billing_last_name();
 }
 
-function ts_yte_get_customer_company( $order ) {
+function ts_yts_get_customer_company( $order ) {
 	return $order->get_billing_company();
 }
 
-function ts_yte_get_qr_matrix( $raw_input ) {
+function ts_yts_get_qr_matrix( $raw_input ) {
 	$qr_code = BaconQrCode\Encoder\Encoder::encode( $raw_input, BaconQrCode\Common\ErrorCorrectionLevel::L(), BaconQrCode\Encoder\Encoder::DEFAULT_BYTE_MODE_ECODING );
 	$matrix  = $qr_code->getMatrix();
 	$rows    = $matrix->getArray()->toArray();
 	return $rows;
 }
 
-function ts_yte_write_log( $log ) {
+function ts_yts_write_log( $log ) {
 	if ( true === WP_DEBUG ) {
 		if ( is_array( $log ) || is_object( $log ) ) {
 			error_log( date( 'Y-m-d H:i:s' ) . ': ' . print_r( $log, true ) );
@@ -133,7 +133,7 @@ function ts_yte_write_log( $log ) {
 	}
 }
 
-function ts_yte_currency_to_ascii( $currency_code ) {
+function ts_yts_currency_to_ascii( $currency_code ) {
 	$currencies = array(
 		'BGN' => 'BGN',
 		'USD' => 'USD',
@@ -144,7 +144,7 @@ function ts_yte_currency_to_ascii( $currency_code ) {
 	return $currencies[ $currency_code ];
 }
 
-function ts_yte_upload_custom_badge_background() {
+function ts_yts_upload_custom_badge_background() {
 	add_filter( 'upload_dir', 'wpse_141088_upload_dir' );
 	include_once ABSPATH . 'wp-admin/includes/file.php';
 	include_once ABSPATH . 'wp-admin/includes/media.php';
@@ -164,17 +164,17 @@ function ts_yte_upload_custom_badge_background() {
 
 	$movefile = wp_handle_upload( $badge_file, $upload_overrides );
 	if ( ! $movefile || isset( $movefile['error'] ) ) {
-		ts_yte_admin_notice_html( $movefile['error'], 'error' );
+		ts_yts_admin_notice_html( $movefile['error'], 'error' );
 	}
 
 	remove_filter( 'upload_dir', 'wpse_141088_upload_dir' );
 }
 
-function ts_yte_badge_background_file_renamer( $dir, $name, $ext ) {
+function ts_yts_badge_background_file_renamer( $dir, $name, $ext ) {
 	return 'badge_background' . $ext;
 }
 
-function ts_yte_sanitize_or_default( $data, $default = '' ) {
+function ts_yts_sanitize_or_default( $data, $default = '' ) {
 	if ( isset( $data ) ) {
 		return sanitize_text_field( wp_unslash( $data ) );
 	}
@@ -182,7 +182,7 @@ function ts_yte_sanitize_or_default( $data, $default = '' ) {
 	return sanitize_text_field( wp_unslash( $default ) );
 }
 
-function ts_yte_allowed_html() {
+function ts_yts_allowed_html() {
 	return array(
 		'html' => array(
 			'href'  => array(),

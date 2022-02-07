@@ -1,38 +1,38 @@
 <?php
 
-require_once TS_YTE_PATH . '/includes/ticketsonic.php';
+require_once TS_YTS_PATH . '/includes/ticketsonic.php';
 
-$url = ts_yte_get_option( 'event_info_endpoint', 'https://www.ticketsonic.com:9507/v1/event/list' );
+$url = ts_yts_get_option( 'event_info_endpoint', 'https://www.ticketsonic.com:9507/v1/event/list' );
 if ( empty( $url ) ) {
-	ts_yte_admin_notice_html( 'Event Info Endpoint have to set in Settings', 'error' );
+	ts_yts_admin_notice_html( 'Event Info Endpoint have to set in Settings', 'error' );
 
 	return;
 }
 
-$email = ts_yte_get_option( 'api_userid', '' );
+$email = ts_yts_get_option( 'api_userid', '' );
 if ( empty( $email ) ) {
-	ts_yte_admin_notice_html( 'API E-mail have to set in Settings', 'error' );
+	ts_yts_admin_notice_html( 'API E-mail have to set in Settings', 'error' );
 
 	return;
 }
 
-$key = ts_yte_get_option( 'api_key', '' );
+$key = ts_yts_get_option( 'api_key', '' );
 if ( empty( $key ) ) {
-	ts_yte_admin_notice_html( 'API Key have to set in Settings', 'error' );
+	ts_yts_admin_notice_html( 'API Key have to set in Settings', 'error' );
 
 	return;
 }
 
-$raw_events = ts_yte_get_events_data_from_remote( $url, $email, $key );
+$raw_events = ts_yts_get_events_data_from_remote( $url, $email, $key );
 
-$url = ts_yte_get_option( 'ticket_info_endpoint', 'https://www.ticketsonic.com:9507/v1/ticket/list' );
+$url = ts_yts_get_option( 'ticket_info_endpoint', 'https://www.ticketsonic.com:9507/v1/ticket/list' );
 if ( empty( $url ) ) {
-	ts_yte_admin_notice_html( 'Event Info Endpoint have to set in Settings', 'error' );
+	ts_yts_admin_notice_html( 'Event Info Endpoint have to set in Settings', 'error' );
 
 	return;
 }
 
-$raw_tickets = ts_yte_get_event_ticket_data_from_remote( $url, $email, $key, null );
+$raw_tickets = ts_yts_get_event_ticket_data_from_remote( $url, $email, $key, null );
 ?>
 <div class="remote-data">
 	<h3><div class="dashicons dashicons-admin-settings"></div>&nbsp;List of events</h3>
@@ -144,9 +144,9 @@ $raw_tickets = ts_yte_get_event_ticket_data_from_remote( $url, $email, $key, nul
 				<table class="form-table table-event table-first">
 					<tbody>
 
-						<?php do_action( 'ts_yte_export_settings_before' ); ?>
+						<?php do_action( 'ts_yts_export_settings_before' ); ?>
 
-						<?php do_action( 'ts_yte_export_settings_general' ); ?>
+						<?php do_action( 'ts_yts_export_settings_general' ); ?>
 
 						<tr id="new-event-ticket-settings">
 							<td colspan="2">
@@ -156,7 +156,7 @@ $raw_tickets = ts_yte_get_event_ticket_data_from_remote( $url, $email, $key, nul
 
 						<tr>
 							<th>
-								<label for="event_title"><?php _e('Title', 'ts_yte' ); ?></label>
+								<label for="event_title"><?php _e('Title', 'ts_yts' ); ?></label>
 							</th>
 							<td>
 								<input type="text" size="50" id="event_title" name="event_title" value="" class="text" />
@@ -165,7 +165,7 @@ $raw_tickets = ts_yte_get_event_ticket_data_from_remote( $url, $email, $key, nul
 
 						<tr>
 							<th>
-								<label for="event_description"><?php _e('Description', 'ts_yte' ); ?></label>
+								<label for="event_description"><?php _e('Description', 'ts_yts' ); ?></label>
 							</th>
 							<td>
 								<input type="text" size="50" id="event_description" name="event_description" value="" class="text" />
@@ -174,7 +174,7 @@ $raw_tickets = ts_yte_get_event_ticket_data_from_remote( $url, $email, $key, nul
 
 						<tr>
 							<th>
-								<label for="event_location"><?php _e('Location', 'ts_yte' ); ?></label>
+								<label for="event_location"><?php _e('Location', 'ts_yts' ); ?></label>
 							</th>
 							<td>
 								<input type="text" size="50" id="event_location" name="event_location" value="" class="text" />
@@ -192,7 +192,7 @@ $raw_tickets = ts_yte_get_event_ticket_data_from_remote( $url, $email, $key, nul
 
 						<tr>
 							<th>
-								<label for="ticket_title0"><?php _e('Title', 'ts_yte' ); ?></label>
+								<label for="ticket_title0"><?php _e('Title', 'ts_yts' ); ?></label>
 							</th>
 							<td>
 								<input type="text" size="50" id="ticket_title0" name="ticket[0][primary_text_pl]" value="" class="text" />
@@ -201,7 +201,7 @@ $raw_tickets = ts_yte_get_event_ticket_data_from_remote( $url, $email, $key, nul
 
 						<tr>
 							<th>
-								<label for="ticket_description0"><?php _e('Description', 'ts_yte' ); ?></label>
+								<label for="ticket_description0"><?php _e('Description', 'ts_yts' ); ?></label>
 							</th>
 							<td>
 								<input type="text" size="50" id="ticket_description0" name="ticket[0][secondary_text_pl]" value="" class="text" />
@@ -210,7 +210,7 @@ $raw_tickets = ts_yte_get_event_ticket_data_from_remote( $url, $email, $key, nul
 
 						<tr>
 							<th>
-								<label for="ticket_price0"><?php _e('Price', 'ts_yte' ); ?></label>
+								<label for="ticket_price0"><?php _e('Price', 'ts_yts' ); ?></label>
 							</th>
 							<td>
 								<input type="text" size="50" id="ticket_price0" name="ticket[0][price]" value="" class="text" />
@@ -219,7 +219,7 @@ $raw_tickets = ts_yte_get_event_ticket_data_from_remote( $url, $email, $key, nul
 
 						<tr>
 							<th>
-								<label for="ticket_currency0"><?php _e('Currency', 'ts_yte' ); ?></label>
+								<label for="ticket_currency0"><?php _e('Currency', 'ts_yts' ); ?></label>
 							</th>
 							<td>
 								<select name="ticket[0][currency]" id="ticket_currency0">
@@ -232,7 +232,7 @@ $raw_tickets = ts_yte_get_event_ticket_data_from_remote( $url, $email, $key, nul
 
 						<tr>
 							<th>
-								<label for="ticket_stock0"><?php _e('Stock', 'ts_yte' ); ?></label>
+								<label for="ticket_stock0"><?php _e('Stock', 'ts_yts' ); ?></label>
 							</th>
 							<td>
 								<input type="text" size="50" id="ticket_stock0" name="ticket[0][stock]" value="" class="text" />
@@ -256,26 +256,26 @@ $raw_tickets = ts_yte_get_event_ticket_data_from_remote( $url, $email, $key, nul
 					<tbody>
 						<tr>
 							<td colspan="2" style="padding:0;">
-								<h3><div class="dashicons dashicons-admin-settings"></div>&nbsp;<?php _e( 'Badge settings', 'ts_yte' ); ?></h3>
-								<p class="description"><?php _e( 'Set badge background and text location for autoprinting badges.', 'ts_yte' ); ?></p>
+								<h3><div class="dashicons dashicons-admin-settings"></div>&nbsp;<?php _e( 'Badge settings', 'ts_yts' ); ?></h3>
+								<p class="description"><?php _e( 'Set badge background and text location for autoprinting badges.', 'ts_yts' ); ?></p>
 							</td>
 						</tr>
 
 						<tr>
 							<th>
-								<label for="badge_background"><?php _e('Badge Background', 'ts_yte' ); ?></label>
+								<label for="badge_background"><?php _e('Badge Background', 'ts_yts' ); ?></label>
 							</th>
 							<td>
-								<img style="width: 150px;" src="<?php print ( esc_attr( TS_YTE_UPLOADURLPATH ) ); ?>/badge_background.jpg"/>
+								<img style="width: 150px;" src="<?php print ( esc_attr( TS_YTS_UPLOADURLPATH ) ); ?>/badge_background.jpg"/>
 								<br>
 								<input type="file" name="badge_file" id="badge_file">
-								<p class="description"><?php _e( 'Only jpeg files are accepted', 'ts_yte' ); ?>.</p>
+								<p class="description"><?php _e( 'Only jpeg files are accepted', 'ts_yts' ); ?>.</p>
 							</td>
 						</tr>
 
 						<tr>
 							<th>
-								<label for="badge_text_horizontal_location"><?php _e('Badge text horizontal location', 'ts_yte' ); ?></label>
+								<label for="badge_text_horizontal_location"><?php _e('Badge text horizontal location', 'ts_yts' ); ?></label>
 							</th>
 							<td>
 								<select name="badge_text_horizontal_location" id="badge_text_horizontal_location">
@@ -288,7 +288,7 @@ $raw_tickets = ts_yte_get_event_ticket_data_from_remote( $url, $email, $key, nul
 
 						<tr>
 							<th>
-								<label for="badge_text_vertical_location"><?php _e('Badge text vertical location', 'ts_yte' ); ?></label>
+								<label for="badge_text_vertical_location"><?php _e('Badge text vertical location', 'ts_yts' ); ?></label>
 							</th>
 							<td>
 								<select name="badge_text_vertical_location" id="badge_text_vertical_location">
@@ -301,7 +301,7 @@ $raw_tickets = ts_yte_get_event_ticket_data_from_remote( $url, $email, $key, nul
 
 						<tr>
 							<th>
-								<label for="badge_primary_text_fontsize"><?php _e( 'Primary text font size', 'ts_yte' ); ?></label>
+								<label for="badge_primary_text_fontsize"><?php _e( 'Primary text font size', 'ts_yts' ); ?></label>
 							</th>
 							<td>
 								<input type="text" size="50" id="badge_primary_text_fontsize" name="badge_primary_text_fontsize" value="100" class="text" />
@@ -310,7 +310,7 @@ $raw_tickets = ts_yte_get_event_ticket_data_from_remote( $url, $email, $key, nul
 
 						<tr>
 							<th>
-								<label for="badge_secondary_text_fontsize"><?php _e('Secondary text font size', 'ts_yte' ); ?></label>
+								<label for="badge_secondary_text_fontsize"><?php _e('Secondary text font size', 'ts_yts' ); ?></label>
 							</th>
 							<td>
 								<input type="text" size="50" id="badge_secondary_text_fontsize" name="badge_secondary_text_fontsize" value="80" class="text" />
@@ -319,7 +319,7 @@ $raw_tickets = ts_yte_get_event_ticket_data_from_remote( $url, $email, $key, nul
 
 						<tr>
 							<th>
-								<label for="badge_primary_text_color"><?php _e('Primary text color', 'ts_yte' ); ?></label>
+								<label for="badge_primary_text_color"><?php _e('Primary text color', 'ts_yts' ); ?></label>
 							</th>
 							<td>
 								<input type="text" size="50" id="badge_primary_text_color" name="badge_primary_text_color" value="#000000" class="text" />
@@ -328,7 +328,7 @@ $raw_tickets = ts_yte_get_event_ticket_data_from_remote( $url, $email, $key, nul
 
 						<tr>
 							<th>
-								<label for="badge_secondary_text_color"><?php _e('Secondary text color', 'ts_yte' ); ?></label>
+								<label for="badge_secondary_text_color"><?php _e('Secondary text color', 'ts_yts' ); ?></label>
 							</th>
 							<td>
 								<input type="text" size="50" id="badge_secondary_text_color" name="badge_secondary_text_color" value="#000000" class="text" />
@@ -341,7 +341,7 @@ $raw_tickets = ts_yte_get_event_ticket_data_from_remote( $url, $email, $key, nul
 						<tr id="new-event-ticket-settings">
 							<td colspan="2">
 								<p class="submit">
-								<input type="submit" name="submit" id="submit-new-event-request-button" class="button button-primary" value="<?php _e( 'Request new event', 'ts_yte' ); ?>" />
+								<input type="submit" name="submit" id="submit-new-event-request-button" class="button button-primary" value="<?php _e( 'Request new event', 'ts_yts' ); ?>" />
 								<span id="cancel-new-event-request-button" class="button button-primary">Cancel</span>
 								</p>
 							</td>
@@ -369,27 +369,27 @@ $raw_tickets = ts_yte_get_event_ticket_data_from_remote( $url, $email, $key, nul
 				<table class="form-table table-ticket table-first">
 					<tbody>
 
-						<?php do_action( 'ts_yte_export_settings_before' ); ?>
+						<?php do_action( 'ts_yts_export_settings_before' ); ?>
 
 						<tr id="general-settings">
 							<td colspan="2" style="padding:0;">
-								<h3><div class="dashicons dashicons-admin-settings"></div>&nbsp;<?php _e( 'Create new ticket', 'ts_yte' ); ?></h3>
-								<p class="description"><?php _e( 'Create a new a new ticket for a specified event. The request will be sent for processing. You will receive an email when the processing is ready.', 'ts_yte' ); ?></p>
+								<h3><div class="dashicons dashicons-admin-settings"></div>&nbsp;<?php _e( 'Create new ticket', 'ts_yts' ); ?></h3>
+								<p class="description"><?php _e( 'Create a new a new ticket for a specified event. The request will be sent for processing. You will receive an email when the processing is ready.', 'ts_yts' ); ?></p>
 							</td>
 						</tr>
 
-						<?php do_action( 'ts_yte_export_settings_general' ); ?>
+						<?php do_action( 'ts_yts_export_settings_general' ); ?>
 
 						<tr id="ticket-settings">
 							<td colspan="2" style="padding:0;">
-								<h3><div class="dashicons dashicons-admin-settings"></div>&nbsp;<?php _e( 'Create tickets for the event', 'ts_yte' ); ?></h3>
-								<p class="description"><?php _e( 'Press the Add new ticket button to assign additional tickets.', 'ts_yte' ); ?></p>
+								<h3><div class="dashicons dashicons-admin-settings"></div>&nbsp;<?php _e( 'Create tickets for the event', 'ts_yts' ); ?></h3>
+								<p class="description"><?php _e( 'Press the Add new ticket button to assign additional tickets.', 'ts_yts' ); ?></p>
 							</td>
 						</tr>
 
 						<tr>
 							<th>
-								<label for="ticket_eventid"><?php _e('Event ID', 'ts_yte' ); ?></label>
+								<label for="ticket_eventid"><?php _e('Event ID', 'ts_yts' ); ?></label>
 							</th>
 							<td>
 								<input type="text" size="50" id="ticket_title" name="ticket_eventid" value="" class="text" />
@@ -398,7 +398,7 @@ $raw_tickets = ts_yte_get_event_ticket_data_from_remote( $url, $email, $key, nul
 
 						<tr>
 							<th>
-								<label for="primary_text_pl"><?php _e('Title', 'ts_yte' ); ?></label>
+								<label for="primary_text_pl"><?php _e('Title', 'ts_yts' ); ?></label>
 							</th>
 							<td>
 								<input type="text" size="50" id="ticketprimary_text_pl_title" name="primary_text_pl" value="" class="text" />
@@ -407,7 +407,7 @@ $raw_tickets = ts_yte_get_event_ticket_data_from_remote( $url, $email, $key, nul
 
 						<tr>
 							<th>
-								<label for="secondary_text_pl"><?php _e('Description', 'ts_yte' ); ?></label>
+								<label for="secondary_text_pl"><?php _e('Description', 'ts_yts' ); ?></label>
 							</th>
 							<td>
 								<input type="text" size="50" id="secondary_text_pl" name="secondary_text_pl" value="" class="text" />
@@ -416,7 +416,7 @@ $raw_tickets = ts_yte_get_event_ticket_data_from_remote( $url, $email, $key, nul
 
 						<tr>
 							<th>
-								<label for="ticket_price"><?php _e('Price', 'ts_yte' ); ?></label>
+								<label for="ticket_price"><?php _e('Price', 'ts_yts' ); ?></label>
 							</th>
 							<td>
 								<input type="text" size="50" id="ticket_price" name="ticket_price" value="" class="text" />
@@ -425,7 +425,7 @@ $raw_tickets = ts_yte_get_event_ticket_data_from_remote( $url, $email, $key, nul
 
 						<tr>
 							<th>
-								<label for="ticket_currency"><?php _e('Currency', 'ts_yte' ); ?></label>
+								<label for="ticket_currency"><?php _e('Currency', 'ts_yts' ); ?></label>
 							</th>
 							<td>
 								<select name="ticket_currency" id="ticket_currency">
@@ -438,7 +438,7 @@ $raw_tickets = ts_yte_get_event_ticket_data_from_remote( $url, $email, $key, nul
 
 						<tr>
 							<th>
-								<label for="ticket_stock"><?php _e('Ticket stock', 'ts_yte' ); ?></label>
+								<label for="ticket_stock"><?php _e('Ticket stock', 'ts_yts' ); ?></label>
 							</th>
 							<td>
 								<input type="text" size="50" id="ticket_stock" name="ticket_stock" value="" class="text" />
@@ -452,7 +452,7 @@ $raw_tickets = ts_yte_get_event_ticket_data_from_remote( $url, $email, $key, nul
 						<tr id="new-event-ticket-settings">
 							<td colspan="2">
 								<p class="submit">
-									<input type="submit" name="submit" id="submit" class="button button-primary" value="<?php _e( 'Request new ticket', 'ts_yte' ); ?>" />
+									<input type="submit" name="submit" id="submit" class="button button-primary" value="<?php _e( 'Request new ticket', 'ts_yts' ); ?>" />
 									<span id="cancel-new-ticket-request-button" class="button button-primary">Cancel</span>
 								</p>
 							</td>

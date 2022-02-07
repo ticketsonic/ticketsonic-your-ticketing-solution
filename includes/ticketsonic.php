@@ -4,7 +4,7 @@ require 'cryptography.php';
 require 'ticketsonic.inc';
 require dirname( __FILE__ ) . '/../vendor/autoload.php';
 
-function ts_yte_request_create_new_event( $url, $email, $key, $event_title, $event_description, $event_datetime, $event_location, $tickets_data, $badge_text_horizontal_location, $badge_text_vartical_location, $badge_primary_text_fontsize, $badge_secondary_text_fontsize, $badge_primary_text_color, $badge_secondary_text_color ) {
+function ts_yts_request_create_new_event( $url, $email, $key, $event_title, $event_description, $event_datetime, $event_location, $tickets_data, $badge_text_horizontal_location, $badge_text_vartical_location, $badge_primary_text_fontsize, $badge_secondary_text_fontsize, $badge_primary_text_color, $badge_secondary_text_color ) {
 	$headers = array(
 		'x-api-userid' => $email,
 		'x-api-key'    => $key,
@@ -14,7 +14,7 @@ function ts_yte_request_create_new_event( $url, $email, $key, $event_title, $eve
 		$tickets_data[ $k ]['price'] = intval( $value['price'] ) * 100;
 	}
 
-	$badge_background = TS_YTE_UPLOADURLPATH . '/badge_background.jpg';
+	$badge_background = TS_YTS_UPLOADURLPATH . '/badge_background.jpg';
 
 	$body = array(
 		'primary_text_pl'                => $event_title,
@@ -32,12 +32,12 @@ function ts_yte_request_create_new_event( $url, $email, $key, $event_title, $eve
 		'badge_secondary_text_color'     => $badge_secondary_text_color,
 	);
 
-	$response = ts_yte_post_request_to_remote( $url, $headers, $body );
+	$response = ts_yts_post_request_to_remote( $url, $headers, $body );
 
 	return $response;
 }
 
-function ts_yte_request_create_new_ticket( $url, $email, $key, $ticket_eventid, $ticket_title, $ticket_description, $ticket_price, $ticket_currency, $ticket_stock ) {
+function ts_yts_request_create_new_ticket( $url, $email, $key, $ticket_eventid, $ticket_title, $ticket_description, $ticket_price, $ticket_currency, $ticket_stock ) {
 	$headers = array(
 		'x-api-userid'  => $email,
 		'x-api-key'     => $key,
@@ -52,12 +52,12 @@ function ts_yte_request_create_new_ticket( $url, $email, $key, $ticket_eventid, 
 		'currency'          => $ticket_currency,
 		'stock'             => $ticket_stock,
 	);
-	$response = ts_yte_post_request_to_remote( $url, $headers, $body );
+	$response = ts_yts_post_request_to_remote( $url, $headers, $body );
 
 	return $response;
 }
 
-function ts_yte_request_change_ticket( $url, $email, $key, $ticket_sku, $ticket_title, $ticket_description, $ticket_price, $ticket_currency, $ticket_stock ) {
+function ts_yts_request_change_ticket( $url, $email, $key, $ticket_sku, $ticket_title, $ticket_description, $ticket_price, $ticket_currency, $ticket_stock ) {
 	$headers = array(
 		'x-api-userid' => $email,
 		'x-api-key'    => $key,
@@ -72,12 +72,12 @@ function ts_yte_request_change_ticket( $url, $email, $key, $ticket_sku, $ticket_
 		'currency'          => $ticket_currency,
 		'stock'             => $ticket_stock,
 	);
-	$response = ts_yte_post_request_to_remote( $url, $headers, $body );
+	$response = ts_yts_post_request_to_remote( $url, $headers, $body );
 
 	return $response;
 }
 
-function ts_yte_request_change_event( $url, $email, $key, $event_id, $event_title, $event_description, $event_location, $event_starttime, $event_badge_data ) {
+function ts_yts_request_change_event( $url, $email, $key, $event_id, $event_title, $event_description, $event_location, $event_starttime, $event_badge_data ) {
 	$headers = array(
 		'x-api-userid'  => $email,
 		'x-api-key'     => $key,
@@ -91,57 +91,57 @@ function ts_yte_request_change_event( $url, $email, $key, $event_id, $event_titl
 		'start_datetime'    => $event_starttime,
 		'badge_data'        => json_encode( $event_badge_data ),
 	);
-	$response = ts_yte_post_request_to_remote( $url, $headers, $body );
+	$response = ts_yts_post_request_to_remote( $url, $headers, $body );
 
 	return $response;
 }
 
-function ts_yte_get_tickets_with_remote( $url, $email, $key, $event_id ) {
+function ts_yts_get_tickets_with_remote( $url, $email, $key, $event_id ) {
 	$headers = array(
 		'x-api-userid'  => $email,
 		'x-api-key'     => $key,
 		'x-api-eventid' => $event_id,
 	);
 
-	$response = ts_yte_get_request_from_remote( $url, $headers, null );
+	$response = ts_yts_get_request_from_remote( $url, $headers, null );
 
 	return $response;
 }
 
-function ts_yte_get_events_data_from_remote( $url, $email, $key ) {
+function ts_yts_get_events_data_from_remote( $url, $email, $key ) {
 	$headers = array(
 		'x-api-userid' => $email,
 		'x-api-key'    => $key,
 	);
 
-	$response = ts_yte_get_request_from_remote( $url, $headers, null );
+	$response = ts_yts_get_request_from_remote( $url, $headers, null );
 	return $response;
 }
 
-function ts_yte_get_event_ticket_data_from_remote( $url, $email, $key, $event_id ) {
+function ts_yts_get_event_ticket_data_from_remote( $url, $email, $key, $event_id ) {
 	$headers = array(
 		'x-api-userid'  => $email,
 		'x-api-key'     => $key,
 		'x-api-eventid' => $event_id,
 	);
 
-	$response = ts_yte_get_request_from_remote( $url, $headers, null );
+	$response = ts_yts_get_request_from_remote( $url, $headers, null );
 	return $response;
 }
 
-function ts_yte_request_create_tickets_order_in_remote( $order_id, $url, $email, $key ) {
+function ts_yts_request_create_tickets_order_in_remote( $order_id, $url, $email, $key ) {
 	$headers = array(
 		'x-api-userid' => $email,
 		'x-api-key'    => $key,
 	);
-	$body = ts_yte_prepare_order_tickets_request_body( $order_id, $email, $key );
+	$body = ts_yts_prepare_order_tickets_request_body( $order_id, $email, $key );
 
-	$response = ts_yte_post_request_to_remote( $url, $headers, $body );
+	$response = ts_yts_post_request_to_remote( $url, $headers, $body );
 
 	return $response;
 }
 
-function ts_yte_prepare_order_tickets_request_body( $order_id, $email, $key ) {
+function ts_yts_prepare_order_tickets_request_body( $order_id, $email, $key ) {
 	$order = wc_get_order( $order_id );
 
 	$data = array(
@@ -168,8 +168,8 @@ function ts_yte_prepare_order_tickets_request_body( $order_id, $email, $key ) {
 	$body = array(
 		'order_hash'    => bin2hex( openssl_random_pseudo_bytes( 16 ) ),
 		'order_details' => array(
-			'customer_billing_name'    => ts_yte_get_customer_name( $order ),
-			'customer_billing_company' => ts_yte_get_customer_company( $order ),
+			'customer_billing_name'    => ts_yts_get_customer_name( $order ),
+			'customer_billing_company' => ts_yts_get_customer_company( $order ),
 		),
 		'tickets'       => array(),
 	);
@@ -188,7 +188,7 @@ function ts_yte_prepare_order_tickets_request_body( $order_id, $email, $key ) {
 	return $body;
 }
 
-function ts_yte_get_request_from_remote( $url, $headers, $body ) {
+function ts_yts_get_request_from_remote( $url, $headers, $body ) {
 	$http     = new GuzzleHttp\Client( array( 'base_uri' => $url, 'verify' => false ) );
 	$response = array();
 	try {
@@ -202,7 +202,7 @@ function ts_yte_get_request_from_remote( $url, $headers, $body ) {
 	return $response;
 }
 
-function ts_yte_post_request_to_remote( $url, $headers, $body ) {
+function ts_yts_post_request_to_remote( $url, $headers, $body ) {
 	$http     = new GuzzleHttp\Client( array( 'base_uri' => $url, 'verify' => false ) );
 	$response = array();
 	try {

@@ -50,7 +50,7 @@ You have to be able to use composer
    composer install
    ```
 5. Enable the TicketSonic plugin
-6. Enter your API credentials in `/wp-admin/admin.php?page=ts_yte&tab=settings`
+6. Enter your API credentials in `/wp-admin/admin.php?page=ts_yts&tab=settings`
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -75,7 +75,7 @@ You can customize the e-mail containing the tickets that will be sent upon succe
 
 ## Syncing
 Once the settings are set you have to sync the tickets from TicketSonic with your WooCommerce store and be ready for sales!
-You should go to `/wp-admin/admin.php?page=ts_yte&tab=sync` and click the Sync button
+You should go to `/wp-admin/admin.php?page=ts_yts&tab=sync` and click the Sync button
 <img width="629" alt="Screenshot 2022-01-26 at 21 44 25" src="https://user-images.githubusercontent.com/7579600/151235406-4601584c-87b6-4b7f-bb07-ad8b121d038f.png">
 
 

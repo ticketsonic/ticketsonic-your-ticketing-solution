@@ -1,17 +1,17 @@
 <?php
-require_once TS_YTE_PATH . '/vendor/autoload.php';
+require_once TS_YTS_PATH . '/vendor/autoload.php';
 
-class TS_YTE_HTML_Generator {
+class TS_YTS_HTML_Generator {
 	private $html = '';
 
 	public $extension = 'html';
 
 	public function __construct() {
-		$this->html = ts_yte_get_option( 'email_body', '' );
+		$this->html = ts_yts_get_option( 'email_body', '' );
 	}
 
 	public function generate_file( $name, $description, $price, $sensitive_decoded, $ticket_file_abs_path ) {
-		$qr = $this->get_html_qr( ts_yte_get_qr_matrix( base64_encode( $sensitive_decoded ) ) );
+		$qr = $this->get_html_qr( ts_yts_get_qr_matrix( base64_encode( $sensitive_decoded ) ) );
 		$this->html = str_replace( '[ticket_qr]', $qr, $this->html );
 		$this->html = str_replace( '[ticket_title]', $name, $this->html );
 		$this->html = str_replace( '[ticket_description]', $description, $this->html );
