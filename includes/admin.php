@@ -70,7 +70,7 @@ function ts_yts_admin_active_tab( $tab_name = null, $tab = null ) {
 		if ( $tab_name === $tab )
 			$output = ' nav-tab-active';
 	}
-	echo $output;
+	echo sanitize_html_class($output);
 }
 
 function ts_yts_tab_template( $tab = '' ) {
