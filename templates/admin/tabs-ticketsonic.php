@@ -68,18 +68,18 @@ $raw_tickets = ts_yts_get_event_ticket_data_from_remote( $url, $email, $key, nul
 							<td class="edit-event-row"><a>Edit</a></td>
 						</tr>
 					<?php endforeach; ?>
-					<tr>
-						<td><span id="new-event-button" class="button button-primary">Request new event</span></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-					</tr>
 				<?php endif; ?>
+				<tr>
+					<td><span id="new-event-button" class="button button-primary">Request new event</span></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
 			</tbody>
 		</table>
 		<input type="hidden" name="action" value="event-change" />
@@ -113,16 +113,16 @@ $raw_tickets = ts_yts_get_event_ticket_data_from_remote( $url, $email, $key, nul
 						<td class="edit-ticket-row"><a>Edit</a></td>
 					</tr>
 					<?php endforeach; ?>
-					<tr>
-						<td><span id="new-ticket-button" class="button button-primary">Request new ticket</span></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-					</tr>
 				<?php endif; ?>
+				<tr>
+					<td><span id="new-ticket-button" class="button button-primary">Request new ticket</span></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
 			</tbody>
 		</table>
 		<input type="hidden" name="action" value="ticket-change" />
