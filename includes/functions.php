@@ -630,11 +630,11 @@ function ts_yts_display_ticket_links_in_order_details( $order ) {
 		print( '<div>No ticket data found for this order</div>' );
 	}
 
-	print '<br class="clear" />';
-	print '<h4>Ticket Files</h4>';
-
 	$generated_tickets = $order->get_meta( 'ts_paths' );
-	if ( array_key_exists( 'ticket_file_url_path', $generated_tickets ) ) {
+	if ( !empty( $generated_tickets ) && array_key_exists( 'ticket_file_url_path', $generated_tickets ) ) {
+		print '<br class="clear" />';
+		print '<h4>Ticket Files</h4>';
+
 		$ticket_files_url_path = $generated_tickets['ticket_file_url_path'];
 
 		if ( ! empty( $ticket_files_url_path ) ) {
