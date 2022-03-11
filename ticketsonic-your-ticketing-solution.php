@@ -4,7 +4,7 @@
  * Plugin Name: TicketSonic - your Ticketing Solution
  * Plugin URI: https://github.com/ticketsonic/ticketsonic-your-ticketing-solution
  * Description: TicketSonic is the ticketing solution effortlessly enabling every web and mobile to become an independent ticket seller
- * Version: 1.0.2
+ * Version: 1.0.3
  * Author: TicketSonic
  * Author URI: https://www.ticketsonic.com
  * License: GPL2
@@ -13,7 +13,7 @@
  * Domain Path: /languages/
 
  * WC requires at least: 2.3
- * WC tested up to: 6.1.1
+ * WC tested up to: 6.3.1
  *
  * @package ticketsonic-your-ticketing-solution
  */
