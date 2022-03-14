@@ -71,7 +71,7 @@ $j(function() {
 	$j("#new-event-ticket-button").click(function () {
 		$j("#new-ticket-anchor").before(`<table class="form-table table-ticket"><tbody>
 		<tr id="new-event-ticket-settings">
-							<td colspan="2" class="center">
+							<td colspan="2">
 								<h3><div class="dashicons dashicons-admin-settings"></div>&nbsp;Ticket #${i+1}</h3>
 								<span class="close-icon right"></span>
 							</td>
