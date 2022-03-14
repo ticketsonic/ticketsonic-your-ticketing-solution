@@ -211,3 +211,7 @@
 .ts-welcome-panel h3 {
 	margin-top: 0;
 }
+
+.popup-form .form-table.table-badge th {
+    padding: 20px 0;
+}
