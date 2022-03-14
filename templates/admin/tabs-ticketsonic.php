@@ -266,7 +266,6 @@ $raw_tickets = ts_yts_get_event_ticket_data_from_remote( $url, $email, $key, nul
 								<label for="badge_background"><?php _e('Badge Background', 'ts_yts' ); ?></label>
 							</th>
 							<td>
-								<img style="width: 150px;" src="<?php print ( esc_attr( TS_YTS_UPLOADURLPATH ) ); ?>/badge_background.jpg"/>
 								<br>
 								<input type="file" name="badge_file" id="badge_file">
 								<p class="description"><?php _e( 'Only jpeg files are accepted', 'ts_yts' ); ?>.</p>
