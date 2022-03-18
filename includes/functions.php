@@ -480,6 +480,9 @@ function ts_yts_force_get_new_tickets_order( $order ) {
 
 	$response = ts_yts_request_create_tickets_order_in_remote( $order_id, $url, $email, $key );
 
+	if ( ! empty( $response['request_hash'] ) )
+		$order->add_order_note( 'Request ID: ' . $response['request_hash'] );
+
 	if ( 'success' !== $response['status'] ) {
 		$order->add_order_note( 'Error getting new tickets for order ' . $order_id . ': ' . $response['message'] );
 		return;
@@ -583,6 +586,9 @@ function ts_yts_send_html_tickets_to_customer_after_order_completed( $order_id )
 	$key   = ts_yts_get_option( 'api_key', '' );
 
 	$response = ts_yts_request_create_tickets_order_in_remote( $order_id, $url, $email, $key );
+
+	if ( ! empty( $response['request_hash'] ) )
+		$order->add_order_note( 'Request ID: ' . $response['request_hash'] );
 
 	if ( 'success' !== $response['status'] ) {
 		$order->update_status( 'failed', 'Error fetching result for order ' . $order_id . ': ' . $response['message'] );
