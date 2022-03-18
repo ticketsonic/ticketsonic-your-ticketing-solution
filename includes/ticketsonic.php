@@ -45,6 +45,7 @@ function ts_yts_request_create_new_ticket( $url, $email, $key, $ticket_eventid, 
 
 	$ticket_price = intval( $ticket_price ) * 100;
 	$body = array(
+		'request_hash'      => bin2hex( openssl_random_pseudo_bytes( 16 ) ),
 		'primary_text_pl'   => $ticket_title,
 		'secondary_text_pl' => $ticket_description,
 		'price'             => $ticket_price,
@@ -65,6 +66,7 @@ function ts_yts_request_change_ticket( $url, $email, $key, $ticket_sku, $ticket_
 
 	$ticket_price = intval( $ticket_price * 100 );
 	$body = array(
+		'request_hash'      => bin2hex( openssl_random_pseudo_bytes( 16 ) ),
 		'primary_text_pl'   => $ticket_title,
 		'secondary_text_pl' => $ticket_description,
 		'price'             => $ticket_price,
@@ -84,6 +86,7 @@ function ts_yts_request_change_event( $url, $email, $key, $event_id, $event_titl
 	);
 
 	$body = array(
+		'request_hash'      => bin2hex( openssl_random_pseudo_bytes( 16 ) ),
 		'primary_text_pl'   => $event_title,
 		'secondary_text_pl' => $event_description,
 		'location'          => $event_location,
@@ -165,7 +168,7 @@ function ts_yts_prepare_order_tickets_request_body( $order_id, $email, $key ) {
 	}
 
 	$body = array(
-		'order_hash'    => bin2hex( openssl_random_pseudo_bytes( 16 ) ),
+		'request_hash'  => bin2hex( openssl_random_pseudo_bytes( 16 ) ),
 		'order_details' => array(
 			'customer_billing_name'    => ts_yts_get_customer_name( $order ),
 			'customer_billing_company' => ts_yts_get_customer_company( $order ),
