@@ -704,10 +704,12 @@ add_filter(
 		$styles[] = 'opacity';
 		$styles[] = 'fill-opacity';
 		$styles[] = 'stroke';
+		$styles[] = 'stroke-opacity';
 		$styles[] = 'stroke-width';
 		$styles[] = 'stroke-linejoin';
 		$styles[] = 'stroke-miterlimit';
 		$styles[] = 'stroke-dasharray';
+		$styles[] = 'stroke-dashoffset';
 		$styles[] = 'fill';
 		$styles[] = 'stroke-linecap';
 		$styles[] = 'border-top-left-radius';
