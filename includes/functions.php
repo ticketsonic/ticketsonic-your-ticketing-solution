@@ -68,7 +68,8 @@ if ( is_admin() ) {
 				if ( 'success' === $result['status'] ) {
 					ts_yts_admin_notice_html( 'Status: success. Ticket with SKU: ' . $ticket_sku . ' successfully sent for processing. You will receive an email when it is processed.', 'updated' );
 				} else {
-					ts_yts_admin_notice_html( 'Failed to request new event: ' . $result['message'], 'error' );
+					$json = json_decode($result['message']);
+					ts_yts_admin_notice_html( 'Failed to request new event: ' . $json->message, 'error' );
 				}
 
 				break;
@@ -131,7 +132,8 @@ if ( is_admin() ) {
 				if ( 'success' === $result['status'] ) {
 					ts_yts_admin_notice_html( 'Status: success. Event with ID: ' . $event_id . ' successfully sent for processing. You will receive an email when it is processed.', 'updated' );
 				} else {
-					ts_yts_admin_notice_html( 'Failed to request new event: ' . $result['message'], 'error' );
+					$json = json_decode($result['message']);
+					ts_yts_admin_notice_html( 'Failed to request new event: ' . $json->message, 'error' );
 				}
 
 				break;
@@ -367,7 +369,8 @@ if ( is_admin() ) {
 				if ( 'success' === $result['status'] ) {
 					ts_yts_admin_notice_html( 'Status: success. Event ID: ' . $result['event_id'] . ' successfully sent for processing. You will receive an email when it is processed.', 'updated' );
 				} else {
-					ts_yts_admin_notice_html( 'Failed to request new event: ' . $result['message'], 'error' );
+					$json = json_decode($result['message']);
+					ts_yts_admin_notice_html( 'Failed to request new event: ' . $json->message, 'error' );
 				}
 
 				break;
@@ -434,7 +437,8 @@ if ( is_admin() ) {
 				if ( 'success' === $result['status'] ) {
 					ts_yts_admin_notice_html( 'Status: success. Ticket for event ID: ' . $ticket_eventid . ' successfully sent for processing. You will receive an email when it is processed.', 'updated' );
 				} else {
-					ts_yts_admin_notice_html( 'Failed to request new event: ' . $result['message'], 'error' );
+					$json = json_decode($result['message']);
+					ts_yts_admin_notice_html( 'Failed to request new event: ' . $json->message, 'error' );
 				}
 
 				break;

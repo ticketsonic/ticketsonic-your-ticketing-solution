@@ -198,7 +198,10 @@ function ts_yts_get_request_from_remote( $url, $headers, $body ) {
 		$response = json_decode( $response->getBody(), true );
 	} catch ( Exception $ex ) {
 		$response['status']  = 'error';
-		$response['message'] = $ex->getMessage();
+		$response['status_code']  = $ex->getResponse()->getStatusCode();
+		$response['reason_phrase']  = $ex->getResponse()->getReasonPhrase();
+		$response['message'] = $ex->getResponse()->getBody()->getContents();
+		$response['full_message'] = $ex->getMessage();
 	}
 
 	return $response;
@@ -212,7 +215,10 @@ function ts_yts_post_request_to_remote( $url, $headers, $body ) {
 		$response = json_decode( $response->getBody(), true );
 	} catch ( Exception $ex ) {
 		$response['status']  = 'error';
-		$response['message'] = $ex->getMessage();
+		$response['status_code']  = $ex->getResponse()->getStatusCode();
+		$response['reason_phrase']  = $ex->getResponse()->getReasonPhrase();
+		$response['message'] = $ex->getResponse()->getBody()->getContents();
+		$response['full_message'] = $ex->getMessage();
 	}
 
 	return $response;
