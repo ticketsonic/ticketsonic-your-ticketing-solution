@@ -293,6 +293,13 @@ if ( is_admin() ) {
 						return;
 					}
 
+					if ( ! is_numeric( $value['stock'] ) ) {
+						$value['stock'] = ts_yts_sanitize_or_default( $value['stock'] );
+						ts_yts_admin_notice_html( 'Ticket stock must be an integer number', 'error' );
+
+						return;
+					}
+
 					if ( empty( $value['currency'] ) ) {
 						$value['currency'] = ts_yts_sanitize_or_default( $value['currency'] );
 						ts_yts_admin_notice_html( 'Ticket currency must be set', 'error' );
