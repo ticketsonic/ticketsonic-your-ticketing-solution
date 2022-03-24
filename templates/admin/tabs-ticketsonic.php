@@ -388,10 +388,16 @@ $raw_tickets = ts_yts_get_event_ticket_data_from_remote( $url, $email, $key, nul
 
 						<tr>
 							<th>
-								<label for="ticket_eventid"><?php _e('Event ID', 'ts_yts' ); ?></label>
+								<label for="ticket_eventid"><?php _e('Event Name', 'ts_yts' ); ?></label>
 							</th>
 							<td>
-								<input type="text" size="50" id="ticket_title" name="ticket_eventid" value="" class="text" />
+								<select name="ticket_eventid" id="ticket_eventid">
+									<?php if ( count( $raw_events['events'] ) > 0 ) : ?>
+										<?php foreach ( $raw_events['events'] as $key => $event ) : ?>
+											<option value="<?php print ( esc_html( $event['event_id'] ) ); ?>"><?php print ( esc_html( $event['title'] ) ); ?></option>
+										<?php endforeach; ?>
+									<?php endif; ?>
+								</select>
 							</td>
 						</tr>
 
