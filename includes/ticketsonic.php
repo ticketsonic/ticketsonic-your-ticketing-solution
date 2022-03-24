@@ -9,10 +9,6 @@ function ts_yts_request_create_new_event( $url, $email, $key, $event_title, $eve
 		'x-api-key'    => $key,
 	);
 
-	foreach ( $tickets_data as $k => $value ) {
-		$tickets_data[ $k ]['price'] = intval( $value['price'] ) * 100;
-	}
-
 	$badge_background = TS_YTS_UPLOADURLPATH . '/badge_background.jpg';
 
 	$body = array(
@@ -43,7 +39,6 @@ function ts_yts_request_create_new_ticket( $url, $email, $key, $ticket_eventid, 
 		'x-api-eventid' => $ticket_eventid,
 	);
 
-	$ticket_price = intval( $ticket_price ) * 100;
 	$body = array(
 		'request_hash'      => bin2hex( openssl_random_pseudo_bytes( 16 ) ),
 		'primary_text_pl'   => $ticket_title,
@@ -64,7 +59,6 @@ function ts_yts_request_change_ticket( $url, $email, $key, $ticket_sku, $ticket_
 		'x-api-sku'    => $ticket_sku,
 	);
 
-	$ticket_price = intval( $ticket_price * 100 );
 	$body = array(
 		'request_hash'      => bin2hex( openssl_random_pseudo_bytes( 16 ) ),
 		'primary_text_pl'   => $ticket_title,
