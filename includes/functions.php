@@ -281,7 +281,7 @@ if ( is_admin() ) {
 
 					if ( ! is_numeric( $value['price'] ) ) {
 						$value['price'] = ts_yts_sanitize_or_default( $value['price'] );
-						ts_yts_admin_notice_html( 'Ticket price must be an integer number', 'error' );
+						ts_yts_admin_notice_html( 'Ticket price must be a valid number', 'error' );
 
 						return;
 					}
