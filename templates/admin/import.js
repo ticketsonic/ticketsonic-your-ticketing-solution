@@ -291,4 +291,24 @@ $j(function() {
 			htmlcolor: "^#[0-9a-f]{6}$"
 		});
 	});
+
+	$j("input[name*='primary_text_pl']").each(function() {
+		$j(this).rules('add', {
+			required: true
+		});
+	});
+
+	$j("input[name*='ticket_stock']").each(function() {
+		$j(this).rules('add', {
+			required: true,
+			digits: true
+		});
+	});
+
+	$j("input[name*='ticket_price']").each(function() {
+		$j(this).rules('add', {
+			required: true,
+			number: true
+		});
+	});
 });
