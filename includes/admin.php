@@ -53,6 +53,8 @@ function ts_yts_enqueue_scripts( $hook ) {
 
 	wp_enqueue_style( 'ts_yts_styles', plugins_url( '/templates/admin/import.css', TS_YTS_RELPATH ) );
 	wp_enqueue_script( 'ts_yts_scripts', plugins_url( '/templates/admin/import.js', TS_YTS_RELPATH ), array( 'jquery' ) );
+	wp_enqueue_script( 'js_validation', plugins_url( '/templates/admin/jquery.validate.min.js', TS_YTS_RELPATH ) );
+	wp_enqueue_script( 'js_validation', plugins_url( '/templates/admin/additional-methods.min.js', TS_YTS_RELPATH ) );
 	wp_enqueue_style( 'dashicons' );
 	wp_enqueue_style( 'woo_vm_styles', plugins_url( '/templates/admin/admin.css', TS_YTS_RELPATH ) );
 }

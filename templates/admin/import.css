@@ -349,3 +349,7 @@ div.remote-data h3 {
 .wp-list-table td a:hover {
     text-decoration: underline;
 }
+
+.form-error {
+	color: red;
+}

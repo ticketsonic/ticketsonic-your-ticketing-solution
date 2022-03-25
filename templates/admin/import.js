@@ -70,12 +70,12 @@ $j(function() {
 	i = 1;
 	$j("#new-event-ticket-button").click(function () {
 		$j("#new-ticket-anchor").before(`<table class="form-table table-ticket"><tbody>
-		<tr id="new-event-ticket-settings">
-							<td colspan="2">
-								<h3><div class="dashicons dashicons-admin-settings"></div>&nbsp;Ticket #${i+1}</h3>
-								<span class="close-icon right"></span>
-							</td>
-						</tr>
+			<tr id="new-event-ticket-settings">
+				<td colspan="2">
+					<h3><div class="dashicons dashicons-admin-settings"></div>&nbsp;Ticket #${i+1}</h3>
+					<span class="close-icon right"></span>
+				</td>
+			</tr>
 			<tr>
 				<th>
 					<label for="ticket_title${i}">Title</label>
@@ -125,6 +125,27 @@ $j(function() {
 				</td>
 			</tr></tbody></table>
 		`);
+
+		$j("input[name*='ticket[" + i + "][price]']").each(function() {
+			$j(this).rules('add', {
+				required: true,
+				number: true
+			});
+		});
+
+		$j("input[name*='ticket[" + i + "][stock]']").each(function() {
+			$j(this).rules('add', {
+				required: true,
+				number: true
+			});
+		});
+
+		$j("input[name*='ticket[" + i + "][primary_text_pl]']").each(function() {
+			$j(this).rules('add', {
+				required: true
+			});
+		});
+
 		i++;
 	});
 
@@ -201,5 +222,73 @@ $j(function() {
 	$j(document).on('click', '#cancel-event-change', function() {
 		var rowId = $j(this).parent().parent().attr('id');
 		$j('#events #' + rowId).replaceWith('<tr id="' + rowId + '">' + rowEventHtml + '</tr>');
+	});
+
+	$j.validator.addMethod(
+		"htmlcolor",
+		function(value, element, regexp) {
+		  var re = new RegExp(regexp);
+		  return this.optional(element) || re.test(value);
+		},
+		"Please enter a valid html color."
+	  );
+
+	jQuery.validator.setDefaults({
+		debug: true,
+		success: "valid"
+	});
+
+	$j("#submit-new-event-request-form").validate({
+		errorElement: "p",
+		errorClass: "form-error"
+	});
+
+	$j("#submit-new-ticket-request-form").validate({
+		errorElement: "p",
+		errorClass: "form-error"
+	});
+
+	$j("input[name*='event_title']").each(function() {
+		$j(this).rules('add', {
+			required: true
+		});
+	});
+
+	$j("input[name*='ticket[0][stock]']").each(function() {
+		$j(this).rules('add', {
+			required: true,
+			number: true
+		});
+	});
+
+	$j("input[name*='ticket[0][price]']").each(function() {
+		$j(this).rules('add', {
+			required: true,
+			number: true
+		});
+	});
+
+	$j("input[name*='ticket[0][primary_text_pl]']").each(function() {
+		$j(this).rules('add', {
+			required: true
+		});
+	});
+
+	$j("input#badge_primary_text_fontsize, input#badge_secondary_text_fontsize").each(function() {
+		$j(this).rules('add', {
+			number: true
+		});
+	});
+
+	$j("input#badge_primary_text_color").each(function() {
+		$j(this).rules('add', {
+			htmlcolor: "^#[0-9a-f]{6}$"
+		});
+	});
+
+	$j("input#badge_secondary_text_color").each(function() {
+		$j(this).rules('add', {
+			htmlcolor: "^#[0-9a-f]{6}$"
+		});
 	});
 });
