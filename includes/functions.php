@@ -308,53 +308,64 @@ if ( is_admin() ) {
 					}
 				}
 
+				$horizontal_locations = array( 'left', 'center', 'right' );
 				$badge_text_horizontal_location = ts_yts_sanitize_or_default( $_POST['badge_text_horizontal_location'] );
-				if ( empty( $badge_text_horizontal_location ) ) {
-					ts_yts_admin_notice_html( 'Badge text horizontal location must be set', 'error' );
-					return;
+				if ( ! empty( $badge_text_horizontal_location ) ) {
+					if ( ! in_array( $badge_text_horizontal_location, $horizontal_locations ) ) {
+						ts_yts_admin_notice_html( 'Badge text horizontal location value must be either left, center or right', 'error' );
+						return;
+					}
 				}
 
+				$vertical_locations = array( 'top', 'center', 'bottom' );
 				$badge_text_vertical_location = ts_yts_sanitize_or_default( $_POST['badge_text_vertical_location'] );
-				if ( empty( $badge_text_vertical_location ) ) {
-					ts_yts_admin_notice_html( 'Badge text vertical location must be set', 'error' );
-					return;
+				if ( ! empty( $badge_text_vertical_location ) ) {
+					if ( ! in_array( $badge_text_vertical_location, $vertical_locations ) ) {
+						ts_yts_admin_notice_html( 'Badge text horizontal location value must be either top, center or bottom', 'error' );
+						return;
+					}
 				}
 
 				$badge_primary_text_fontsize = ts_yts_sanitize_or_default( $_POST['badge_primary_text_fontsize'] );
-				if ( empty( $badge_primary_text_fontsize ) ) {
-					ts_yts_admin_notice_html( 'Primary text font size must be set', 'error' );
-					return;
-				}
-
-				if ( ! is_int( intval( $badge_primary_text_fontsize ) ) ) {
-					ts_yts_admin_notice_html( 'Primary text font size must be an integer number', 'error' );
-					return;
+				if ( ! empty( $badge_primary_text_fontsize ) ) {
+					if ( ! is_numeric( $badge_primary_text_fontsize ) ) {
+						ts_yts_admin_notice_html( 'Primary text font size must be a number', 'error' );
+						return;
+					}
 				}
 
 				$badge_secondary_text_fontsize = ts_yts_sanitize_or_default( $_POST['badge_secondary_text_fontsize'] );
-				if ( empty( $badge_secondary_text_fontsize ) ) {
-					ts_yts_admin_notice_html( 'Primary text font size must be set', 'error' );
-					return;
-				}
-
-				if ( ! is_int( intval( $badge_secondary_text_fontsize ) ) ) {
-					ts_yts_admin_notice_html( 'Secondary text font size must be an integer number', 'error' );
-					return;
+				if ( ! empty( $badge_secondary_text_fontsize ) ) {
+					if ( ! is_numeric( $badge_secondary_text_fontsize ) ) {
+						ts_yts_admin_notice_html( 'Secondary text font size must be a number', 'error' );
+						return;
+					}
 				}
 
 				$badge_primary_text_color = ts_yts_sanitize_or_default( $_POST['badge_primary_text_color'] );
-				if ( empty( $badge_primary_text_color ) ) {
-					ts_yts_admin_notice_html( 'Primary text color must be set', 'error' );
-					return;
+				if ( ! empty( $badge_primary_text_color ) ) {
+					$output = null;
+					preg_match_all( "/#[0-9a-f]{6}/i", $badge_primary_text_color, $output );
+					preg_match_all( "/#[0-9a-f]{3}/i", $badge_primary_text_color, $output );
+					if ( count( $output[0] ) < 1 ) {
+						ts_yts_admin_notice_html( 'Primary text color must be in html format', 'error' );
+						return;
+					}
 				}
 
 				$badge_secondary_text_color = ts_yts_sanitize_or_default( $_POST['badge_secondary_text_color'] );
-				if ( empty( $badge_secondary_text_color ) ) {
-					ts_yts_admin_notice_html( 'Secondary text color must be set', 'error' );
-					return;
+				if ( ! empty( $badge_secondary_text_color ) ) {
+					$output = null;
+					preg_match_all( "/#[0-9a-f]{6}/i", $badge_secondary_text_color, $output );
+					preg_match_all( "/#[0-9a-f]{3}/i", $badge_secondary_text_color, $output );
+					if ( count( $output[0] ) < 1 ) {
+						ts_yts_admin_notice_html( 'Secondary text color must be in html format', 'error' );
+						return;
+					}
 				}
 
-				ts_yts_upload_custom_badge_background();
+				if ( isset( $_POST['badge_file'] ) )
+					ts_yts_upload_custom_badge_background();
 
 				$result = ts_yts_request_create_new_event(
 					$url,
