@@ -257,7 +257,7 @@ $j(function() {
 	$j("input[name*='ticket[0][stock]']").each(function() {
 		$j(this).rules('add', {
 			required: true,
-			number: true
+			digits: true
 		});
 	});
 
