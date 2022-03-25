@@ -40,26 +40,23 @@ if ( is_admin() ) {
 
 				$ticket_title = ts_yts_sanitize_or_default( $_POST['ticket_primary_text_pl'] );
 				if ( empty( $ticket_title ) ) {
-					ts_yts_admin_notice_html( 'Ticket title field have to set', 'error' );
+					ts_yts_admin_notice_html( 'Ticket title have to set', 'error' );
 					return;
 				}
 
 				$ticket_description = ts_yts_sanitize_or_default( $_POST['ticket_secondary_text_pl'] );
-
 				$ticket_price = ts_yts_sanitize_or_default( $_POST['ticket_price'] );
 
-				if ( ! is_int( intval( ts_yts_sanitize_or_default( $ticket_price ) ) ) ) {
-					ts_yts_admin_notice_html( 'Ticket price must be an integer number', 'error' );
-
+				if ( ! is_numeric( $ticket_price ) ) {
+					ts_yts_admin_notice_html( 'Ticket price must be a valid number', 'error' );
 					return;
 				}
 
 				$ticket_currency = ts_yts_sanitize_or_default( $_POST['ticket_currency'] );
 
 				$ticket_stock = ts_yts_sanitize_or_default( $_POST['ticket_stock'] );
-				if ( ! is_int( intval( ts_yts_sanitize_or_default( $ticket_stock ) ) ) ) {
-					ts_yts_admin_notice_html( 'Ticket stock must be an integer number', 'error' );
-
+				if ( ! is_numeric( $ticket_stock ) ) {
+					ts_yts_admin_notice_html( 'Ticket stock must be a valid number', 'error' );
 					return;
 				}
 
