@@ -222,7 +222,6 @@ function setValidators() {
 	  );
 
 	jQuery.validator.setDefaults({
-		debug: true,
 		success: "valid"
 	});
 
