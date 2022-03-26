@@ -158,7 +158,7 @@ $j(function() {
 		var skuTdValue = $j('#tickets #' + rowId + ' .sku').html();
 		$j('#tickets #' + rowId).append('<td class="hidden"><input type="hidden" name="ticket_sku" value="' + skuTdValue + '"></td>');
 
-		$j('#tickets #' + rowId + ' .edit-ticket-row').replaceWith('<td><input type="submit" id="request-ticket-change" class="button button-primary" value="Request"><input type="button" id="cancel-ticket-change" class="button button-primary" value="Cancel"></td>');
+		$j('#tickets #' + rowId + ' .edit-ticket-row').replaceWith('<td><input type="submit" id="request-ticket-change" class="button button-primary" value="Request" name="request-ticket-change"><input type="button" id="cancel-ticket-change" class="button button-primary" value="Cancel" name="cancel-ticket-change"></td>');
 
 		setValidators();
 	});
