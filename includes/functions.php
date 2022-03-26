@@ -269,23 +269,9 @@ if ( is_admin() ) {
 						return;
 					}
 
-					if ( empty( $value['price'] ) ) {
-						$value['price'] = ts_yts_sanitize_or_default( $value['price'] );
-						ts_yts_admin_notice_html( 'Ticket price must be set', 'error' );
-
-						return;
-					}
-
 					if ( ! is_numeric( $value['price'] ) ) {
 						$value['price'] = ts_yts_sanitize_or_default( $value['price'] );
 						ts_yts_admin_notice_html( 'Ticket price must be a valid number', 'error' );
-
-						return;
-					}
-
-					if ( empty( $value['stock'] ) ) {
-						$value['stock'] = ts_yts_sanitize_or_default( $value['stock'] );
-						ts_yts_admin_notice_html( 'Ticket stock must be set', 'error' );
 
 						return;
 					}
@@ -424,11 +410,6 @@ if ( is_admin() ) {
 				$ticket_description = ts_yts_sanitize_or_default( $_POST['secondary_text_pl'] );
 
 				$ticket_price = ts_yts_sanitize_or_default( $_POST['ticket_price'] );
-				if ( empty( $ticket_price ) ) {
-					ts_yts_admin_notice_html( 'Ticket price field have to set', 'error' );
-					return;
-				}
-
 				if ( ! is_numeric( $ticket_price ) ) {
 					ts_yts_admin_notice_html( 'Ticket price must be a valid number', 'error' );
 					return;
@@ -441,11 +422,6 @@ if ( is_admin() ) {
 				}
 
 				$ticket_stock = ts_yts_sanitize_or_default( $_POST['ticket_stock'] );
-				if ( empty( $ticket_stock ) ) {
-					ts_yts_admin_notice_html( 'Ticket stock field have to set', 'error' );
-					return;
-				}
-
 				if ( ! is_numeric( $ticket_stock ) ) {
 					ts_yts_admin_notice_html( 'Ticket stock must be a valid number', 'error' );
 					return;
