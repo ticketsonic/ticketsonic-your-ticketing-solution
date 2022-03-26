@@ -247,6 +247,38 @@ function setValidators() {
 		errorClass: "form-error"
 	});
 
+	$j("#events-list").on('submit', function(e) {
+        var isvalid = $j("#events-list").valid();
+        if (!isvalid) {
+            e.preventDefault();
+            alert("Please fix the validation errors in the form");
+        }
+    });
+
+	$j("#tickets-list").on('submit', function(e) {
+        var isvalid = $j("#tickets-list").valid();
+        if (!isvalid) {
+            e.preventDefault();
+            alert("Please fix the validation errors in the form");
+        }
+    });
+
+	$j("#submit-new-event-request-form").on('submit', function(e) {
+        var isvalid = $j("#submit-new-event-request-form").valid();
+        if (!isvalid) {
+            e.preventDefault();
+            alert("Please fix the validation errors in the form");
+        }
+    });
+
+	$j("#submit-new-ticket-request-form").on('submit', function(e) {
+        var isvalid = $j("#submit-new-ticket-request-form").valid();
+        if (!isvalid) {
+            e.preventDefault();
+            alert("Please fix the validation errors in the form");
+        }
+    });
+
 	$j("input[name*='badge_primary_text_fontsize'], input[name*='badge_secondary_text_fontsize']").each(function() {
 		$j(this).rules('add', {
 			number: true
