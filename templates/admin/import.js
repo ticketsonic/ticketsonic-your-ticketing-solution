@@ -209,6 +209,8 @@ $j(function() {
 		var rowId = $j(this).parent().parent().attr('id');
 		$j('#events #' + rowId).replaceWith('<tr id="' + rowId + '">' + rowEventHtml + '</tr>');
 	});
+
+	setValidators()
 });
 
 function setValidators() {
