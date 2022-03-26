@@ -78,7 +78,7 @@ $j(function() {
 			</tr>
 			<tr>
 				<th>
-					<label for="ticket_title${i}">Title</label>
+					<label for="ticket_title${i}">Title *</label>
 				</th>
 				<td>
 					<input type="text" size="50" id="ticket_title${i}" name="ticket[${i}][primary_text_pl]" value="" class="text" />
@@ -96,7 +96,7 @@ $j(function() {
 
 			<tr>
 				<th>
-					<label for="ticket_price${i}">Price</label>
+					<label for="ticket_price${i}">Price *</label>
 				</th>
 				<td>
 					<input type="text" size="50" id="ticket_price${i}" name="ticket[${i}][price]" value="" class="text" />
@@ -118,12 +118,12 @@ $j(function() {
 
 			<tr>
 				<th>
-					<label for="ticket_stock${i}">Stock</label>
+					<label for="ticket_stock${i}">Stock *</label>
 				</th>
 				<td>
 					<input type="text" size="50" id="ticket_stock${i}" name="ticket[${i}][stock]" value="" class="text" />
 				</td>
-			</tr></tbody></table>
+			</tr><tr><td>* - required fields</td></tr></tbody></table>
 		`);
 
 		setValidators();

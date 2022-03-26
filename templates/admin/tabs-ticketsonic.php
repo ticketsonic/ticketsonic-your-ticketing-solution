@@ -156,7 +156,7 @@ $raw_tickets = ts_yts_get_event_ticket_data_from_remote( $url, $email, $key, nul
 
 						<tr>
 							<th>
-								<label for="event_title"><?php _e('Title', 'ts_yts' ); ?></label>
+								<label for="event_title"><?php _e('Title', 'ts_yts' ); ?> *</label>
 							</th>
 							<td>
 								<input type="text" size="50" id="event_title" name="event_title" value="" class="text" />
@@ -180,6 +180,7 @@ $raw_tickets = ts_yts_get_event_ticket_data_from_remote( $url, $email, $key, nul
 								<input type="text" size="50" id="event_location" name="event_location" value="" class="text" />
 							</td>
 						</tr>
+						<tr><td>* - required fields</td></tr>
 					</tbody>
 				</table>
 				<table class="form-table table-ticket">
@@ -192,7 +193,7 @@ $raw_tickets = ts_yts_get_event_ticket_data_from_remote( $url, $email, $key, nul
 
 						<tr>
 							<th>
-								<label for="ticket_title0"><?php _e('Title', 'ts_yts' ); ?></label>
+								<label for="ticket_title0"><?php _e('Title', 'ts_yts' ); ?> *</label>
 							</th>
 							<td>
 								<input type="text" size="50" id="ticket_title0" name="ticket[0][primary_text_pl]" value="" class="text" />
@@ -210,7 +211,7 @@ $raw_tickets = ts_yts_get_event_ticket_data_from_remote( $url, $email, $key, nul
 
 						<tr>
 							<th>
-								<label for="ticket_price0"><?php _e('Price', 'ts_yts' ); ?></label>
+								<label for="ticket_price0"><?php _e('Price', 'ts_yts' ); ?> *</label>
 							</th>
 							<td>
 								<input type="text" size="50" id="ticket_price0" name="ticket[0][price]" value="" class="text" />
@@ -232,12 +233,13 @@ $raw_tickets = ts_yts_get_event_ticket_data_from_remote( $url, $email, $key, nul
 
 						<tr>
 							<th>
-								<label for="ticket_stock0"><?php _e('Stock', 'ts_yts' ); ?></label>
+								<label for="ticket_stock0"><?php _e('Stock', 'ts_yts' ); ?> *</label>
 							</th>
 							<td>
 								<input type="text" size="50" id="ticket_stock0" name="ticket[0][stock]" value="" class="text" />
 							</td>
 						</tr>
+						<tr><td>* - required fields</td></tr>
 					</tbody>
 				</table>
 				<div id="new-ticket-anchor"></div>
@@ -403,7 +405,7 @@ $raw_tickets = ts_yts_get_event_ticket_data_from_remote( $url, $email, $key, nul
 
 						<tr>
 							<th>
-								<label for="primary_text_pl"><?php _e('Title', 'ts_yts' ); ?></label>
+								<label for="primary_text_pl"><?php _e('Title', 'ts_yts' ); ?> *</label>
 							</th>
 							<td>
 								<input type="text" size="50" id="ticketprimary_text_pl_title" name="primary_text_pl" value="" class="text" />
@@ -421,7 +423,7 @@ $raw_tickets = ts_yts_get_event_ticket_data_from_remote( $url, $email, $key, nul
 
 						<tr>
 							<th>
-								<label for="ticket_price"><?php _e('Price', 'ts_yts' ); ?></label>
+								<label for="ticket_price"><?php _e('Price', 'ts_yts' ); ?> *</label>
 							</th>
 							<td>
 								<input type="text" size="50" id="ticket_price" name="ticket_price" value="" class="text" />
@@ -443,12 +445,13 @@ $raw_tickets = ts_yts_get_event_ticket_data_from_remote( $url, $email, $key, nul
 
 						<tr>
 							<th>
-								<label for="ticket_stock"><?php _e('Ticket stock', 'ts_yts' ); ?></label>
+								<label for="ticket_stock"><?php _e('Ticket stock', 'ts_yts' ); ?> *</label>
 							</th>
 							<td>
 								<input type="text" size="50" id="ticket_stock" name="ticket_stock" value="" class="text" />
 							</td>
 						</tr>
+						<tr><td>* - required fields</td></tr>
 					</tbody>
 				</table>
 
