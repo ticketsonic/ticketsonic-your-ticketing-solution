@@ -126,25 +126,7 @@ $j(function() {
 			</tr></tbody></table>
 		`);
 
-		$j("input[name*='ticket[" + i + "][price]']").each(function() {
-			$j(this).rules('add', {
-				required: true,
-				number: true
-			});
-		});
-
-		$j("input[name*='ticket[" + i + "][stock]']").each(function() {
-			$j(this).rules('add', {
-				required: true,
-				number: true
-			});
-		});
-
-		$j("input[name*='ticket[" + i + "][primary_text_pl]']").each(function() {
-			$j(this).rules('add', {
-				required: true
-			});
-		});
+		setValidators();
 
 		i++;
 	});
@@ -177,6 +159,8 @@ $j(function() {
 		$j('#tickets #' + rowId).append('<td class="hidden"><input type="hidden" name="ticket_sku" value="' + skuTdValue + '"></td>');
 
 		$j('#tickets #' + rowId + ' .edit-ticket-row').replaceWith('<td><input type="submit" id="request-ticket-change" class="button button-primary" value="Request"><input type="button" id="cancel-ticket-change" class="button button-primary" value="Cancel"></td>');
+
+		setValidators();
 	});
 
 	$j(document).on('click', '#cancel-ticket-change', function() {
@@ -217,13 +201,17 @@ $j(function() {
 		$j('#events #' + rowId).append('<td class="hidden"><input type="hidden" name="event_id" value="' + eventIdTdValue + '"></td>');
 
 		$j('#events #' + rowId + ' .edit-event-row').replaceWith('<td><input type="submit" id="request-event-change" class="button button-primary" value="Request"><input type="button" id="cancel-event-change" class="button button-primary" value="Cancel"></td>');
+
+		setValidators();
 	});
 
 	$j(document).on('click', '#cancel-event-change', function() {
 		var rowId = $j(this).parent().parent().attr('id');
 		$j('#events #' + rowId).replaceWith('<tr id="' + rowId + '">' + rowEventHtml + '</tr>');
 	});
+});
 
+function setValidators() {
 	$j.validator.addMethod(
 		"htmlcolor",
 		function(value, element, regexp) {
@@ -238,6 +226,16 @@ $j(function() {
 		success: "valid"
 	});
 
+	$j("#events-list").validate({
+		errorElement: "p",
+		errorClass: "form-error"
+	});
+
+	$j("#tickets-list").validate({
+		errorElement: "p",
+		errorClass: "form-error"
+	});
+
 	$j("#submit-new-event-request-form").validate({
 		errorElement: "p",
 		errorClass: "form-error"
@@ -248,67 +246,35 @@ $j(function() {
 		errorClass: "form-error"
 	});
 
-	$j("input[name*='event_title']").each(function() {
+	$j("input[name*='badge_primary_text_fontsize'], input[name*='badge_secondary_text_fontsize']").each(function() {
+		$j(this).rules('add', {
+			number: true
+		});
+	});
+
+	$j("input[name*='badge_primary_text_color'], input[name*='badge_secondary_text_color']").each(function() {
+		$j(this).rules('add', {
+			htmlcolor: "^#[0-9a-f]{6}$"
+		});
+	});
+
+	$j("input[name*='event_title'], input[name*='primary_text_pl']").each(function() {
 		$j(this).rules('add', {
 			required: true
 		});
 	});
 
-	$j("input[name*='ticket[0][stock]']").each(function() {
+	$j("input[name*='stock']").each(function() {
 		$j(this).rules('add', {
 			required: true,
 			digits: true
 		});
 	});
 
-	$j("input[name*='ticket[0][price]']").each(function() {
+	$j("input[name*='price']").each(function() {
 		$j(this).rules('add', {
 			required: true,
 			number: true
 		});
 	});
-
-	$j("input[name*='ticket[0][primary_text_pl]']").each(function() {
-		$j(this).rules('add', {
-			required: true
-		});
-	});
-
-	$j("input#badge_primary_text_fontsize, input#badge_secondary_text_fontsize").each(function() {
-		$j(this).rules('add', {
-			number: true
-		});
-	});
-
-	$j("input#badge_primary_text_color").each(function() {
-		$j(this).rules('add', {
-			htmlcolor: "^#[0-9a-f]{6}$"
-		});
-	});
-
-	$j("input#badge_secondary_text_color").each(function() {
-		$j(this).rules('add', {
-			htmlcolor: "^#[0-9a-f]{6}$"
-		});
-	});
-
-	$j("input[name*='primary_text_pl']").each(function() {
-		$j(this).rules('add', {
-			required: true
-		});
-	});
-
-	$j("input[name*='ticket_stock']").each(function() {
-		$j(this).rules('add', {
-			required: true,
-			digits: true
-		});
-	});
-
-	$j("input[name*='ticket_price']").each(function() {
-		$j(this).rules('add', {
-			required: true,
-			number: true
-		});
-	});
-});
+}

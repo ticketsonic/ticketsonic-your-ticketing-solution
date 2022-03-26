@@ -37,7 +37,7 @@ $raw_tickets = ts_yts_get_event_ticket_data_from_remote( $url, $email, $key, nul
 <div class="remote-data">
 	<h3><div class="dashicons dashicons-admin-settings"></div>&nbsp;List of events</h3>
 
-	<form method="POST">
+	<form method="POST" id="events-list">
 		<table id="events" class="wp-list-table widefat fixed striped table-view-list posts">
 			<thead>
 				<tr>
@@ -56,7 +56,7 @@ $raw_tickets = ts_yts_get_event_ticket_data_from_remote( $url, $email, $key, nul
 				<?php if ( count( $raw_events['events'] ) > 0 ) : ?>
 					<?php foreach ( $raw_events['events'] as $key => $event ) : ?>
 						<?php $badge_data = json_decode( $event['badge_data'] ); ?>
-						<tr id="row-<?php print ( esc_html( $key ) ); ?>">
+						<tr id="events-row-<?php print ( esc_html( $key ) ); ?>">
 							<td class="event-id"><?php print ( esc_html( $event['event_id'] ) ); ?></td>
 							<td class="title"><?php print ( esc_html( $event['title'] ) ); ?></td>
 							<td class="htext-loc"><?php print ( esc_html( $badge_data->badge_text_horizontal_location ) ); ?></td>
@@ -87,7 +87,7 @@ $raw_tickets = ts_yts_get_event_ticket_data_from_remote( $url, $email, $key, nul
 
 	<h3><div class="dashicons dashicons-admin-settings"></div>&nbsp;List of tickets</h3>
 
-	<form method="POST">
+	<form method="POST" id="tickets-list">
 		<table id="tickets" class="wp-list-table widefat fixed striped table-view-list posts">
 			<thead>
 				<tr>
@@ -148,7 +148,7 @@ $raw_tickets = ts_yts_get_event_ticket_data_from_remote( $url, $email, $key, nul
 
 						<?php do_action( 'ts_yts_export_settings_general' ); ?>
 
-						<tr id="new-event-ticket-settings">
+						<tr id="new-event-ticket-settings1">
 							<td colspan="2">
 								<h3><div class="dashicons dashicons-admin-settings"></div>&nbsp;Event</h3>
 							</td>
@@ -184,7 +184,7 @@ $raw_tickets = ts_yts_get_event_ticket_data_from_remote( $url, $email, $key, nul
 				</table>
 				<table class="form-table table-ticket">
 					<tbody>
-						<tr id="new-event-ticket-settings">
+						<tr id="new-event-ticket-settings2">
 							<td colspan="2">
 								<h3><div class="dashicons dashicons-admin-settings"></div>&nbsp;Ticket #1</h3>
 							</td>
@@ -243,7 +243,7 @@ $raw_tickets = ts_yts_get_event_ticket_data_from_remote( $url, $email, $key, nul
 				<div id="new-ticket-anchor"></div>
 				<table class="form-table submit-button">
 					<tbody>
-						<tr id="new-event-ticket-settings">
+						<tr id="new-event-ticket-settings3">
 							<td colspan="2">
 								<p class="submit">
 									<input type="button" id="new-event-ticket-button" class="button button-primary" value="Add new ticket">
@@ -337,7 +337,7 @@ $raw_tickets = ts_yts_get_event_ticket_data_from_remote( $url, $email, $key, nul
 				</table>
 				<table class="form-table submit-button">
 					<tbody>
-						<tr id="new-event-ticket-settings">
+						<tr id="new-event-ticket-settings4">
 							<td colspan="2">
 								<p class="submit">
 								<input type="submit" name="submit" id="submit-new-event-request-button" class="button button-primary" value="<?php _e( 'Request new event', 'ts_yts' ); ?>" />
@@ -454,7 +454,7 @@ $raw_tickets = ts_yts_get_event_ticket_data_from_remote( $url, $email, $key, nul
 
 				<table class="form-table submit-button">
 					<tbody>
-						<tr id="new-event-ticket-settings">
+						<tr id="new-event-ticket-settings5">
 							<td colspan="2">
 								<p class="submit">
 									<input type="submit" name="submit" id="submit" class="button button-primary" value="<?php _e( 'Request new ticket', 'ts_yts' ); ?>" />
