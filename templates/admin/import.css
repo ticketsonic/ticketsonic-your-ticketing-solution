@@ -350,6 +350,6 @@ div.remote-data h3 {
     text-decoration: underline;
 }
 
-.form-error {
+form table .form-error {
 	color: red;
 }
