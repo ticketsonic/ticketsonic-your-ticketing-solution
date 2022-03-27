@@ -315,7 +315,7 @@ $raw_tickets = ts_yts_get_event_ticket_data_from_remote( $url, $email, $key, nul
 								<label for="badge_primary_text_fontsize"><?php _e( 'Primary text font size', 'ts_yts' ); ?></label>
 							</th>
 							<td>
-								<input type="text" size="50" id="badge_primary_text_fontsize" name="badge_primary_text_fontsize" value="100" class="text" />
+								<input type="text" size="50" id="badge_primary_text_fontsize" name="badge_primary_text_fontsize" value="30" class="text" />
 							</td>
 						</tr>
 
@@ -324,7 +324,7 @@ $raw_tickets = ts_yts_get_event_ticket_data_from_remote( $url, $email, $key, nul
 								<label for="badge_secondary_text_fontsize"><?php _e('Secondary text font size', 'ts_yts' ); ?></label>
 							</th>
 							<td>
-								<input type="text" size="50" id="badge_secondary_text_fontsize" name="badge_secondary_text_fontsize" value="80" class="text" />
+								<input type="text" size="50" id="badge_secondary_text_fontsize" name="badge_secondary_text_fontsize" value="20" class="text" />
 							</td>
 						</tr>
 
