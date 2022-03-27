@@ -347,7 +347,7 @@ if ( is_admin() ) {
 					}
 				}
 
-				if ( isset( $_POST['badge_file'] ) )
+				if ( isset( $_FILES['badge_file'] ) )
 					ts_yts_upload_custom_badge_background();
 
 				$result = ts_yts_request_create_new_event(

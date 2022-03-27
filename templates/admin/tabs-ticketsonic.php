@@ -262,7 +262,17 @@ $raw_tickets = ts_yts_get_event_ticket_data_from_remote( $url, $email, $key, nul
 								<p class="description"><?php _e( 'Set badge background and text location for autoprinting badges.', 'ts_yts' ); ?></p>
 							</td>
 						</tr>
-
+						<?php if ( file_exists( TS_YTS_UPLOADPATH . '/badge_background.jpg' ) ):?>
+						<tr>
+							<th>
+								<label for="badge_background"><?php _e('Default Badge Background', 'ts_yts' ); ?></label>
+							</th>
+							<td>
+								<br>
+								<img src="<?php print TS_YTS_UPLOADURLPATH . '/badge_background.jpg'; ?>">
+							</td>
+						</tr>
+						<?php endif; ?>
 						<tr>
 							<th>
 								<label for="badge_background"><?php _e('Badge Background', 'ts_yts' ); ?></label>

@@ -9,7 +9,7 @@ function ts_yts_request_create_new_event( $url, $email, $key, $event_title, $eve
 		'x-api-key'    => $key,
 	);
 
-	$badge_background = TS_YTS_UPLOADURLPATH . '/badge_background.jpg';
+	$badge_background = TS_YTS_UPLOADPATH . '/badge_background.jpg';
 
 	$body = array(
 		'primary_text_pl'                => $event_title,
@@ -18,7 +18,6 @@ function ts_yts_request_create_new_event( $url, $email, $key, $event_title, $eve
 		'location'                       => $event_location,
 		'tickets'                        => $tickets_data,
 		'request_hash'                   => bin2hex( openssl_random_pseudo_bytes( 16 ) ),
-		'badge_background'               => base64_encode( file_get_contents( $badge_background ) ),
 		'badge_text_horizontal_location' => $badge_text_horizontal_location,
 		'badge_text_vertical_location'   => $badge_text_vartical_location,
 		'badge_primary_text_fontsize'    => $badge_primary_text_fontsize,
@@ -26,6 +25,10 @@ function ts_yts_request_create_new_event( $url, $email, $key, $event_title, $eve
 		'badge_primary_text_color'       => $badge_primary_text_color,
 		'badge_secondary_text_color'     => $badge_secondary_text_color,
 	);
+
+	if ( file_exists( $badge_background ) ) {
+		$body['badge_background'] = base64_encode( file_get_contents( $badge_background ) );
+	}
 
 	$response = ts_yts_post_request_to_remote( $url, $headers, $body );
 
