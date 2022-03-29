@@ -347,8 +347,11 @@ if ( is_admin() ) {
 					}
 				}
 
-				if ( isset( $_FILES['badge_file'] ) )
-					ts_yts_upload_custom_badge_background();
+				$uploaded_badge_file_path = null;
+				if ( isset( $_FILES['badge_file'] ) ) {
+					$result = ts_yts_upload_custom_badge_background();
+					$uploaded_badge_file_path = $result['file'];
+				}
 
 				$result = ts_yts_request_create_new_event(
 					$url,
@@ -359,6 +362,7 @@ if ( is_admin() ) {
 					$event_datetime,
 					$event_location,
 					$tickets_data,
+					$uploaded_badge_file_path,
 					$badge_text_horizontal_location,
 					$badge_text_vertical_location,
 					$badge_primary_text_fontsize,
