@@ -2,7 +2,7 @@
 Contributors: ticketsonic
 Requires at least: 4.7
 Tested up to: 5.9.2
-Stable tag: 1.1
+Stable tag: 1.1.1
 Requires PHP: 7.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -10,7 +10,7 @@ License URI: https://www.gnu.org/licenses/gpl-2.0.html
 **TicketSonic** is the ticketing engine that integrates with your platform behind the scenes enabling you to become a full featured ticket seller.
 
 == Description ==
-We bring together everything required for you to become a standalone ticket seller and have a successful event. TicketSonic's products provide solutions for every scenario. Electronic tickets, free scanner mobile app, auto printed badge for accelerated reception and many more to support all kinds of events and venues like conferences, museums, city tours, staduims, etc.
+TicketSonic brings together everything required for you to become a standalone ticket seller and have a successful event. TicketSonic's products provide solutions for every scenario. Electronic tickets, free scanner mobile app, auto printed badge for accelerated reception and many more to support all kinds of events and venues like conferences, museums, city tours, staduims, etc.
 
 This is a WooCommerce based plugin for integrating the TicketSonic Engine with your WooCommerce platform.
 
@@ -23,8 +23,6 @@ What you get from this plugin?
 
 ### Prerequisites
 
-*   [Composer](https://getcomposer.org/)
-*   [WordPress installation](https://wordpress.org)
 *   [WooCommerce Plugin](https://wordpress.org/plugins/woocommerce) installed and activated
 *   Ensure wp-content/uploads dir is writable. In most cases it is by default. The plugin will create a subdirectory called ticketsonic-your-ticketing-solution and it will be used for storage of ticket files when the admin manually generates ones
 
@@ -33,21 +31,10 @@ What you get from this plugin?
 
 1. Get API credentials at [https://www.ticketsonic.com/user/register](https://www.ticketsonic.com/user/register)
 
-2. Get the plugin either from:
-    *   the WordPress plugins page and unpack at the plugins folder
-    *   the repo at [https://github.com/ticketsonic/ticketsonic-your-ticketing-solution](https://github.com/ticketsonic/ticketsonic-your-ticketing-solution)
-
-3. Install dependencies - navigate to the plugin folder and perform:
-    > foo@bar:~$ composer install
-
-4. Enable the TicketSonic plugin
-
-5. Enter your API credentials in `/wp-admin/admin.php?page=ts_yts&tab=settings`
-
-
-## Settings
-
+2. Download and enable the plugin
 Once installed the plugin page is available as one of the WooCommerce menu items.
+
+3. Enter your API credentials in `/wp-admin/admin.php?page=ts_yts&tab=settings`
 
 ![TicketSonic Demo Screenshot](/path/to/screenshot-1.png "TicketSonic Demo Screenshot")
 
@@ -55,10 +42,7 @@ Once installed the plugin page is available as one of the WooCommerce menu items
 ### General settings
 The settings that have to be set are:
 
-*    **Event ID** - when syncing with TicketSonic only the tickets related to the event with the set EventID will be synced as WooCommerce Product.
-   Leave empty to sync all tickets from TicketSonic.
-
-*    **API credentials** - the API key identifier available at your [TicketSonic account](https://www.ticketsonic.com/user).
+*    **API credentials** - the API Key and API Email identifiers available at your [TicketSonic account](https://www.ticketsonic.com/user).
 
 
 ### E-mail settings

@@ -37,7 +37,7 @@
 				</th>
 				<td>
 					<input type="text" size="30" id="api_userid" name="api_userid" value="<?php print ( esc_attr( $api_userid ) ); ?>" class="text" />
-					<p class="description"><?php _e( 'The email ID used when registered with TicketSonic.', 'ts_yts' ); ?>.</p>
+					<p class="description"><?php _e( 'The Email ID used when registered with TicketSonic.', 'ts_yts' ); ?>.</p>
 				</td>
 			</tr>
 			<tr>
