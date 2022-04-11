@@ -115,16 +115,22 @@ if ( is_admin() ) {
 				$badge_primary_text_color   = ts_yts_sanitize_or_default( $_POST['badge_primary_text_color'] );
 				$badge_secondary_text_color = ts_yts_sanitize_or_default( $_POST['badge_secondary_text_color'] );
 
-				$event_badge_data = array(
-					'badge_text_horizontal_location' => $badge_text_horizontal_location,
-					'badge_text_vertical_location'   => $badge_text_vertical_location,
-					'badge_primary_text_fontsize'    => $badge_primary_text_fontsize,
-					'badge_secondary_text_fontsize'  => $badge_secondary_text_fontsize,
-					'badge_primary_text_color'       => $badge_primary_text_color,
-					'badge_secondary_text_color'     => $badge_secondary_text_color,
+				$result = ts_yts_request_change_event(
+					$url,
+					$email,
+					$key,
+					$event_id,
+					$event_title,
+					$event_description,
+					$event_location,
+					$event_start_datetime,
+					$badge_text_horizontal_location,
+					$badge_text_vertical_location,
+					$badge_primary_text_fontsize,
+					$badge_secondary_text_fontsize,
+					$badge_primary_text_color,
+					$badge_secondary_text_color
 				);
-
-				$result = ts_yts_request_change_event( $url, $email, $key, $event_id, $event_title, $event_description, $event_location, $event_start_datetime, $event_badge_data );
 
 				if ( 'success' === $result['status'] ) {
 					ts_yts_admin_notice_html( 'Status: success. Event with ID: ' . $event_id . ' successfully sent for processing. You will receive an email when it is processed.', 'updated' );
