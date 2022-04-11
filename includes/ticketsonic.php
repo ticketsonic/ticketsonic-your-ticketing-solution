@@ -171,8 +171,8 @@ function ts_yts_prepare_order_tickets_request_body( $order_id, $email, $key ) {
 	$body = array(
 		'request_hash'  => bin2hex( openssl_random_pseudo_bytes( 16 ) ),
 		'order_details' => array(
-			'customer_billing_name'    => ts_yts_get_customer_name( $order ),
-			'customer_billing_company' => ts_yts_get_customer_company( $order ),
+			'primary_text_pl'   => ts_yts_get_customer_name( $order ),
+			'secondary_text_pl' => ts_yts_get_customer_company( $order ),
 		),
 		'tickets'       => array(),
 	);
