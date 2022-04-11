@@ -203,7 +203,8 @@ if ( is_admin() ) {
 					$ticket_obj->set_status( 'publish' );
 					$ticket_obj->set_catalog_visibility( 'visible' );
 
-					$price = (int) $ticket['price'] / 100;
+					// $price = (int) $ticket['price'] / 100;
+					$price = $ticket['price'];
 					$ticket_obj->set_price( $price );
 					$ticket_obj->set_regular_price( $price );
 					$ticket_obj->set_manage_stock( true );
