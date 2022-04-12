@@ -3,7 +3,7 @@
 require 'cryptography.php';
 require dirname( __FILE__ ) . '/../vendor/autoload.php';
 
-function ts_yts_request_create_new_event( $url, $email, $key, $event_title, $event_description, $event_datetime, $event_location, $tickets_data, $badge_background, $badge_text_horizontal_location, $badge_text_vartical_location, $badge_primary_text_fontsize, $badge_secondary_text_fontsize, $badge_primary_text_color, $badge_secondary_text_color ) {
+function ts_yts_request_create_new_event( $url, $email, $key, $event_title, $event_description, $event_datetime, $event_location, $tickets_data, $badge_background, $badge_text_horizontal_location, $badge_text_vertical_location, $badge_primary_text_fontsize, $badge_secondary_text_fontsize, $badge_primary_text_color, $badge_secondary_text_color ) {
 	$headers = array(
 		'x-api-userid' => $email,
 		'x-api-key'    => $key,
@@ -16,16 +16,36 @@ function ts_yts_request_create_new_event( $url, $email, $key, $event_title, $eve
 		'location'          => $event_location,
 		'tickets'           => $tickets_data,
 		'request_hash'      => bin2hex( openssl_random_pseudo_bytes( 16 ) ),
-		'badge'             => array(
-			'badge_background'               => base64_encode( file_get_contents( $badge_background ) ),
-			'badge_text_horizontal_location' => $badge_text_horizontal_location,
-			'badge_text_vertical_location'   => $badge_text_vartical_location,
-			'badge_primary_text_fontsize'    => $badge_primary_text_fontsize,
-			'badge_secondary_text_fontsize'  => $badge_secondary_text_fontsize,
-			'badge_primary_text_color'       => $badge_primary_text_color,
-			'badge_secondary_text_color'     => $badge_secondary_text_color,
-		),
+		'badge'             => array(),
 	);
+
+	if ( ! empty( $badge_background ) ) {
+		$body['badge']['badge_background'] = base64_encode( file_get_contents( $badge_background ) );
+	}
+
+	if ( ! empty( $badge_text_horizontal_location ) ) {
+		$body['badge']['badge_text_horizontal_location'] = $badge_text_horizontal_location;
+	}
+
+	if ( ! empty( $badge_text_vertical_location ) ) {
+		$body['badge']['badge_text_vertical_location'] = $badge_text_vertical_location;
+	}
+
+	if ( ! empty( $badge_primary_text_fontsize ) ) {
+		$body['badge']['badge_primary_text_fontsize'] = $badge_primary_text_fontsize;
+	}
+
+	if ( ! empty( $badge_secondary_text_fontsize ) ) {
+		$body['badge']['badge_secondary_text_fontsize'] = $badge_secondary_text_fontsize;
+	}
+
+	if ( ! empty( $badge_primary_text_color ) ) {
+		$body['badge']['badge_primary_text_color'] = $badge_primary_text_color;
+	}
+
+	if ( ! empty( $badge_secondary_text_color ) ) {
+		$body['badge']['badge_secondary_text_color'] = $badge_secondary_text_color;
+	}
 
 	$response = ts_yts_post_request_to_remote( $url, $headers, $body );
 
@@ -85,15 +105,33 @@ function ts_yts_request_change_event( $url, $email, $key, $event_id, $event_titl
 		'secondary_text_pl' => $event_description,
 		'location'          => $event_location,
 		'start_datetime'    => $event_starttime,
-		'badge'             => array(
-			'badge_text_horizontal_location' => $badge_text_horizontal_location,
-			'badge_text_vertical_location'   => $badge_text_vertical_location,
-			'badge_primary_text_fontsize'    => $badge_primary_text_fontsize,
-			'badge_secondary_text_fontsize'  => $badge_secondary_text_fontsize,
-			'badge_primary_text_color'       => $badge_primary_text_color,
-			'badge_secondary_text_color'     => $badge_secondary_text_color,
-		),
+		'badge'             => array(),
 	);
+
+	if ( ! empty( $badge_text_horizontal_location ) ) {
+		$body['badge']['badge_text_horizontal_location'] = $badge_text_horizontal_location;
+	}
+
+	if ( ! empty( $badge_text_vertical_location ) ) {
+		$body['badge']['badge_text_vertical_location'] = $badge_text_vertical_location;
+	}
+
+	if ( ! empty( $badge_primary_text_fontsize ) ) {
+		$body['badge']['badge_primary_text_fontsize'] = $badge_primary_text_fontsize;
+	}
+
+	if ( ! empty( $badge_secondary_text_fontsize ) ) {
+		$body['badge']['badge_secondary_text_fontsize'] = $badge_secondary_text_fontsize;
+	}
+
+	if ( ! empty( $badge_primary_text_color ) ) {
+		$body['badge']['badge_primary_text_color'] = $badge_primary_text_color;
+	}
+
+	if ( ! empty( $badge_secondary_text_color ) ) {
+		$body['badge']['badge_secondary_text_color'] = $badge_secondary_text_color;
+	}
+
 	$response = ts_yts_post_request_to_remote( $url, $headers, $body );
 
 	return $response;
