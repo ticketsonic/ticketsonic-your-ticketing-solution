@@ -55,16 +55,16 @@ $raw_tickets = ts_yts_get_event_ticket_data_from_remote( $url, $email, $key, nul
 			<tbody>
 				<?php if ( count( $raw_events['events'] ) > 0 ) : ?>
 					<?php foreach ( $raw_events['events'] as $key => $event ) : ?>
-						<?php $badge_data = json_decode( $event['badge_data'] ); ?>
+						<?php $badge_data = $event['badge']; ?>
 						<tr id="events-row-<?php print ( esc_html( $key ) ); ?>">
 							<td class="event-id"><?php print ( esc_html( $event['event_id'] ) ); ?></td>
 							<td class="title"><?php print ( esc_html( $event['title'] ) ); ?></td>
-							<td class="htext-loc"><?php print ( esc_html( $badge_data->badge_text_horizontal_location ) ); ?></td>
-							<td class="vtext-loc"><?php print ( esc_html( $badge_data->badge_text_vertical_location ) ); ?></td>
-							<td class="htext-fontsize"><?php print ( esc_html( $badge_data->badge_primary_text_fontsize ) ); ?></td>
-							<td class="vtext-fontsize"><?php print ( esc_html( $badge_data->badge_secondary_text_fontsize ) ); ?></td>
-							<td class="htext-color"><?php print ( esc_html( $badge_data->badge_primary_text_color ) ); ?></td>
-							<td class="vtext-color"><?php print ( esc_html( $badge_data->badge_secondary_text_color ) ); ?></td>
+							<td class="htext-loc"><?php print ( esc_html( $badge_data['badge_text_horizontal_location'] ) ); ?></td>
+							<td class="vtext-loc"><?php print ( esc_html( $badge_data['badge_text_vertical_location'] ) ); ?></td>
+							<td class="htext-fontsize"><?php print ( esc_html( $badge_data['badge_primary_text_fontsize'] ) ); ?></td>
+							<td class="vtext-fontsize"><?php print ( esc_html( $badge_data['badge_secondary_text_fontsize'] ) ); ?></td>
+							<td class="htext-color"><?php print ( esc_html( $badge_data['badge_primary_text_color'] ) ); ?></td>
+							<td class="vtext-color"><?php print ( esc_html( $badge_data['badge_secondary_text_color'] ) ); ?></td>
 							<td class="edit-event-row"><a>Edit</a></td>
 						</tr>
 					<?php endforeach; ?>
