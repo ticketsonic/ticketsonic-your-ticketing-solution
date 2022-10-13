@@ -1,10 +1,10 @@
 <?php
 
 /**
- * Plugin Name: TicketSonic - your Ticketing Solution
+ * Plugin Name: TicketSonic - your Ticketing Solution (dev)
  * Plugin URI: https://github.com/ticketsonic/ticketsonic-your-ticketing-solution
  * Description: TicketSonic is the ticketing solution effortlessly enabling every web and mobile to become an independent ticket seller
- * Version: 1.1.3
+ * Version: 1.2
  * Author: TicketSonic
  * Author URI: https://www.ticketsonic.com
  * License: GPL2

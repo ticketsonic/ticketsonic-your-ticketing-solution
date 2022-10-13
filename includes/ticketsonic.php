@@ -3,7 +3,36 @@
 require 'cryptography.php';
 require dirname( __FILE__ ) . '/../vendor/autoload.php';
 
-function ts_yts_request_create_new_event( $url, $email, $key, $event_title, $event_description, $event_datetime, $event_location, $tickets_data, $badge_background, $badge_text_horizontal_location, $badge_text_vertical_location, $badge_primary_text_fontsize, $badge_secondary_text_fontsize, $badge_primary_text_color, $badge_secondary_text_color ) {
+function ts_yts_request_create_new_event(
+	$url,
+	$email,
+	$key,
+	$event_title,
+	$event_description,
+	$event_datetime,
+	$event_location,
+	$tickets_data,
+	$uploaded_badge_file_path,
+	$badge_size,
+	$badge_primary_test_text,
+	$badge_primary_text_horizontal_location,
+	$badge_primary_text_horizontal_offset,
+	$badge_primary_text_vertical_location,
+	$badge_primary_text_vertical_offset,
+	$badge_primary_text_fontsize,
+	$badge_primary_text_color,
+	$badge_primary_text_break,
+	$badge_primary_text_break_distance,
+	$badge_secondary_test_text,
+	$badge_secondary_text_horizontal_location,
+	$badge_secondary_text_horizontal_offset,
+	$badge_secondary_text_vertical_location,
+	$badge_secondary_text_vertical_offset,
+	$badge_secondary_text_fontsize,
+	$badge_secondary_text_color,
+	$badge_secondary_text_break,
+	$badge_secondary_text_break_distance
+) {
 	$headers = array(
 		'x-api-userid' => $email,
 		'x-api-key'    => $key,
@@ -19,32 +48,84 @@ function ts_yts_request_create_new_event( $url, $email, $key, $event_title, $eve
 		'badge'             => array(),
 	);
 
-	if ( ! empty( $badge_background ) ) {
-		$body['badge']['badge_background'] = base64_encode( file_get_contents( $badge_background ) );
+	if ( isset( $uploaded_badge_file_path ) ) {
+		$body['badge']['badge_background'] = base64_encode( file_get_contents( $uploaded_badge_file_path ) );
 	}
 
-	if ( ! empty( $badge_text_horizontal_location ) ) {
-		$body['badge']['badge_text_horizontal_location'] = $badge_text_horizontal_location;
+	if ( isset( $badge_size ) ) {
+		$body['badge']['badge_size'] = $badge_size;
 	}
 
-	if ( ! empty( $badge_text_vertical_location ) ) {
-		$body['badge']['badge_text_vertical_location'] = $badge_text_vertical_location;
+	if ( isset( $badge_primary_test_text ) ) {
+		$body['badge']['badge_primary_test_text'] = $badge_primary_test_text;
 	}
 
-	if ( ! empty( $badge_primary_text_fontsize ) ) {
+	if ( isset( $badge_primary_text_horizontal_location ) ) {
+		$body['badge']['badge_primary_text_horizontal_location'] = $badge_primary_text_horizontal_location;
+	}
+
+	if ( isset( $badge_primary_text_horizontal_offset ) ) {
+		$body['badge']['badge_primary_text_horizontal_offset'] = $badge_primary_text_horizontal_offset;
+	}
+
+	if ( isset( $badge_primary_text_vertical_location ) ) {
+		$body['badge']['badge_primary_text_vertical_location'] = $badge_primary_text_vertical_location;
+	}
+
+	if ( isset( $badge_primary_text_vertical_offset ) ) {
+		$body['badge']['badge_primary_text_vertical_offset'] = $badge_primary_text_vertical_offset;
+	}
+
+	if ( isset( $badge_primary_text_fontsize ) ) {
 		$body['badge']['badge_primary_text_fontsize'] = $badge_primary_text_fontsize;
 	}
 
-	if ( ! empty( $badge_secondary_text_fontsize ) ) {
-		$body['badge']['badge_secondary_text_fontsize'] = $badge_secondary_text_fontsize;
-	}
-
-	if ( ! empty( $badge_primary_text_color ) ) {
+	if ( isset( $badge_primary_text_color ) ) {
 		$body['badge']['badge_primary_text_color'] = $badge_primary_text_color;
 	}
 
-	if ( ! empty( $badge_secondary_text_color ) ) {
+	if ( isset( $badge_primary_text_break ) ) {
+		$body['badge']['badge_primary_text_break'] = $badge_primary_text_break;
+	}
+
+	if ( isset( $badge_primary_text_break_distance ) ) {
+		$body['badge']['badge_primary_text_break_distance'] = $badge_primary_text_break_distance;
+	}
+
+	if ( isset( $badge_secondary_test_text ) ) {
+		$body['badge']['badge_secondary_test_text'] = $badge_secondary_test_text;
+	}
+
+	if ( isset( $badge_secondary_text_horizontal_location ) ) {
+		$body['badge']['badge_secondary_text_horizontal_location'] = $badge_secondary_text_horizontal_location;
+	}
+
+	if ( isset( $badge_secondary_text_horizontal_offset ) ) {
+		$body['badge']['badge_secondary_text_horizontal_offset'] = $badge_secondary_text_horizontal_offset;
+	}
+
+	if ( isset( $badge_secondary_text_vertical_location ) ) {
+		$body['badge']['badge_secondary_text_vertical_location'] = $badge_secondary_text_vertical_location;
+	}
+
+	if ( isset( $badge_secondary_text_vertical_offset ) ) {
+		$body['badge']['badge_secondary_text_vertical_offset'] = $badge_secondary_text_vertical_offset;
+	}
+
+	if ( isset( $badge_secondary_text_fontsize ) ) {
+		$body['badge']['badge_secondary_text_fontsize'] = $badge_secondary_text_fontsize;
+	}
+
+	if ( isset( $badge_secondary_text_color ) ) {
 		$body['badge']['badge_secondary_text_color'] = $badge_secondary_text_color;
+	}
+
+	if ( isset( $badge_secondary_text_break ) ) {
+		$body['badge']['badge_secondary_text_break'] = $badge_secondary_text_break;
+	}
+
+	if ( isset( $badge_secondary_text_break_distance ) ) {
+		$body['badge']['badge_secondary_text_break_distance'] = $badge_secondary_text_break_distance;
 	}
 
 	$response = ts_yts_post_request_to_remote( $url, $headers, $body );
@@ -92,7 +173,29 @@ function ts_yts_request_change_ticket( $url, $email, $key, $ticket_sku, $ticket_
 	return $response;
 }
 
-function ts_yts_request_change_event( $url, $email, $key, $event_id, $event_title, $event_description, $event_location, $event_starttime, $badge_text_horizontal_location, $badge_text_vertical_location, $badge_primary_text_fontsize, $badge_secondary_text_fontsize, $badge_primary_text_color, $badge_secondary_text_color ) {
+function ts_yts_request_change_event(
+	$url,
+	$email,
+	$key,
+	$event_id,
+	$event_title,
+	$event_description,
+	$event_location,
+	$event_start_datetime,
+	$badge_size,
+	$badge_primary_text_horizontal_location,
+	$badge_primary_text_horizontal_offset,
+	$badge_primary_text_vertical_location,
+	$badge_primary_text_vertical_offset,
+	$badge_primary_text_fontsize,
+	$badge_primary_text_color,
+	$badge_secondary_text_horizontal_location,
+	$badge_secondary_text_horizontal_offset,
+	$badge_secondary_text_vertical_location,
+	$badge_secondary_text_vertical_offset,
+	$badge_secondary_text_fontsize,
+	$badge_secondary_text_color
+	) {
 	$headers = array(
 		'x-api-userid'  => $email,
 		'x-api-key'     => $key,
@@ -104,28 +207,56 @@ function ts_yts_request_change_event( $url, $email, $key, $event_id, $event_titl
 		'primary_text_pl'   => $event_title,
 		'secondary_text_pl' => $event_description,
 		'location'          => $event_location,
-		'start_datetime'    => $event_starttime,
+		'start_datetime'    => $event_start_datetime,
 		'badge'             => array(),
 	);
-
-	if ( ! empty( $badge_text_horizontal_location ) ) {
-		$body['badge']['badge_text_horizontal_location'] = $badge_text_horizontal_location;
+	
+	if ( ! empty( $badge_size ) ) {
+		$body['badge']['badge_size'] = $badge_size;
 	}
 
-	if ( ! empty( $badge_text_vertical_location ) ) {
-		$body['badge']['badge_text_vertical_location'] = $badge_text_vertical_location;
+	if ( ! empty( $badge_primary_text_horizontal_location ) ) {
+		$body['badge']['badge_primary_text_horizontal_location'] = $badge_primary_text_horizontal_location;
+	}
+
+	if ( ! empty( $badge_primary_text_horizontal_offset ) ) {
+		$body['badge']['badge_primary_text_horizontal_offset'] = $badge_primary_text_horizontal_offset;
+	}
+
+	if ( ! empty( $badge_primary_text_vertical_location ) ) {
+		$body['badge']['badge_primary_text_vertical_location'] = $badge_primary_text_vertical_location;
+	}
+
+	if ( ! empty( $badge_primary_text_vertical_offset ) ) {
+		$body['badge']['badge_primary_text_vertical_offset'] = $badge_primary_text_vertical_offset;
 	}
 
 	if ( ! empty( $badge_primary_text_fontsize ) ) {
 		$body['badge']['badge_primary_text_fontsize'] = $badge_primary_text_fontsize;
 	}
 
-	if ( ! empty( $badge_secondary_text_fontsize ) ) {
-		$body['badge']['badge_secondary_text_fontsize'] = $badge_secondary_text_fontsize;
-	}
-
 	if ( ! empty( $badge_primary_text_color ) ) {
 		$body['badge']['badge_primary_text_color'] = $badge_primary_text_color;
+	}
+
+	if ( ! empty( $badge_secondary_text_horizontal_location ) ) {
+		$body['badge']['badge_secondary_text_horizontal_location'] = $badge_secondary_text_horizontal_location;
+	}
+
+	if ( ! empty( $badge_secondary_text_horizontal_offset ) ) {
+		$body['badge']['badge_secondary_text_horizontal_offset'] = $badge_secondary_text_horizontal_offset;
+	}
+
+	if ( ! empty( $badge_secondary_text_vertical_location ) ) {
+		$body['badge']['badge_secondary_text_vertical_location'] = $badge_secondary_text_vertical_location;
+	}
+
+	if ( ! empty( $badge_secondary_text_vertical_offset ) ) {
+		$body['badge']['badge_secondary_text_vertical_offset'] = $badge_secondary_text_vertical_offset;
+	}
+
+	if ( ! empty( $badge_secondary_text_fontsize ) ) {
+		$body['badge']['badge_secondary_text_fontsize'] = $badge_secondary_text_fontsize;
 	}
 
 	if ( ! empty( $badge_secondary_text_color ) ) {
@@ -235,6 +366,12 @@ function ts_yts_get_request_from_remote( $url, $headers, $body ) {
 	try {
 		$response = $http->request( 'GET', $url, array('headers' => $headers, 'body' => json_encode( $body ) ) );
 		$response = json_decode( $response->getBody(), true );
+	} catch ( GuzzleHttp\Exception\ConnectException $ex ) {
+		$response['status']  = 'error';
+		$response['status_code']  = null;
+		$response['reason_phrase']  = 'Error connecting to the TS server';
+		$response['message'] = 'Error connecting to the TS server';
+		$response['full_message'] = 'Error connecting to the TS server';
 	} catch ( Exception $ex ) {
 		$response['status']  = 'error';
 		$response['status_code']  = $ex->getResponse()->getStatusCode();
@@ -252,6 +389,12 @@ function ts_yts_post_request_to_remote( $url, $headers, $body ) {
 	try {
 		$response = $http->request( 'POST', $url, array( 'headers' => $headers, 'body' => json_encode( $body ) ) );
 		$response = json_decode( $response->getBody(), true );
+	} catch ( GuzzleHttp\Exception\ConnectException $ex ) {
+		$response['status']  = 'error';
+		$response['status_code']  = null;
+		$response['reason_phrase']  = 'Error connecting to the TS server';
+		$response['message'] = 'Error connecting to the TS server';
+		$response['full_message'] = 'Error connecting to the TS server';
 	} catch ( Exception $ex ) {
 		$response['status']  = 'error';
 		$response['status_code']  = $ex->getResponse()->getStatusCode();

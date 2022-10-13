@@ -106,14 +106,21 @@ if ( is_admin() ) {
 				$event_location       = ts_yts_sanitize_or_default( $_POST['event_location'] );
 				$event_start_datetime = ts_yts_sanitize_or_default( $_POST['event_start_datetime'] );
 
-				$badge_text_horizontal_location = ts_yts_sanitize_or_default( $_POST['badge_text_horizontal_location'] );
-				$badge_text_vertical_location   = ts_yts_sanitize_or_default( $_POST['badge_text_vertical_location'] );
+				$badge_size = ts_yts_sanitize_or_default( $_POST['badge_size'] );
 
-				$badge_primary_text_fontsize   = ts_yts_sanitize_or_default( $_POST['badge_primary_text_fontsize'] );
-				$badge_secondary_text_fontsize = ts_yts_sanitize_or_default( $_POST['badge_secondary_text_fontsize'] );
-
-				$badge_primary_text_color   = ts_yts_sanitize_or_default( $_POST['badge_primary_text_color'] );
-				$badge_secondary_text_color = ts_yts_sanitize_or_default( $_POST['badge_secondary_text_color'] );
+				$badge_primary_text_horizontal_location = ts_yts_sanitize_or_default( $_POST['badge_primary_text_horizontal_location'] );
+				$badge_primary_text_horizontal_offset   = ts_yts_sanitize_or_default( $_POST['badge_primary_text_horizontal_offset'] );
+				$badge_primary_text_vertical_location   = ts_yts_sanitize_or_default( $_POST['badge_primary_text_vertical_location'] );
+				$badge_primary_text_vertical_offset     = ts_yts_sanitize_or_default( $_POST['badge_primary_text_vertical_offset'] );
+				$badge_primary_text_fontsize            = ts_yts_sanitize_or_default( $_POST['badge_primary_text_fontsize'] );
+				$badge_primary_text_color               = ts_yts_sanitize_or_default( $_POST['badge_primary_text_color'] );
+				
+				$badge_secondary_text_horizontal_location = ts_yts_sanitize_or_default( $_POST['badge_secondary_text_horizontal_location'] );
+				$badge_secondary_text_horizontal_offset   = ts_yts_sanitize_or_default( $_POST['badge_secondary_text_horizontal_offset'] );
+				$badge_secondary_text_vertical_location   = ts_yts_sanitize_or_default( $_POST['badge_secondary_text_vertical_location'] );
+				$badge_secondary_text_vertical_offset     = ts_yts_sanitize_or_default( $_POST['badge_secondary_text_vertical_offset'] );
+				$badge_secondary_text_fontsize            = ts_yts_sanitize_or_default( $_POST['badge_secondary_text_fontsize'] );
+				$badge_secondary_text_color               = ts_yts_sanitize_or_default( $_POST['badge_secondary_text_color'] );
 
 				$result = ts_yts_request_change_event(
 					$url,
@@ -124,18 +131,25 @@ if ( is_admin() ) {
 					$event_description,
 					$event_location,
 					$event_start_datetime,
-					$badge_text_horizontal_location,
-					$badge_text_vertical_location,
+					$badge_size,
+					$badge_primary_text_horizontal_location,
+					$badge_primary_text_horizontal_offset,
+					$badge_primary_text_vertical_location,
+					$badge_primary_text_vertical_offset,
 					$badge_primary_text_fontsize,
-					$badge_secondary_text_fontsize,
 					$badge_primary_text_color,
+					$badge_secondary_text_horizontal_location,
+					$badge_secondary_text_horizontal_offset,
+					$badge_secondary_text_vertical_location,
+					$badge_secondary_text_vertical_offset,
+					$badge_secondary_text_fontsize,
 					$badge_secondary_text_color
 				);
 
 				if ( 'success' === $result['status'] ) {
 					ts_yts_admin_notice_html( 'Status: success. Event with ID: ' . $event_id . ' successfully sent for processing. You will receive an email when it is processed.', 'updated' );
 				} else {
-					$json = json_decode($result['message']);
+					$json = json_decode( $result['message'] );
 					ts_yts_admin_notice_html( 'Failed to request new event: ' . $json->message, 'error' );
 				}
 
@@ -298,42 +312,61 @@ if ( is_admin() ) {
 					}
 				}
 
+				$valid_badge_size = array( 'A4', 'A5', 'A6', 'A7', 'A8', 'A9', 'A10' );
+				$badge_size = ts_yts_sanitize_or_default( $_POST['badge_size'] );
+				if ( isset( $badge_size ) ) {
+					if ( ! in_array( $badge_size, $valid_badge_size ) ) {
+						ts_yts_admin_notice_html( 'Invalid badge size', 'error' );
+						return;
+					}
+				}
+
+				$badge_primary_test_text = ts_yts_sanitize_or_default( $_POST['badge_primary_test_text'] );
+
 				$horizontal_locations = array( 'left', 'center', 'right' );
-				$badge_text_horizontal_location = ts_yts_sanitize_or_default( $_POST['badge_text_horizontal_location'] );
-				if ( ! empty( $badge_text_horizontal_location ) ) {
-					if ( ! in_array( $badge_text_horizontal_location, $horizontal_locations ) ) {
-						ts_yts_admin_notice_html( 'Badge text horizontal location value must be either left, center or right', 'error' );
+				$badge_primary_text_horizontal_location = ts_yts_sanitize_or_default( $_POST['badge_primary_text_horizontal_location'] );
+				if ( isset( $badge_primary_text_horizontal_location ) ) {
+					if ( ! in_array( $badge_primary_text_horizontal_location, $horizontal_locations ) ) {
+						ts_yts_admin_notice_html( 'Primary text horizontal location value must be either left, center or right', 'error' );
+						return;
+					}
+				}
+
+				$badge_primary_text_horizontal_offset = ts_yts_sanitize_or_default( $_POST['badge_primary_text_horizontal_offset'] );
+				if ( isset( $badge_primary_text_horizontal_offset ) ) {
+					if ( ! is_numeric( $badge_primary_text_horizontal_offset ) ) {
+						ts_yts_admin_notice_html( 'Primary text horizontal offset must be a number', 'error' );
 						return;
 					}
 				}
 
 				$vertical_locations = array( 'top', 'center', 'bottom' );
-				$badge_text_vertical_location = ts_yts_sanitize_or_default( $_POST['badge_text_vertical_location'] );
-				if ( ! empty( $badge_text_vertical_location ) ) {
-					if ( ! in_array( $badge_text_vertical_location, $vertical_locations ) ) {
-						ts_yts_admin_notice_html( 'Badge text horizontal location value must be either top, center or bottom', 'error' );
+				$badge_primary_text_vertical_location = ts_yts_sanitize_or_default( $_POST['badge_primary_text_vertical_location'] );
+				if ( isset( $badge_primary_text_vertical_location ) ) {
+					if ( ! in_array( $badge_primary_text_vertical_location, $vertical_locations ) ) {
+						ts_yts_admin_notice_html( 'Primary text vertical location value must be either top, center or bottom', 'error' );
+						return;
+					}
+				}
+
+				$badge_primary_text_vertical_offset = ts_yts_sanitize_or_default( $_POST['badge_primary_text_vertical_offset'] );
+				if ( isset( $badge_primary_text_vertical_offset ) ) {
+					if ( ! is_numeric( $badge_primary_text_vertical_offset ) ) {
+						ts_yts_admin_notice_html( 'Primary text vertical offset must be a number', 'error' );
 						return;
 					}
 				}
 
 				$badge_primary_text_fontsize = ts_yts_sanitize_or_default( $_POST['badge_primary_text_fontsize'] );
-				if ( ! empty( $badge_primary_text_fontsize ) ) {
+				if ( isset( $badge_primary_text_fontsize ) ) {
 					if ( ! is_numeric( $badge_primary_text_fontsize ) ) {
 						ts_yts_admin_notice_html( 'Primary text font size must be a number', 'error' );
 						return;
 					}
 				}
 
-				$badge_secondary_text_fontsize = ts_yts_sanitize_or_default( $_POST['badge_secondary_text_fontsize'] );
-				if ( ! empty( $badge_secondary_text_fontsize ) ) {
-					if ( ! is_numeric( $badge_secondary_text_fontsize ) ) {
-						ts_yts_admin_notice_html( 'Secondary text font size must be a number', 'error' );
-						return;
-					}
-				}
-
 				$badge_primary_text_color = ts_yts_sanitize_or_default( $_POST['badge_primary_text_color'] );
-				if ( ! empty( $badge_primary_text_color ) ) {
+				if ( isset( $badge_primary_text_color ) ) {
 					$output = null;
 					preg_match_all( "/#[0-9a-f]{6}/i", $badge_primary_text_color, $output );
 					preg_match_all( "/#[0-9a-f]{3}/i", $badge_primary_text_color, $output );
@@ -343,13 +376,77 @@ if ( is_admin() ) {
 					}
 				}
 
+				$badge_primary_text_break = filter_var( ts_yts_sanitize_or_default( $_POST['badge_primary_text_break'] ), FILTER_VALIDATE_BOOLEAN );
+
+				$badge_primary_text_break_distance = ts_yts_sanitize_or_default( $_POST['badge_primary_text_break_distance'] );
+				if ( isset( $badge_primary_text_break_distance ) ) {
+					if ( ! is_numeric( $badge_primary_text_break_distance ) ) {
+						ts_yts_admin_notice_html( 'Primary break text distance must be a number', 'error' );
+						return;
+					}
+				}
+
+				$badge_secondary_test_text = ts_yts_sanitize_or_default( $_POST['badge_secondary_test_text'] );
+
+				$horizontal_locations = array( 'left', 'center', 'right' );
+				$badge_secondary_text_horizontal_location = ts_yts_sanitize_or_default( $_POST['badge_secondary_text_horizontal_location'] );
+				if ( isset( $badge_secondary_text_horizontal_location ) ) {
+					if ( ! in_array( $badge_secondary_text_horizontal_location, $horizontal_locations ) ) {
+						ts_yts_admin_notice_html( 'Primary text horizontal location value must be either left, center or right', 'error' );
+						return;
+					}
+				}
+
+				$badge_secondary_text_horizontal_offset = ts_yts_sanitize_or_default( $_POST['badge_secondary_text_horizontal_offset'] );
+				if ( isset( $badge_secondary_text_horizontal_offset ) ) {
+					if ( ! is_numeric( $badge_secondary_text_horizontal_offset ) ) {
+						ts_yts_admin_notice_html( 'Primary text horizontal offset must be a number', 'error' );
+						return;
+					}
+				}
+
+				$vertical_locations = array( 'top', 'center', 'bottom' );
+				$badge_secondary_text_vertical_location = ts_yts_sanitize_or_default( $_POST['badge_secondary_text_vertical_location'] );
+				if ( isset( $badge_secondary_text_vertical_location ) ) {
+					if ( ! in_array( $badge_secondary_text_vertical_location, $vertical_locations ) ) {
+						ts_yts_admin_notice_html( 'Primary text vertical location value must be either top, center or bottom', 'error' );
+						return;
+					}
+				}
+
+				$badge_secondary_text_vertical_offset = ts_yts_sanitize_or_default( $_POST['badge_secondary_text_vertical_offset'] );
+				if ( isset( $badge_secondary_text_vertical_offset ) ) {
+					if ( ! is_numeric( $badge_secondary_text_vertical_offset ) ) {
+						ts_yts_admin_notice_html( 'Primary text vertical offset must be a number', 'error' );
+						return;
+					}
+				}
+
+				$badge_secondary_text_fontsize = ts_yts_sanitize_or_default( $_POST['badge_secondary_text_fontsize'] );
+				if ( isset( $badge_secondary_text_fontsize ) ) {
+					if ( ! is_numeric( $badge_secondary_text_fontsize ) ) {
+						ts_yts_admin_notice_html( 'Primary text font size must be a number', 'error' );
+						return;
+					}
+				}
+
 				$badge_secondary_text_color = ts_yts_sanitize_or_default( $_POST['badge_secondary_text_color'] );
-				if ( ! empty( $badge_secondary_text_color ) ) {
+				if ( isset( $badge_secondary_text_color ) ) {
 					$output = null;
 					preg_match_all( "/#[0-9a-f]{6}/i", $badge_secondary_text_color, $output );
 					preg_match_all( "/#[0-9a-f]{3}/i", $badge_secondary_text_color, $output );
 					if ( count( $output[0] ) < 1 ) {
-						ts_yts_admin_notice_html( 'Secondary text color must be in html format', 'error' );
+						ts_yts_admin_notice_html( 'Primary text color must be in html format', 'error' );
+						return;
+					}
+				}
+
+				$badge_secondary_text_break = filter_var( ts_yts_sanitize_or_default( $_POST['badge_secondary_text_break'] ), FILTER_VALIDATE_BOOLEAN );
+
+				$badge_secondary_text_break_distance = ts_yts_sanitize_or_default( $_POST['badge_secondary_text_break_distance'] );
+				if ( isset( $badge_secondary_text_break_distance ) ) {
+					if ( ! is_numeric( $badge_secondary_text_break_distance ) ) {
+						ts_yts_admin_notice_html( 'Secondary break text distance must be a number', 'error' );
 						return;
 					}
 				}
@@ -370,18 +467,31 @@ if ( is_admin() ) {
 					$event_location,
 					$tickets_data,
 					$uploaded_badge_file_path,
-					$badge_text_horizontal_location,
-					$badge_text_vertical_location,
+					$badge_size,
+					$badge_primary_test_text,
+					$badge_primary_text_horizontal_location,
+					$badge_primary_text_horizontal_offset,
+					$badge_primary_text_vertical_location,
+					$badge_primary_text_vertical_offset,
 					$badge_primary_text_fontsize,
-					$badge_secondary_text_fontsize,
 					$badge_primary_text_color,
-					$badge_secondary_text_color
+					$badge_primary_text_break,
+					$badge_primary_text_break_distance,
+					$badge_secondary_test_text,
+					$badge_secondary_text_horizontal_location,
+					$badge_secondary_text_horizontal_offset,
+					$badge_secondary_text_vertical_location,
+					$badge_secondary_text_vertical_offset,
+					$badge_secondary_text_fontsize,
+					$badge_secondary_text_color,
+					$badge_secondary_text_break,
+					$badge_secondary_text_break_distance
 				);
 
 				if ( 'success' === $result['status'] ) {
 					ts_yts_admin_notice_html( 'Status: success. Event ID: ' . $result['event_id'] . ' successfully sent for processing. You will receive an email when it is processed.', 'updated' );
 				} else {
-					$json = json_decode($result['message']);
+					$json = json_decode( $result['message'] );
 					ts_yts_admin_notice_html( 'Failed to request new event: ' . $json->message, 'error' );
 				}
 

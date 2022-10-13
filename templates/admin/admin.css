@@ -215,3 +215,8 @@
 .popup-form .form-table.table-badge th {
     padding: 20px 0;
 }
+
+canvas {
+	border: 1px solid gray;
+	max-width: 100%;
+}
