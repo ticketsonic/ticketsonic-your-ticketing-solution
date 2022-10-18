@@ -220,3 +220,12 @@ canvas {
 	border: 1px solid gray;
 	max-width: 100%;
 }
+
+table#events th {
+	border: 1px solid lightgray;
+    text-align: center;
+}
+
+table#events .badge-background, #event-request-popup img#badge_file_preview {
+	width: 100%;
+}

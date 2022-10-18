@@ -41,15 +41,37 @@ $raw_tickets = ts_yts_get_event_ticket_data_from_remote( $url, $email, $key, nul
 		<table id="events" class="wp-list-table widefat fixed striped table-view-list posts">
 			<thead>
 				<tr>
-					<th class="manage-column column-xs">Event ID</th>
-					<th class="manage-column column-xs">Title</th>
-					<th class="manage-column column-xs">Horizontal text location</th>
-					<th class="manage-column column-xs">Vertical text location</th>
-					<th class="manage-column column-xs">Horizontal text font size</th>
-					<th class="manage-column column-xs">Vertical text font size</th>
-					<th class="manage-column column-xs">Horizontal text font color</th>
-					<th class="manage-column column-xs">Vertical text font color</th>
-					<th class="manage-column column-xs">Edit</th>
+					<th class="manage-column" rowspan="3">Event ID</th>
+					<th class="manage-column" rowspan="3">Date</th>
+					<th class="manage-column" rowspan="3">Loc.</th>
+					<th class="manage-column" rowspan="3">Title</th>
+					<th class="manage-column" rowspan="3">Desc</th>
+					<th class="manage-column" colspan="18">Badge</th>
+					<th class="manage-column" rowspan="3">Edit</th>
+				</tr>
+				<tr>
+					<th class="manage-column" rowspan="2">Size</th>
+					<th class="manage-column" rowspan="2">Background</th>
+					<th class="manage-column" colspan="8">Primary text</th>
+					<th class="manage-column" colspan="8">Secondary text</th>
+				</tr>
+				<tr>
+					<th class="manage-column">Hor. loc.</th>
+					<th class="manage-column">Hor. offset</th>
+					<th class="manage-column">Vert. loc.</th>
+					<th class="manage-column">Vert. offset</th>
+					<th class="manage-column">Font size</th>
+					<th class="manage-column">Font color</th>
+					<th class="manage-column">Test text</th>
+					<th class="manage-column">Break dist.</th>
+					<th class="manage-column">Hor. loc.</th>
+					<th class="manage-column">Hor. offset</th>
+					<th class="manage-column">Vert. loc.</th>
+					<th class="manage-column">Vert. offset</th>
+					<th class="manage-column">Font size</th>
+					<th class="manage-column">Font color</th>
+					<th class="manage-column">Test text</th>
+					<th class="manage-column">Break dist.</th>
 				</tr>
 			</thead>    
 			<tbody>
@@ -58,21 +80,52 @@ $raw_tickets = ts_yts_get_event_ticket_data_from_remote( $url, $email, $key, nul
 						<?php $badge_data = $event['badge']; ?>
 						<tr id="events-row-<?php print ( esc_html( $key ) ); ?>">
 							<td class="event-id"><?php print ( esc_html( $event['event_id'] ) ); ?></td>
-							<td class="title"><?php print ( esc_html( $event['primary_text_pl'] ) ); ?></td>
-							<td class="htext-loc"><?php print ( esc_html( $badge_data['primary_text_horizontal_location'] ) ); ?></td>
-							<td class="vtext-loc"><?php print ( esc_html( $badge_data['primary_text_vertical_location'] ) ); ?></td>
-							<!-- <td class=""><?php print ( esc_html( $badge_data['primary_text_horizontal_offset'] ) ); ?></td>
-							<td class=""><?php print ( esc_html( $badge_data['primary_text_vertical_offset'] ) ); ?></td> -->
-							<td class="htext-fontsize"><?php print ( esc_html( $badge_data['badge_primary_text_fontsize'] ) ); ?></td>
-							<td class="vtext-fontsize"><?php print ( esc_html( $badge_data['badge_secondary_text_fontsize'] ) ); ?></td>
-							<td class="htext-color"><?php print ( esc_html( $badge_data['badge_primary_text_color'] ) ); ?></td>
-							<td class="vtext-color"><?php print ( esc_html( $badge_data['badge_secondary_text_color'] ) ); ?></td>
+							<td class="event-start-time"><?php print ( esc_html( date("d M Y", $event['start_time'] ) ) ); ?></td>
+							<td class="event-location"><?php print ( esc_html( $event['location'] ) ); ?></td>
+							<td class="event-primary"><?php print ( esc_html( $event['primary_text_pl'] ) ); ?></td>
+							<td class="event-secondary"><?php print ( esc_html( $event['secondary_text_pl'] ) ); ?></td>
+
+							<td class="badge-size"><?php print ( esc_html( $badge_data['badge_size'] ) ); ?></td>
+							<td class="badge-background"><img class="badge-background" data-path="<?php print ( esc_html( wp_upload_dir()['basedir'] . DIRECTORY_SEPARATOR . TS_YTS_DIRNAME . DIRECTORY_SEPARATOR . $event['event_id'] . '-badge-background.jpg' ) ); ?>" src="<?php print ( esc_html( wp_upload_dir()['baseurl'] . DIRECTORY_SEPARATOR . TS_YTS_DIRNAME . DIRECTORY_SEPARATOR . $event['event_id'] . '-badge-background.jpg' ) ); ?>"/></td>
+
+							<td class="badge-pr-htext-loc"><?php print ( esc_html( $badge_data['badge_primary_text_horizontal_location'] ) ); ?></td>
+							<td class="badge-pr-htext-offset"><?php print ( esc_html( $badge_data['badge_primary_text_horizontal_offset'] ) ); ?></td>
+							<td class="badge-pr-vtext-loc"><?php print ( esc_html( $badge_data['badge_primary_text_vertical_location'] ) ); ?></td>
+							<td class="badge-pr-vtext-offset"><?php print ( esc_html( $badge_data['badge_primary_text_vertical_offset'] ) ); ?></td>
+							<td class="badge-pr-fontsize"><?php print ( esc_html( $badge_data['badge_primary_text_fontsize'] ) ); ?></td>
+							<td class="badge-pr-color"><?php print ( esc_html( $badge_data['badge_primary_text_color'] ) ); ?></td>
+							<td class="badge-pr-test-text"><?php print ( esc_html( $badge_data['badge_primary_test_text'] ) ); ?></td>
+							<td class="badge-pr-br-distance"><?php print ( esc_html( $badge_data['badge_primary_text_break_distance'] ) ); ?></td>
+
+							<td class="badge-sc-htext-loc"><?php print ( esc_html( $badge_data['badge_secondary_text_horizontal_location'] ) ); ?></td>
+							<td class="badge-sc-htext-offset"><?php print ( esc_html( $badge_data['badge_secondary_text_horizontal_offset'] ) ); ?></td>
+							<td class="badge-sc-vtext-loc"><?php print ( esc_html( $badge_data['badge_secondary_text_vertical_location'] ) ); ?></td>
+							<td class="badge-sc-vtext-offset"><?php print ( esc_html( $badge_data['badge_secondary_text_vertical_offset'] ) ); ?></td>
+							<td class="badge-sc-fontsize"><?php print ( esc_html( $badge_data['badge_secondary_text_fontsize'] ) ); ?></td>
+							<td class="badge-sc-color"><?php print ( esc_html( $badge_data['badge_secondary_text_color'] ) ); ?></td>
+							<td class="badge-sc-test-text"><?php print ( esc_html( $badge_data['badge_secondary_test_text'] ) ); ?></td>
+							<td class="badge-sc-br-distance"><?php print ( esc_html( $badge_data['badge_secondary_text_break_distance'] ) ); ?></td>
 							<td class="edit-event-row"><a>Edit</a></td>
 						</tr>
 					<?php endforeach; ?>
 				<?php endif; ?>
 				<tr>
 					<td><span id="new-event-button" class="button button-primary">Request new event</span></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
 					<td></td>
 					<td></td>
 					<td></td>
@@ -133,494 +186,7 @@ $raw_tickets = ts_yts_get_event_ticket_data_from_remote( $url, $email, $key, nul
 
 <div class="popups">
 	<div class="popups-overlay"></div>
-	<div id="new-event-popup" class="popup">
-		<button type="button" class="close-form">
-			<span class="screen-reader-text">Close</span>
-			<span class="tb-close-icon"></span>
-		</button>
-		<div class="form-title-bar">
-			<span class="popup-title">Request new event</span>
-		</div>
-		<div class="popup-form" id="submit-new-event-request">
-			<form id="submit-new-event-request-form" enctype="multipart/form-data" method="post">
-				<table class="form-table table-event table-first">
-					<tbody>
-
-						<?php do_action( 'ts_yts_export_settings_before' ); ?>
-
-						<?php do_action( 'ts_yts_export_settings_general' ); ?>
-
-						<tr id="new-event-ticket-settings1">
-							<td colspan="2">
-								<h3><div class="dashicons dashicons-admin-settings"></div>&nbsp;Event</h3>
-							</td>
-						</tr>
-
-						<tr>
-							<th>
-								<label for="event_title"><?php _e('Title', 'ts_yts' ); ?> *</label>
-							</th>
-							<td>
-								<input type="text" size="50" id="event_title" name="event_title" value="" class="text" />
-							</td>
-						</tr>
-
-						<tr>
-							<th>
-								<label for="event_description"><?php _e('Description', 'ts_yts' ); ?></label>
-							</th>
-							<td>
-								<input type="text" size="50" id="event_description" name="event_description" value="" class="text" />
-							</td>
-						</tr>
-
-						<tr>
-							<th>
-								<label for="event_location"><?php _e('Location', 'ts_yts' ); ?></label>
-							</th>
-							<td>
-								<input type="text" size="50" id="event_location" name="event_location" value="" class="text" />
-							</td>
-						</tr>
-						<tr><td>* - required fields</td></tr>
-					</tbody>
-				</table>
-				<table class="form-table table-ticket">
-					<tbody>
-						<tr id="new-event-ticket-settings2">
-							<td colspan="2">
-								<h3><div class="dashicons dashicons-admin-settings"></div>&nbsp;Ticket #1</h3>
-							</td>
-						</tr>
-
-						<tr>
-							<th>
-								<label for="ticket_title0"><?php _e('Title', 'ts_yts' ); ?> *</label>
-							</th>
-							<td>
-								<input type="text" size="50" id="ticket_title0" name="ticket[0][primary_text_pl]" value="" class="text" />
-							</td>
-						</tr>
-
-						<tr>
-							<th>
-								<label for="ticket_description0"><?php _e('Description', 'ts_yts' ); ?></label>
-							</th>
-							<td>
-								<input type="text" size="50" id="ticket_description0" name="ticket[0][secondary_text_pl]" value="" class="text" />
-							</td>
-						</tr>
-
-						<tr>
-							<th>
-								<label for="ticket_price0"><?php _e('Price', 'ts_yts' ); ?> *</label>
-							</th>
-							<td>
-								<input type="text" size="50" id="ticket_price0" name="ticket[0][price]" value="" class="text" />
-							</td>
-						</tr>
-
-						<tr>
-							<th>
-								<label for="ticket_currency0"><?php _e('Currency', 'ts_yts' ); ?></label>
-							</th>
-							<td>
-								<select name="ticket[0][currency]" id="ticket_currency0">
-									<option value="BGN">BGN</option>
-									<option value="EUR">EUR</option>
-									<option value="USD">USD</option>
-								</select>
-							</td>
-						</tr>
-
-						<tr>
-							<th>
-								<label for="ticket_stock0"><?php _e('Stock', 'ts_yts' ); ?> *</label>
-							</th>
-							<td>
-								<input type="text" size="50" id="ticket_stock0" name="ticket[0][stock]" value="" class="text" />
-							</td>
-						</tr>
-						<tr><td>* - required fields</td></tr>
-					</tbody>
-				</table>
-				<div id="new-ticket-anchor"></div>
-				<table class="form-table submit-button">
-					<tbody>
-						<tr id="new-event-ticket-settings3">
-							<td colspan="2">
-								<p class="submit">
-									<input type="button" id="new-event-ticket-button" class="button button-primary" value="Add new ticket">
-								</p>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-				<table class="form-table table-badge">
-					<tbody>
-						<tr>
-							<td colspan="2" style="padding:0;">
-								<h3><div class="dashicons dashicons-admin-settings"></div>&nbsp;<?php _e( 'Badge settings', 'ts_yts' ); ?></h3>
-								<p class="description"><?php _e( 'Set badge background and text location for autoprinting badges.', 'ts_yts' ); ?></p>
-							</td>
-						</tr>
-
-						<tr>
-							<th>
-								<label for="badge_size"><?php _e('Badge size', 'ts_yts' ); ?></label>
-							</th>
-							<td>
-								<select name="badge_size" id="badge_size">
-									<option value="A4">A4 - 210 x 297 mm</option>
-									<option value="A5">A5 - 148 x 210 mm</option>
-									<option value="A6" selected>A6 - 105 x 148 mm</option>
-									<option value="A7">A7 - 74 x 105 mm</option>
-									<option value="A8">A8 - 52 x 74 mm</option>
-									<option value="A8">A9 - 37 x 52 mm</option>
-									<option value="A8">A10 - 26 x 37 mm</option>
-								</select>
-								<p class="description"><?php _e( 'The physical size of the printed badge', 'ts_yts' ); ?>.</p>
-							</td>
-						</tr>
-
-						<?php // if ( file_exists( TS_YTS_UPLOADPATH . '/badge_background.jpg' ) ):?>
-						<!-- <tr>
-							<th>
-								<label for="badge_background"><?php // _e('Default Badge Background', 'ts_yts' ); ?></label>
-							</th>
-							<td>
-								<br>
-								<img src="<?php // print TS_YTS_UPLOADURLPATH . '/badge_background.jpg'; ?>">
-							</td>
-						</tr> -->
-						<?php // endif; ?>
-
-						<tr>
-							<th>
-								<label for="badge_background"><?php _e('Badge Background', 'ts_yts' ); ?> *</label>
-							</th>
-							<td>
-								<br>
-								<input type="file" name="badge_file" id="badge_file">
-								<p class="description"><?php _e( 'Only jpeg files are accepted.', 'ts_yts' ); ?>.</p>
-								<p>A4 - 2480x3508, A5 - 1748x2480,<br>A6 - 1240x1748, A7 - 874x1240,<br>A8 - 614x874, A9 - 437x614,<br>A10 - 307x437</p>
-							</td>
-						</tr>
-
-						<tr>
-							<td colspan="2" style="padding:0;">
-								<h3><div class="dashicons dashicons-admin-settings"></div>&nbsp;<?php _e( 'Primary text settings', 'ts_yts' ); ?></h3>
-								<p class="description"><?php _e( 'Set primary text location for autoprinting badges.', 'ts_yts' ); ?></p>
-							</td>
-						</tr>
-
-						<tr>
-							<th>
-								<label for="badge_primary_text_horizontal_location"><?php _e('Horizontal location', 'ts_yts' ); ?></label>
-							</th>
-							<td>
-								<select name="badge_primary_text_horizontal_location" id="badge_primary_text_horizontal_location">
-									<option value="left">Left</option>
-									<option value="center" selected>Center</option>
-									<option value="right">Right</option>
-								</select>
-							</td>
-						</tr>
-
-						<tr>
-							<th>
-								<label for="badge_primary_text_horizontal_offset"><?php _e('Horizontal offset', 'ts_yts' ); ?></label>
-							</th>
-							<td>
-								<select name="badge_primary_text_horizontal_offset" id="badge_primary_text_horizontal_offset">
-									<option value="-50">-50%</option>
-									<option value="-10">-10%</option>
-									<option value="-9">-9%</option>
-									<option value="-8">-8%</option>
-									<option value="-7">-7%</option>
-									<option value="-6">-6%</option>
-									<option value="-5">-5%</option>
-									<option value="-4">-4%</option>
-									<option value="-3">-3%</option>
-									<option value="-2">-2%</option>
-									<option value="-1">-1%</option>
-									<option value="0" selected>0%</option>
-									<option value="1">1%</option>
-									<option value="2">2%</option>
-									<option value="3">3%</option>
-									<option value="4">4%</option>
-									<option value="5">5%</option>
-									<option value="6">6%</option>
-									<option value="7">7%</option>
-									<option value="8">8%</option>
-									<option value="9">9%</option>
-									<option value="10">10%</option>
-									<option value="50">50%</option>
-								</select>
-							</td>
-						</tr>
-
-						<tr>
-							<th>
-								<label for="badge_primary_text_vertical_location"><?php _e('Vertical location', 'ts_yts' ); ?></label>
-							</th>
-							<td>
-								<select name="badge_primary_text_vertical_location" id="badge_primary_text_vertical_location">
-									<option value="top">Top</option>
-									<option value="center" selected>Center</option>
-									<option value="bottom">Bottom</option>
-								</select>
-							</td>
-						</tr>
-
-						<tr>
-							<th>
-								<label for="badge_primary_text_vertical_offset"><?php _e('Vertical offset', 'ts_yts' ); ?></label>
-							</th>
-							<td>
-								<select name="badge_primary_text_vertical_offset" id="badge_primary_text_vertical_offset">
-									<option value="-10">-10%</option>
-									<option value="-9">-9%</option>
-									<option value="-8">-8%</option>
-									<option value="-7">-7%</option>
-									<option value="-6">-6%</option>
-									<option value="-5">-5%</option>
-									<option value="-4">-4%</option>
-									<option value="-3">-3%</option>
-									<option value="-2">-2%</option>
-									<option value="-1">-1%</option>
-									<option value="0" selected>0%</option>
-									<option value="1">1%</option>
-									<option value="2">2%</option>
-									<option value="3">3%</option>
-									<option value="4">4%</option>
-									<option value="5">5%</option>
-									<option value="6">6%</option>
-									<option value="7">7%</option>
-									<option value="8">8%</option>
-									<option value="9">9%</option>
-									<option value="10">10%</option>
-									<option value="50">50%</option>
-								</select>
-							</td>
-						</tr>
-
-						<tr>
-							<th>
-								<label for="badge_primary_text_fontsize"><?php _e( 'Font size', 'ts_yts' ); ?></label>
-							</th>
-							<td>
-								<input type="text" size="50" id="badge_primary_text_fontsize" name="badge_primary_text_fontsize" value="70" class="text" />
-							</td>
-						</tr>
-
-						<tr>
-							<th>
-								<label for="badge_primary_text_color"><?php _e('Text color', 'ts_yts' ); ?></label>
-							</th>
-							<td>
-								<input type="text" size="50" id="badge_primary_text_color" name="badge_primary_text_color" value="#000000" class="text" />
-							</td>
-						</tr>
-
-						<tr>
-							<td colspan="2" style="padding:0;">
-								<h3><div class="dashicons dashicons-admin-settings"></div>&nbsp;<?php _e( 'Secondary text settings', 'ts_yts' ); ?></h3>
-								<p class="description"><?php _e( 'Set secondary text location for autoprinting badges.', 'ts_yts' ); ?></p>
-							</td>
-						</tr>
-
-						<tr>
-							<th>
-								<label for="badge_secondary_text_horizontal_location"><?php _e('Horizontal location', 'ts_yts' ); ?></label>
-							</th>
-							<td>
-								<select name="badge_secondary_text_horizontal_location" id="badge_secondary_text_horizontal_location">
-									<option value="left">Left</option>
-									<option value="center" selected>Center</option>
-									<option value="right">Right</option>
-								</select>
-							</td>
-						</tr>
-
-						<tr>
-							<th>
-								<label for="badge_secondary_text_horizontal_offset"><?php _e('Horizontal offset', 'ts_yts' ); ?></label>
-							</th>
-							<td>
-								<select name="badge_secondary_text_horizontal_offset" id="badge_secondary_text_horizontal_offset">
-									<option value="-50">-50%</option>
-									<option value="-10">-10%</option>
-									<option value="-9">-9%</option>
-									<option value="-8">-8%</option>
-									<option value="-7">-7%</option>
-									<option value="-6">-6%</option>
-									<option value="-5">-5%</option>
-									<option value="-4">-4%</option>
-									<option value="-3">-3%</option>
-									<option value="-2">-2%</option>
-									<option value="-1">-1%</option>
-									<option value="0" selected>0%</option>
-									<option value="1">1%</option>
-									<option value="2">2%</option>
-									<option value="3">3%</option>
-									<option value="4">4%</option>
-									<option value="5">5%</option>
-									<option value="6">6%</option>
-									<option value="7">7%</option>
-									<option value="8">8%</option>
-									<option value="9">9%</option>
-									<option value="10">10%</option>
-									<option value="50">50%</option>
-								</select>
-							</td>
-						</tr>
-
-						<tr>
-							<th>
-								<label for="badge_secondary_text_vertical_location"><?php _e('Vertical location', 'ts_yts' ); ?></label>
-							</th>
-							<td>
-								<select name="badge_secondary_text_vertical_location" id="badge_secondary_text_vertical_location">
-									<option value="top">Top</option>
-									<option value="center" selected>Center</option>
-									<option value="bottom">Bottom</option>
-								</select>
-							</td>
-						</tr>
-
-						<tr>
-							<th>
-								<label for="badge_secondary_text_vertical_offset"><?php _e('Vertical offset', 'ts_yts' ); ?></label>
-							</th>
-							<td>
-								<select name="badge_secondary_text_vertical_offset" id="badge_secondary_text_vertical_offset">
-									<option value="-10">-10%</option>
-									<option value="-9">-9%</option>
-									<option value="-8">-8%</option>
-									<option value="-7">-7%</option>
-									<option value="-6">-6%</option>
-									<option value="-5">-5%</option>
-									<option value="-4">-4%</option>
-									<option value="-3">-3%</option>
-									<option value="-2">-2%</option>
-									<option value="-1">-1%</option>
-									<option value="0">0%</option>
-									<option value="1">1%</option>
-									<option value="2">2%</option>
-									<option value="3">3%</option>
-									<option value="4">4%</option>
-									<option value="5" selected>5%</option>
-									<option value="6">6%</option>
-									<option value="7">7%</option>
-									<option value="8">8%</option>
-									<option value="9">9%</option>
-									<option value="10">10%</option>
-									<option value="50">50%</option>
-								</select>
-							</td>
-						</tr>
-
-						<tr>
-							<th>
-								<label for="badge_secondary_text_fontsize"><?php _e('Font size', 'ts_yts' ); ?></label>
-							</th>
-							<td>
-								<input type="text" size="50" id="badge_secondary_text_fontsize" name="badge_secondary_text_fontsize" value="50" class="text" />
-							</td>
-						</tr>
-
-						<tr>
-							<th>
-								<label for="badge_secondary_text_color"><?php _e('Text color', 'ts_yts' ); ?></label>
-							</th>
-							<td>
-								<input type="text" size="50" id="badge_secondary_text_color" name="badge_secondary_text_color" value="#000000" class="text" />
-							</td>
-						</tr>
-
-						<tr>
-							<td colspan="2" style="padding:0;">
-								<h3><div class="dashicons dashicons-admin-settings"></div>&nbsp;<?php _e( 'Badge Preview', 'ts_yts' ); ?></h3>
-								<p class="description"><?php _e( 'Generate a preview before sending your new event for processing.', 'ts_yts' ); ?></p>
-							</td>
-						</tr>
-
-						<tr>
-							<th>
-								<label for="badge_primary_test_text"><?php _e('Primary Test Text', 'ts_yts' ); ?></label>
-							</th>
-							<td>
-								<input type="text" size="50" id="badge_primary_test_text" name="badge_primary_test_text" value="FirstName LastName" class="text" />
-							</td>
-						</tr>
-
-						<tr>
-							<th>
-								<label for="badge_primary_text_break_distance"><?php _e('Break Primary Text Distance', 'ts_yts' ); ?></label>
-							</th>
-							<td>
-								<input type="text" id="badge_primary_text_break_distance" name="badge_primary_text_break_distance" value="0" class="text" />
-								<p class="description"><?php _e( 'Positive value will divide every word on a new line with the set vertical distance between them. Set 0 for single lined output.', 'ts_yts' ); ?>.</p>
-							</td>
-						</tr>
-
-						<tr>
-							<th>
-								<label for="badge_secondary_test_text"><?php _e('Secondary Test Text', 'ts_yts' ); ?></label>
-							</th>
-							<td>
-								<input type="text" size="50" id="badge_secondary_test_text" name="badge_secondary_test_text" value="My Awesome Company" class="text" />
-							</td>
-						</tr>
-
-						<tr>
-							<th>
-								<label for="badge_secondary_text_break_distance"><?php _e('Break Secondary Text Distance', 'ts_yts' ); ?></label>
-							</th>
-							<td>
-								<input type="text" id="badge_secondary_text_break_distance" name="badge_secondary_text_break_distance" value="0" class="text" />
-								<p class="description"><?php _e( 'Positive value will divide every word on a new line with the set vertical distance between them. Set 0 for single lined output.', 'ts_yts' ); ?>.</p>
-							</td>
-						</tr>
-
-						<tr>
-							<th>
-								<label for="badge_background"><?php _e('Badge Background', 'ts_yts' ); ?></label>
-							</th>
-							<td>
-								<br>
-								<input type="button" name="generate_preview" value="Preview Badge" id="generate_preview"/>
-								<p class="description"><?php _e( 'Generate badge preview', 'ts_yts' ); ?>.</p>
-							</td>
-						</tr>
-
-						<tr>
-							<th>
-								<label for="badge_background"><?php _e('Badge Preview', 'ts_yts' ); ?></label>
-							</th>
-							<td>
-								<canvas id="badge_preview"></canvas>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-				<table class="form-table submit-button">
-					<tbody>
-						<tr id="new-event-ticket-settings4">
-							<td colspan="2">
-								<p class="submit">
-								<input type="submit" name="submit" id="submit-new-event-request-button" class="button button-primary" value="<?php _e( 'Request new event', 'ts_yts' ); ?>" />
-								<span id="cancel-new-event-request-button" class="button button-primary">Cancel</span>
-								</p>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-				<input type="hidden" name="action" value="create-event" />
-			</form>
-		</div>
-	</div>
+	
 
 
 

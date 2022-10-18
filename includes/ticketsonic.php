@@ -21,7 +21,6 @@ function ts_yts_request_create_new_event(
 	$badge_primary_text_vertical_offset,
 	$badge_primary_text_fontsize,
 	$badge_primary_text_color,
-	$badge_primary_text_break,
 	$badge_primary_text_break_distance,
 	$badge_secondary_test_text,
 	$badge_secondary_text_horizontal_location,
@@ -30,7 +29,6 @@ function ts_yts_request_create_new_event(
 	$badge_secondary_text_vertical_offset,
 	$badge_secondary_text_fontsize,
 	$badge_secondary_text_color,
-	$badge_secondary_text_break,
 	$badge_secondary_text_break_distance
 ) {
 	$headers = array(
@@ -41,7 +39,7 @@ function ts_yts_request_create_new_event(
 	$body = array(
 		'primary_text_pl'   => $event_title,
 		'secondary_text_pl' => $event_description,
-		'datetime'          => $event_datetime,
+		'start_datetime'    => strtotime( $event_datetime ),
 		'location'          => $event_location,
 		'tickets'           => $tickets_data,
 		'request_hash'      => bin2hex( openssl_random_pseudo_bytes( 16 ) ),
@@ -84,10 +82,6 @@ function ts_yts_request_create_new_event(
 		$body['badge']['badge_primary_text_color'] = $badge_primary_text_color;
 	}
 
-	if ( isset( $badge_primary_text_break ) ) {
-		$body['badge']['badge_primary_text_break'] = $badge_primary_text_break;
-	}
-
 	if ( isset( $badge_primary_text_break_distance ) ) {
 		$body['badge']['badge_primary_text_break_distance'] = $badge_primary_text_break_distance;
 	}
@@ -120,15 +114,17 @@ function ts_yts_request_create_new_event(
 		$body['badge']['badge_secondary_text_color'] = $badge_secondary_text_color;
 	}
 
-	if ( isset( $badge_secondary_text_break ) ) {
-		$body['badge']['badge_secondary_text_break'] = $badge_secondary_text_break;
-	}
-
 	if ( isset( $badge_secondary_text_break_distance ) ) {
 		$body['badge']['badge_secondary_text_break_distance'] = $badge_secondary_text_break_distance;
 	}
 
 	$response = ts_yts_post_request_to_remote( $url, $headers, $body );
+
+	if ( 'success' === $response['status'] ) {
+		$pi	= pathinfo( $uploaded_badge_file_path );
+		$badge_file_path = $pi['dirname'] . DIRECTORY_SEPARATOR . $response['event_id'] . '-badge-background' . '.' . $pi['extension'];
+		rename( $uploaded_badge_file_path, $badge_file_path );
+	}
 
 	return $response;
 }
@@ -181,7 +177,7 @@ function ts_yts_request_change_event(
 	$event_title,
 	$event_description,
 	$event_location,
-	$event_start_datetime,
+	$event_date,
 	$badge_size,
 	$badge_primary_text_horizontal_location,
 	$badge_primary_text_horizontal_offset,
@@ -207,7 +203,7 @@ function ts_yts_request_change_event(
 		'primary_text_pl'   => $event_title,
 		'secondary_text_pl' => $event_description,
 		'location'          => $event_location,
-		'start_datetime'    => $event_start_datetime,
+		'start_datetime'    => $event_date,
 		'badge'             => array(),
 	);
 	
