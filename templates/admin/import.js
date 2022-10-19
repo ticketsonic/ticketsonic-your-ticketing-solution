@@ -200,18 +200,25 @@ $j(function() {
 	});
 
 	$j("body").on("click", "#generate_preview", function() {
-		const file = $j('#badge_file')[0].files[0];
+		var file = $j('#badge_file')[0].files[0];
+		var badgeBackgroundFilePath = $j('#event-request-popup img#badge_file_preview').attr('src');
 	
 		if (file) {
 			let reader = new FileReader();
 			reader.onload = function(event) {
-				draw(event.target.result);
+				drawBadge(event.target.result);
 			}
 	
 			reader.readAsDataURL(file);
+		} else if (badgeBackgroundFilePath) {
+			var background = new Image();
+			background.onload = function() {
+				drawBadge(background);
+			}
+
+			background.src = badgeBackgroundFilePath;
 		} else {
-			var badgeBackgroundFilePath = $j('#event-request-popup img#badge_file_preview').attr('src');
-			draw(badgeBackgroundFilePath);
+			drawBadge();
 		}
 	});
 
@@ -296,7 +303,7 @@ function setValidators() {
 		});
 	});
 
-	$j("input[name*='event_title'], input[name*='primary_text_pl'], input[name*='badge_file']").each(function() {
+	$j("input[name*='event_title'], input[name*='primary_text_pl']").each(function() {
 		$j(this).rules('add', {
 			required: true
 		});
@@ -317,7 +324,7 @@ function setValidators() {
 	});
 }
 
-function draw(image_url) {
+function drawBadge(background) {
 	var height = 0;
 	var width = 0;
 
@@ -327,82 +334,68 @@ function draw(image_url) {
 	var canvas = document.getElementById("badge_preview");
 	ctx = canvas.getContext("2d");
 
-	var background = new Image();
-	background.onload = function() {
-		var badgeSize = $j("#badge_size").val();
-		switch (badgeSize) {
-			case "A4":
-				width = 210 * ppmm;
-				height = 297 * ppmm;
-				break;
-			case "A5":
-				width = 148 * ppmm;
-				height = 210 * ppmm;
-				break;
-			case "A6":
-				width = 105 * ppmm;
-				height = 148 * ppmm;
-				break;
-			case "A7":
-				width = 74 * ppmm;
-				height = 105 * ppmm;
-				break;
-			case "A8":
-				width = 52 * ppmm;
-				height = 74 * ppmm;
-				break;
-			case "A9":
-				width = 37 * ppmm;
-				height = 52 * ppmm;
-				break;
-			case "A10":
-				width = 26 * ppmm;
-				height = 37 * ppmm;
-				break;
-		}
+	var badgeSize = $j("#badge_size").val();
+	switch (badgeSize) {
+		case "A4":
+			width = 210 * ppmm;
+			height = 297 * ppmm;
+			break;
+		case "A5":
+			width = 148 * ppmm;
+			height = 210 * ppmm;
+			break;
+		case "A6":
+			width = 105 * ppmm;
+			height = 148 * ppmm;
+			break;
+		case "A7":
+			width = 74 * ppmm;
+			height = 105 * ppmm;
+			break;
+		case "A8":
+			width = 52 * ppmm;
+			height = 74 * ppmm;
+			break;
+		case "A9":
+			width = 37 * ppmm;
+			height = 52 * ppmm;
+			break;
+		case "A10":
+			width = 26 * ppmm;
+			height = 37 * ppmm;
+			break;
+	}
 
-		ctx.canvas.width  = width;
-		ctx.canvas.height = height;
+	ctx.canvas.width  = width;
+	ctx.canvas.height = height;
 
+	if (background)
 		ctx.drawImage(background, 0, 0);
+	else {
+		ctx.fillStyle = "#FFFFFF";
+		ctx.fillRect(0, 0, width, height);
+	}
 
-		var primaryText = $j("#badge_primary_test_text").val();
-		var primaryTextBreakDistance = parseFloat($j("#badge_primary_text_break_distance").val());
-		var primaryTextFontSize = parseFloat($j("#badge_primary_text_fontsize").val());
-		var primaryTextFontColor = $j("#badge_primary_text_color").val();
+	var primaryText = $j("#badge_primary_test_text").val();
+	var primaryTextBreakDistance = parseFloat($j("#badge_primary_text_break_distance").val());
+	var primaryTextFontSize = parseFloat($j("#badge_primary_text_fontsize").val());
+	var primaryTextFontColor = $j("#badge_primary_text_color").val();
 
-		var primaryTextHorizontalOffset = $j("#badge_primary_text_horizontal_offset").val();
-		var primaryTextVerticalOffset = $j("#badge_primary_text_vertical_offset").val();
-		var primaryTextHorizontalLocation = $j("#badge_primary_text_horizontal_location").val();
-		var primaryTextVerticalLocation = $j("#badge_primary_text_vertical_location").val();
+	var primaryTextHorizontalOffset = $j("#badge_primary_text_horizontal_offset").val();
+	var primaryTextVerticalOffset = $j("#badge_primary_text_vertical_offset").val();
+	var primaryTextHorizontalLocation = $j("#badge_primary_text_horizontal_location").val();
+	var primaryTextVerticalLocation = $j("#badge_primary_text_vertical_location").val();
 
-		var font = primaryTextFontSize + 'pt  Arial';
-		ctx.font = font;
-		
-		ctx.fillStyle = primaryTextFontColor;
-		if (primaryTextBreakDistance) {
-			primaryText = primaryText.split(' ');
-			for (var i = 0; i < primaryText.length; i++) {
-				let coordinates = getTextCoordinates(
-					ctx,
-					primaryText[i],
-					width,
-					height,
-					primaryTextHorizontalLocation,
-					primaryTextVerticalLocation,
-					primaryTextHorizontalOffset,
-					primaryTextVerticalOffset
-				);
-				ctx.fillText(
-					primaryText[i],
-					coordinates.x,
-					coordinates.y + (i * (primaryTextFontSize + primaryTextBreakDistance))
-				);
-			}
-		} else {
+	var font = primaryTextFontSize + 'pt  Arial';
+	ctx.font = font;
+	
+	ctx.fillStyle = primaryTextFontColor;
+	if (primaryTextBreakDistance) {
+		primaryText = primaryText.split(' ');
+		for (var i = 0; i < primaryText.length; i++) {
 			let coordinates = getTextCoordinates(
 				ctx,
-				primaryText,
+				primaryText[i],
 				width,
 				height,
 				primaryTextHorizontalLocation,
@@ -410,47 +403,46 @@ function draw(image_url) {
 				primaryTextHorizontalOffset,
 				primaryTextVerticalOffset
 			);
-			ctx.fillText(primaryText, coordinates.x, coordinates.y);
+			ctx.fillText(
+				primaryText[i],
+				coordinates.x,
+				coordinates.y + (i * (primaryTextFontSize + primaryTextBreakDistance))
+			);
 		}
-		
-		var secondaryText = $j("#badge_secondary_test_text").val();
-		var secondaryTextBreakDistance = parseFloat($j("#badge_secondary_text_break_distance").val());
-		var secondaryTextFontSize = parseFloat($j("#badge_secondary_text_fontsize").val());
-		var secondaryTextFontColor = $j("#badge_secondary_text_color").val();
+	} else {
+		let coordinates = getTextCoordinates(
+			ctx,
+			primaryText,
+			width,
+			height,
+			primaryTextHorizontalLocation,
+			primaryTextVerticalLocation,
+			primaryTextHorizontalOffset,
+			primaryTextVerticalOffset
+		);
+		ctx.fillText(primaryText, coordinates.x, coordinates.y);
+	}
+	
+	var secondaryText = $j("#badge_secondary_test_text").val();
+	var secondaryTextBreakDistance = parseFloat($j("#badge_secondary_text_break_distance").val());
+	var secondaryTextFontSize = parseFloat($j("#badge_secondary_text_fontsize").val());
+	var secondaryTextFontColor = $j("#badge_secondary_text_color").val();
 
-		var secondaryTextHorizontalOffset = $j("#badge_secondary_text_horizontal_offset").val();
-		var secondaryTextVerticalOffset = $j("#badge_secondary_text_vertical_offset").val();
-		var secondaryTextHorizontalLocation = $j("#badge_secondary_text_horizontal_location").val();
-		var secondaryTextVerticalLocation = $j("#badge_secondary_text_vertical_location").val();
+	var secondaryTextHorizontalOffset = $j("#badge_secondary_text_horizontal_offset").val();
+	var secondaryTextVerticalOffset = $j("#badge_secondary_text_vertical_offset").val();
+	var secondaryTextHorizontalLocation = $j("#badge_secondary_text_horizontal_location").val();
+	var secondaryTextVerticalLocation = $j("#badge_secondary_text_vertical_location").val();
 
-		var font = secondaryTextFontSize + 'pt  Arial';
-		ctx.font = font;
+	var font = secondaryTextFontSize + 'pt  Arial';
+	ctx.font = font;
 
-		ctx.fillStyle = secondaryTextFontColor;
-		if (secondaryTextBreakDistance > 0) {
-			secondaryText = secondaryText.split(' ');
-			for (var i = 0; i < secondaryText.length; i++) {
-				let coordinates = getTextCoordinates(
-					ctx,
-					secondaryText[i],
-					width,
-					height,
-					secondaryTextHorizontalLocation,
-					secondaryTextVerticalLocation,
-					secondaryTextHorizontalOffset,
-					secondaryTextVerticalOffset
-				);
-				ctx.fillText(
-					secondaryText[i],
-					coordinates.x,
-					coordinates.y + (i * (secondaryTextFontSize + secondaryTextBreakDistance))
-				);
-			}
-
-		} else {
+	ctx.fillStyle = secondaryTextFontColor;
+	if (secondaryTextBreakDistance > 0) {
+		secondaryText = secondaryText.split(' ');
+		for (var i = 0; i < secondaryText.length; i++) {
 			let coordinates = getTextCoordinates(
 				ctx,
-				secondaryText,
+				secondaryText[i],
 				width,
 				height,
 				secondaryTextHorizontalLocation,
@@ -458,11 +450,26 @@ function draw(image_url) {
 				secondaryTextHorizontalOffset,
 				secondaryTextVerticalOffset
 			);
-			ctx.fillText(secondaryText, coordinates.x, coordinates.y);
+			ctx.fillText(
+				secondaryText[i],
+				coordinates.x,
+				coordinates.y + (i * (secondaryTextFontSize + secondaryTextBreakDistance))
+			);
 		}
-	}
 
-	background.src = image_url;
+	} else {
+		let coordinates = getTextCoordinates(
+			ctx,
+			secondaryText,
+			width,
+			height,
+			secondaryTextHorizontalLocation,
+			secondaryTextVerticalLocation,
+			secondaryTextHorizontalOffset,
+			secondaryTextVerticalOffset
+		);
+		ctx.fillText(secondaryText, coordinates.x, coordinates.y);
+	}
 }
 
 function getTextCoordinates(ctx, text, width, height, textHorizontalLocation, textVerticalLocation, textHorizontalOffset, textVerticalOffset) {
@@ -691,7 +698,7 @@ function insertEventForm(
 
 							<tr>
 								<th>
-									<label for="badge-background">Badge Background *</label>
+									<label for="badge-background">Badge Background</label>
 								</th>
 								<td>
 									<br>
@@ -1059,29 +1066,5 @@ function insertEventForm(
 	
 	$j(".popups-overlay").show();
 	$j("#event-request-popup").show();
-
 	$j("#event_date").datepicker();
 }
-
-// const getBase64StringFromDataURL = (dataURL) =>
-//     	dataURL.replace('data:', '').replace(/^.+,/, '');
-
-// function encodeImgtoBase64(file) {
-// 	fetch(file)
-// 		.then((res) => res.blob())
-// 		.then((blob) => {
-// 			// Read the Blob as DataURL using the FileReader API
-// 			const reader = new FileReader();
-// 			reader.onloadend = () => {
-// 				console.log(reader.result);
-// 				// Logs data:image/jpeg;base64,wL2dvYWwgbW9yZ...
-
-// 				// Convert to Base64 string
-// 				const base64 = getBase64StringFromDataURL(reader.result);
-// 				console.log(base64);
-// 				return base64;
-// 				// Logs wL2dvYWwgbW9yZ...
-// 			};
-// 			reader.readAsDataURL(blob);
-// 	});
-// }
