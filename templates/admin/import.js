@@ -553,10 +553,10 @@ function insertEventForm(
 
 							<tr>
 								<th>
-									<label for="event_title">Title *</label>
+									<label for="event_primary_text_pl">Title *</label>
 								</th>
 								<td>
-									<input type="text" size="50" id="event_title" name="event_title" value="" class="text" />
+									<input type="text" size="50" id="event_primary_text_pl" name="event_primary_text_pl" value="" class="text" />
 								</td>
 							</tr>
 
@@ -1024,7 +1024,7 @@ function insertEventForm(
 		$j("#table-ticket-submit").remove();
 		$j("#event-request-popup #popup-title").text('Request event change');
 		$j("#event-request-popup #new-event-request").val('Request event change');
-		$j("#event-request-popup #event_title").attr('value', eventTitle);
+		$j("#event-request-popup #event_primary_text_pl").attr('value', eventTitle);
 		$j("#event-request-popup #event_description").attr('value', eventDescription);
 		$j("#event-request-popup #event_date").attr('value', eventStarttime);
 		$j("#event-request-popup #event_location").attr('value', eventLocation);
@@ -1052,6 +1052,7 @@ function insertEventForm(
 		$j("#event-request-popup #badge_secondary_text_break_distance").attr('value', badgeScBrDistance);
 
 		$j("#event-request-popup #action_type").attr('value', 'event-change');
+		$j("#event-request-popup #action_type").append(`<input id="event_id" type="hidden" name="event_id" value="${eventId}" />`);
 
 		$j("#generate_preview").click();
 	}
