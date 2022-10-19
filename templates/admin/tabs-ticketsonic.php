@@ -86,7 +86,13 @@ $raw_tickets = ts_yts_get_event_ticket_data_from_remote( $url, $email, $key, nul
 							<td class="event-location"><?php print ( esc_html( $event['location'] ) ); ?></td>
 
 							<td class="badge-size"><?php print ( esc_html( $badge_data['badge_size'] ) ); ?></td>
-							<td class="badge-background"><img class="badge-background" data-path="<?php print ( esc_html( wp_upload_dir()['basedir'] . DIRECTORY_SEPARATOR . TS_YTS_DIRNAME . DIRECTORY_SEPARATOR . $event['event_id'] . '-badge-background.jpg' ) ); ?>" src="<?php print ( esc_html( wp_upload_dir()['baseurl'] . DIRECTORY_SEPARATOR . TS_YTS_DIRNAME . DIRECTORY_SEPARATOR . $event['event_id'] . '-badge-background.jpg' ) ); ?>"/></td>
+							<?php $badge_background_file = wp_upload_dir()['basedir'] . DIRECTORY_SEPARATOR . TS_YTS_DIRNAME . DIRECTORY_SEPARATOR . $event['event_id'] . '-badge-background.jpg'; ?>
+							<?php $badge_background_url = wp_upload_dir()['baseurl'] . DIRECTORY_SEPARATOR . TS_YTS_DIRNAME . DIRECTORY_SEPARATOR . $event['event_id'] . '-badge-background.jpg'; ?>
+							<td class="badge-background">
+							<?php if ( file_exists( $badge_background_file ) ) : ?>
+								<img class="badge-background" src="<?php print ( esc_html( $badge_background_url ) ); ?>"/>
+							<?php endif; ?>
+							</td>
 
 							<td class="badge-pr-htext-loc"><?php print ( esc_html( $badge_data['badge_primary_text_horizontal_location'] ) ); ?></td>
 							<td class="badge-pr-htext-offset"><?php print ( esc_html( $badge_data['badge_primary_text_horizontal_offset'] ) ); ?></td>
