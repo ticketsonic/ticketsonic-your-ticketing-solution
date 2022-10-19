@@ -80,10 +80,10 @@ $raw_tickets = ts_yts_get_event_ticket_data_from_remote( $url, $email, $key, nul
 						<?php $badge_data = $event['badge']; ?>
 						<tr id="events-row-<?php print ( esc_html( $key ) ); ?>">
 							<td class="event-id"><?php print ( esc_html( $event['event_id'] ) ); ?></td>
-							<td class="event-start-time"><?php print ( esc_html( date("d M Y", $event['start_time'] ) ) ); ?></td>
-							<td class="event-location"><?php print ( esc_html( $event['location'] ) ); ?></td>
 							<td class="event-primary"><?php print ( esc_html( $event['primary_text_pl'] ) ); ?></td>
 							<td class="event-secondary"><?php print ( esc_html( $event['secondary_text_pl'] ) ); ?></td>
+							<td class="event-start-time"><?php print ( esc_html( date( 'd M Y', $event['start_time'] ) ) ); ?></td>
+							<td class="event-location"><?php print ( esc_html( $event['location'] ) ); ?></td>
 
 							<td class="badge-size"><?php print ( esc_html( $badge_data['badge_size'] ) ); ?></td>
 							<td class="badge-background"><img class="badge-background" data-path="<?php print ( esc_html( wp_upload_dir()['basedir'] . DIRECTORY_SEPARATOR . TS_YTS_DIRNAME . DIRECTORY_SEPARATOR . $event['event_id'] . '-badge-background.jpg' ) ); ?>" src="<?php print ( esc_html( wp_upload_dir()['baseurl'] . DIRECTORY_SEPARATOR . TS_YTS_DIRNAME . DIRECTORY_SEPARATOR . $event['event_id'] . '-badge-background.jpg' ) ); ?>"/></td>
