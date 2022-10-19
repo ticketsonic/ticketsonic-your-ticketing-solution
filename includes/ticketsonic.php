@@ -208,7 +208,7 @@ function ts_yts_request_change_event(
 		'primary_text_pl'   => $event_title,
 		'secondary_text_pl' => $event_description,
 		'location'          => $event_location,
-		'start_datetime'    => $event_date,
+		'start_datetime'    => strtotime( $event_date ),
 		'badge'             => array(),
 	);
 
