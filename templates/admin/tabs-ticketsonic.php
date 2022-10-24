@@ -42,81 +42,86 @@ $raw_tickets = ts_yts_get_event_ticket_data_from_remote( $url, $email, $key, nul
 			<thead>
 				<tr>
 					<th class="manage-column" rowspan="3">Event ID</th>
-					<th class="manage-column" rowspan="3">Date</th>
-					<th class="manage-column" rowspan="3">Loc.</th>
 					<th class="manage-column" rowspan="3">Title</th>
 					<th class="manage-column" rowspan="3">Desc</th>
-					<th class="manage-column" colspan="18">Badge</th>
+					<th class="manage-column" rowspan="3">Date</th>
+					<th class="manage-column" rowspan="3">Loc.</th>
+					<th class="manage-column colspan-18" colspan="18">Badge<a id="toggle-badge-details">Show details</a></th>
 					<th class="manage-column" rowspan="3">Edit</th>
 				</tr>
 				<tr>
-					<th class="manage-column" rowspan="2">Size</th>
-					<th class="manage-column" rowspan="2">Background</th>
-					<th class="manage-column" colspan="8">Primary text</th>
-					<th class="manage-column" colspan="8">Secondary text</th>
+					<th class="manage-column" rowspan="2">Preview</th>
+					<th class="manage-column badge-foldable" rowspan="2">Size</th>
+					<th class="manage-column badge-foldable" rowspan="2">Background</th>
+					<th class="manage-column badge-foldable" colspan="8">Primary text</th>
+					<th class="manage-column badge-foldable" colspan="8">Secondary text</th>
 				</tr>
 				<tr>
-					<th class="manage-column">Hor. loc.</th>
-					<th class="manage-column">Hor. offset</th>
-					<th class="manage-column">Vert. loc.</th>
-					<th class="manage-column">Vert. offset</th>
-					<th class="manage-column">Font size</th>
-					<th class="manage-column">Font color</th>
-					<th class="manage-column">Test text</th>
-					<th class="manage-column">Break dist.</th>
-					<th class="manage-column">Hor. loc.</th>
-					<th class="manage-column">Hor. offset</th>
-					<th class="manage-column">Vert. loc.</th>
-					<th class="manage-column">Vert. offset</th>
-					<th class="manage-column">Font size</th>
-					<th class="manage-column">Font color</th>
-					<th class="manage-column">Test text</th>
-					<th class="manage-column">Break dist.</th>
+					<th class="manage-column badge-foldable">Hor. loc.</th>
+					<th class="manage-column badge-foldable">Hor. offset</th>
+					<th class="manage-column badge-foldable">Vert. loc.</th>
+					<th class="manage-column badge-foldable">Vert. offset</th>
+					<th class="manage-column badge-foldable">Font size</th>
+					<th class="manage-column badge-foldable">Font color</th>
+					<th class="manage-column badge-foldable">Test text</th>
+					<th class="manage-column badge-foldable">Break dist.</th>
+					<th class="manage-column badge-foldable">Hor. loc.</th>
+					<th class="manage-column badge-foldable">Hor. offset</th>
+					<th class="manage-column badge-foldable">Vert. loc.</th>
+					<th class="manage-column badge-foldable">Vert. offset</th>
+					<th class="manage-column badge-foldable">Font size</th>
+					<th class="manage-column badge-foldable">Font color</th>
+					<th class="manage-column badge-foldable">Test text</th>
+					<th class="manage-column badge-foldable">Break dist.</th>
 				</tr>
 			</thead>    
 			<tbody>
 				<?php if ( count( $raw_events['events'] ) > 0 ) : ?>
 					<?php foreach ( $raw_events['events'] as $key => $event ) : ?>
 						<?php $badge_data = $event['badge']; ?>
-						<tr id="events-row-<?php print ( esc_html( $key ) ); ?>">
+						<tr class="event-row" id="event-row-<?php print ( esc_html( $key ) ); ?>">
 							<td class="event-id"><?php print ( esc_html( $event['event_id'] ) ); ?></td>
 							<td class="event-primary"><?php print ( esc_html( $event['primary_text_pl'] ) ); ?></td>
 							<td class="event-secondary"><?php print ( esc_html( $event['secondary_text_pl'] ) ); ?></td>
 							<td class="event-start-time"><?php print ( esc_html( date( 'd M Y', $event['start_time'] ) ) ); ?></td>
 							<td class="event-location"><?php print ( esc_html( $event['location'] ) ); ?></td>
 
-							<td class="badge-size"><?php print ( esc_html( $badge_data['badge_size'] ) ); ?></td>
+							<td class="badge-preview"><canvas id="badge-preview-<?php print ( esc_html( $key ) ); ?>"></canvas></td>
+							<td class="badge-size badge-foldable"><?php print ( esc_html( $badge_data['badge_size'] ) ); ?></td>
 							<?php $badge_background_file = wp_upload_dir()['basedir'] . DIRECTORY_SEPARATOR . TS_YTS_DIRNAME . DIRECTORY_SEPARATOR . $event['event_id'] . '-badge-background.jpg'; ?>
 							<?php $badge_background_url = wp_upload_dir()['baseurl'] . DIRECTORY_SEPARATOR . TS_YTS_DIRNAME . DIRECTORY_SEPARATOR . $event['event_id'] . '-badge-background.jpg'; ?>
-							<td class="badge-background">
+							
 							<?php if ( file_exists( $badge_background_file ) ) : ?>
-								<img class="badge-background" src="<?php print ( esc_html( $badge_background_url ) ); ?>"/>
+								<td class="badge-background badge-foldable">
+									<img class="badge-background" src="<?php print ( esc_html( $badge_background_url ) ); ?>"/>
+								</td>
+							<?php else : ?>
+								<td class="badge-background badge-foldable"></td>
 							<?php endif; ?>
-							</td>
+							
 
-							<td class="badge-pr-htext-loc"><?php print ( esc_html( $badge_data['badge_primary_text_horizontal_location'] ) ); ?></td>
-							<td class="badge-pr-htext-offset"><?php print ( esc_html( $badge_data['badge_primary_text_horizontal_offset'] ) ); ?></td>
-							<td class="badge-pr-vtext-loc"><?php print ( esc_html( $badge_data['badge_primary_text_vertical_location'] ) ); ?></td>
-							<td class="badge-pr-vtext-offset"><?php print ( esc_html( $badge_data['badge_primary_text_vertical_offset'] ) ); ?></td>
-							<td class="badge-pr-fontsize"><?php print ( esc_html( $badge_data['badge_primary_text_fontsize'] ) ); ?></td>
-							<td class="badge-pr-color"><?php print ( esc_html( $badge_data['badge_primary_text_color'] ) ); ?></td>
-							<td class="badge-pr-test-text"><?php print ( esc_html( $badge_data['badge_primary_test_text'] ) ); ?></td>
-							<td class="badge-pr-br-distance"><?php print ( esc_html( $badge_data['badge_primary_text_break_distance'] ) ); ?></td>
+							<td class="badge-pr-htext-loc badge-foldable"><?php print ( esc_html( $badge_data['badge_primary_text_horizontal_location'] ) ); ?></td>
+							<td class="badge-pr-htext-offset badge-foldable"><?php print ( esc_html( $badge_data['badge_primary_text_horizontal_offset'] ) ); ?></td>
+							<td class="badge-pr-vtext-loc badge-foldable"><?php print ( esc_html( $badge_data['badge_primary_text_vertical_location'] ) ); ?></td>
+							<td class="badge-pr-vtext-offset badge-foldable"><?php print ( esc_html( $badge_data['badge_primary_text_vertical_offset'] ) ); ?></td>
+							<td class="badge-pr-fontsize badge-foldable"><?php print ( esc_html( $badge_data['badge_primary_text_fontsize'] ) ); ?></td>
+							<td class="badge-pr-color badge-foldable"><?php print ( esc_html( $badge_data['badge_primary_text_color'] ) ); ?></td>
+							<td class="badge-pr-test-text badge-foldable"><?php print ( esc_html( $badge_data['badge_primary_test_text'] ) ); ?></td>
+							<td class="badge-pr-br-distance badge-foldable"><?php print ( esc_html( $badge_data['badge_primary_text_break_distance'] ) ); ?></td>
 
-							<td class="badge-sc-htext-loc"><?php print ( esc_html( $badge_data['badge_secondary_text_horizontal_location'] ) ); ?></td>
-							<td class="badge-sc-htext-offset"><?php print ( esc_html( $badge_data['badge_secondary_text_horizontal_offset'] ) ); ?></td>
-							<td class="badge-sc-vtext-loc"><?php print ( esc_html( $badge_data['badge_secondary_text_vertical_location'] ) ); ?></td>
-							<td class="badge-sc-vtext-offset"><?php print ( esc_html( $badge_data['badge_secondary_text_vertical_offset'] ) ); ?></td>
-							<td class="badge-sc-fontsize"><?php print ( esc_html( $badge_data['badge_secondary_text_fontsize'] ) ); ?></td>
-							<td class="badge-sc-color"><?php print ( esc_html( $badge_data['badge_secondary_text_color'] ) ); ?></td>
-							<td class="badge-sc-test-text"><?php print ( esc_html( $badge_data['badge_secondary_test_text'] ) ); ?></td>
-							<td class="badge-sc-br-distance"><?php print ( esc_html( $badge_data['badge_secondary_text_break_distance'] ) ); ?></td>
+							<td class="badge-sc-htext-loc badge-foldable"><?php print ( esc_html( $badge_data['badge_secondary_text_horizontal_location'] ) ); ?></td>
+							<td class="badge-sc-htext-offset badge-foldable"><?php print ( esc_html( $badge_data['badge_secondary_text_horizontal_offset'] ) ); ?></td>
+							<td class="badge-sc-vtext-loc badge-foldable"><?php print ( esc_html( $badge_data['badge_secondary_text_vertical_location'] ) ); ?></td>
+							<td class="badge-sc-vtext-offset badge-foldable"><?php print ( esc_html( $badge_data['badge_secondary_text_vertical_offset'] ) ); ?></td>
+							<td class="badge-sc-fontsize badge-foldable"><?php print ( esc_html( $badge_data['badge_secondary_text_fontsize'] ) ); ?></td>
+							<td class="badge-sc-color badge-foldable"><?php print ( esc_html( $badge_data['badge_secondary_text_color'] ) ); ?></td>
+							<td class="badge-sc-test-text badge-foldable"><?php print ( esc_html( $badge_data['badge_secondary_test_text'] ) ); ?></td>
+							<td class="badge-sc-br-distance badge-foldable"><?php print ( esc_html( $badge_data['badge_secondary_text_break_distance'] ) ); ?></td>
 							<td class="edit-event-row"><a>Edit</a></td>
 						</tr>
 					<?php endforeach; ?>
 				<?php endif; ?>
-				<tr>
-					<td><span id="new-event-button" class="button button-primary">Request new event</span></td>
+				<!-- <tr>
 					<td></td>
 					<td></td>
 					<td></td>
@@ -140,11 +145,13 @@ $raw_tickets = ts_yts_get_event_ticket_data_from_remote( $url, $email, $key, nul
 					<td></td>
 					<td></td>
 					<td></td>
-				</tr>
+					<td></td>
+				</tr> -->
 			</tbody>
 		</table>
 		<input type="hidden" name="action" value="event-change" />
 	</form>
+	<span id="new-event-button" class="button button-primary">Request new event</span>
 
 	<h3><div class="dashicons dashicons-admin-settings"></div>&nbsp;List of tickets</h3>
 

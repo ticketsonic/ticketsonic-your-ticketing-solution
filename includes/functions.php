@@ -284,7 +284,7 @@ if ( is_admin() ) {
 					return;
 				}
 
-				$event_title = ts_yts_sanitize_or_default( $_POST['event_title'] );
+				$event_title = ts_yts_sanitize_or_default( $_POST['event_primary_text_pl'] );
 				if ( empty( $event_title ) ) {
 					ts_yts_admin_notice_html( 'Event title field have to set', 'error' );
 					return;

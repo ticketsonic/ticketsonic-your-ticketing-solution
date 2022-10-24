@@ -11,7 +11,6 @@ $j(function() {
 		insertEventForm();
 
 		$j("html, body").animate({ scrollTop: 0 }, "slow");
-		
 	});
 
 	$j("#new-ticket-button").click(function(){
@@ -202,24 +201,113 @@ $j(function() {
 	$j("body").on("click", "#generate_preview", function() {
 		var file = $j('#badge_file')[0].files[0];
 		var badgeBackgroundFilePath = $j('#event-request-popup img#badge_file_preview').attr('src');
-	
-		if (file) {
-			let reader = new FileReader();
-			reader.onload = function(event) {
-				drawBadge(event.target.result);
-			}
-	
-			reader.readAsDataURL(file);
-		} else if (badgeBackgroundFilePath) {
-			var background = new Image();
-			background.onload = function() {
-				drawBadge(background);
-			}
+		var badgeSize = $j("#badge_size").val();
 
-			background.src = badgeBackgroundFilePath;
-		} else {
-			drawBadge();
-		}
+		var primaryText = $j("#badge_primary_test_text").val();
+		var primaryTextBreakDistance = parseFloat($j("#badge_primary_text_break_distance").val());
+		var primaryTextFontSize = parseFloat($j("#badge_primary_text_fontsize").val());
+		var primaryTextFontColor = $j("#badge_primary_text_color").val();
+		var primaryTextHorizontalOffset = $j("#badge_primary_text_horizontal_offset").val();
+		var primaryTextVerticalOffset = $j("#badge_primary_text_vertical_offset").val();
+		var primaryTextHorizontalLocation = $j("#badge_primary_text_horizontal_location").val();
+		var primaryTextVerticalLocation = $j("#badge_primary_text_vertical_location").val();
+
+		var secondaryText = $j("#badge_secondary_test_text").val();
+		var secondaryTextBreakDistance = parseFloat($j("#badge_secondary_text_break_distance").val());
+		var secondaryTextFontSize = parseFloat($j("#badge_secondary_text_fontsize").val());
+		var secondaryTextFontColor = $j("#badge_secondary_text_color").val();
+		var secondaryTextHorizontalOffset = $j("#badge_secondary_text_horizontal_offset").val();
+		var secondaryTextVerticalOffset = $j("#badge_secondary_text_vertical_offset").val();
+		var secondaryTextHorizontalLocation = $j("#badge_secondary_text_horizontal_location").val();
+		var secondaryTextVerticalLocation = $j("#badge_secondary_text_vertical_location").val();
+
+		badgeBuilder(
+			"badge_preview",
+			file,
+			badgeBackgroundFilePath,
+			badgeSize,
+			primaryText,
+			primaryTextBreakDistance,
+			primaryTextFontSize,
+			primaryTextFontColor,
+			primaryTextHorizontalOffset,
+			primaryTextVerticalOffset,
+			primaryTextHorizontalLocation,
+			primaryTextVerticalLocation,
+			secondaryText,
+			secondaryTextBreakDistance,
+			secondaryTextFontSize,
+			secondaryTextFontColor,
+			secondaryTextHorizontalOffset,
+			secondaryTextVerticalOffset,
+			secondaryTextHorizontalLocation,
+			secondaryTextVerticalLocation
+		);
+	});
+
+	$j("body").on("click", "#toggle-badge-details", function() {
+		$j(".badge-foldable").toggle();
+		var val = parseInt($j(".colspan-18").attr("colspan"));
+		if (val === 18)
+			$j(".colspan-18").attr("colspan", 1);
+		else
+			$j(".colspan-18").attr("colspan", 18);
+	});
+
+	$j(document).ready(function() {
+		var eventRows = $j("table#events tr.event-row");
+		eventRows.each(function(i) {
+			// var eventData = eventRow.find("td.event-id").val();
+			var eventId = $j(this).find("td.event-id").text();
+			var eventTitle = $j(this).find("td.event-primary").text();
+			var eventDescription = $j(this).find("td.event-secondary").text();
+			var eventStarttime = $j(this).find("td.event-start-time").text();
+			var eventLocation = $j(this).find("td.event-location").text();
+			
+			var badgeSize = $j(this).find("td.badge-size").text();
+			var badgeBackgroundFilePath = $j(this).find("td.badge-background").text();
+			var badgePrimaryText = $j(this).find("td.badge-pr-test-text").text();
+			var badgePrimaryTextBreakDistance = $j(this).find("td.badge-pr-br-distance").text();
+			var badgePrimaryTextHorizontalLocation = $j(this).find("td.badge-pr-htext-loc").text();
+			var badgePrimaryTextHorizontalOffset = $j(this).find("td.badge-pr-htext-offset").text();
+			var badgePrimaryTextVerticalLocation = $j(this).find("td.badge-pr-vtext-loc").text();
+			var badgePrimaryTextVerticalOffset = $j(this).find("td.badge-pr-vtext-offset").text();
+			var badgePrimaryTextFontSize = $j(this).find("td.badge-pr-fontsize").text();
+			var badgePrimaryTextFontColor = $j(this).find("td.badge-pr-color").text();
+
+			var badgeSecondaryTextHorizontalLocation = $j(this).find("td.badge-sc-htext-loc").text();
+			var badgeSecondaryTextHorizontalOffset = $j(this).find("td.badge-sc-htext-offset").text();
+			var badgeSecondaryTextVerticalLocation = $j(this).find("td.badge-sc-vtext-loc").text();
+			var badgeSecondaryTextVerticalOffset = $j(this).find("td.badge-sc-vtext-offset").text();
+			var badgeSecondaryTextFontSize = $j(this).find("td.badge-sc-fontsize").text();
+			var badgeSecondaryTextFontColor = $j(this).find("td.badge-sc-color").text();
+			var badgeSecondaryTextBreakDistance = $j(this).find("td.badge-sc-br-distance").text();
+			var badgeSecondaryText = $j(this).find("td.badge-sc-test-text").text();
+
+
+			badgeBuilder(
+				"badge-preview-" + i,
+				null,
+				badgeBackgroundFilePath,
+				badgeSize,
+				badgePrimaryText,
+				badgePrimaryTextBreakDistance,
+				badgePrimaryTextFontSize,
+				badgePrimaryTextFontColor,
+				badgePrimaryTextHorizontalOffset,
+				badgePrimaryTextVerticalOffset,
+				badgePrimaryTextHorizontalLocation,
+				badgePrimaryTextVerticalLocation,
+				badgeSecondaryText,
+				badgeSecondaryTextBreakDistance,
+				badgeSecondaryTextFontSize,
+				badgeSecondaryTextFontColor,
+				badgeSecondaryTextHorizontalOffset,
+				badgeSecondaryTextVerticalOffset,
+				badgeSecondaryTextHorizontalLocation,
+				badgeSecondaryTextVerticalLocation
+			)
+		});
 	});
 
 	setValidators()
@@ -324,17 +412,142 @@ function setValidators() {
 	});
 }
 
-function drawBadge(background) {
+function badgeBuilder(
+	targetCanvasId,
+	file,
+	path,
+	badgeSize,
+	primaryText,
+	primaryTextBreakDistance,
+	primaryTextFontSize,
+	primaryTextFontColor,
+	primaryTextHorizontalOffset,
+	primaryTextVerticalOffset,
+	primaryTextHorizontalLocation,
+	primaryTextVerticalLocation,
+	secondaryText,
+	secondaryTextBreakDistance,
+	secondaryTextFontSize,
+	secondaryTextFontColor,
+	secondaryTextHorizontalOffset,
+	secondaryTextVerticalOffset,
+	secondaryTextHorizontalLocation,
+	secondaryTextVerticalLocation
+) {
+	if (file) {
+		let reader = new FileReader();
+		reader.onload = function(event) {
+			drawBadge(
+				targetCanvasId,
+				event.target.result,
+				badgeSize,
+				badgeSize,
+				primaryText,
+				primaryTextBreakDistance,
+				primaryTextFontSize,
+				primaryTextFontColor,
+				primaryTextHorizontalOffset,
+				primaryTextVerticalOffset,
+				primaryTextHorizontalLocation,
+				primaryTextVerticalLocation,
+				secondaryText,
+				secondaryTextBreakDistance,
+				secondaryTextFontSize,
+				secondaryTextFontColor,
+				secondaryTextHorizontalOffset,
+				secondaryTextVerticalOffset,
+				secondaryTextHorizontalLocation,
+				secondaryTextVerticalLocation
+			);
+		}
+
+		reader.readAsDataURL(file);
+	} else if (path) {
+		var background = new Image();
+		background.onload = function() {
+			drawBadge(
+				targetCanvasId,
+				background,
+				badgeSize,
+				badgeSize,
+				primaryText,
+				primaryTextBreakDistance,
+				primaryTextFontSize,
+				primaryTextFontColor,
+				primaryTextHorizontalOffset,
+				primaryTextVerticalOffset,
+				primaryTextHorizontalLocation,
+				primaryTextVerticalLocation,
+				secondaryText,
+				secondaryTextBreakDistance,
+				secondaryTextFontSize,
+				secondaryTextFontColor,
+				secondaryTextHorizontalOffset,
+				secondaryTextVerticalOffset,
+				secondaryTextHorizontalLocation,
+				secondaryTextVerticalLocation
+			);
+		}
+
+		background.src = path;
+	} else {
+		drawBadge(
+			targetCanvasId,
+			null,
+			badgeSize,
+			badgeSize,
+			primaryText,
+			primaryTextBreakDistance,
+			primaryTextFontSize,
+			primaryTextFontColor,
+			primaryTextHorizontalOffset,
+			primaryTextVerticalOffset,
+			primaryTextHorizontalLocation,
+			primaryTextVerticalLocation,
+			secondaryText,
+			secondaryTextBreakDistance,
+			secondaryTextFontSize,
+			secondaryTextFontColor,
+			secondaryTextHorizontalOffset,
+			secondaryTextVerticalOffset,
+			secondaryTextHorizontalLocation,
+			secondaryTextVerticalLocation
+		);
+	}
+}
+
+function drawBadge(
+	targetCanvasId,
+	background,
+	badgeSize,
+	badgeSize,
+	primaryText,
+	primaryTextBreakDistance,
+	primaryTextFontSize,
+	primaryTextFontColor,
+	primaryTextHorizontalOffset,
+	primaryTextVerticalOffset,
+	primaryTextHorizontalLocation,
+	primaryTextVerticalLocation,
+	secondaryText,
+	secondaryTextBreakDistance,
+	secondaryTextFontSize,
+	secondaryTextFontColor,
+	secondaryTextHorizontalOffset,
+	secondaryTextVerticalOffset,
+	secondaryTextHorizontalLocation,
+	secondaryTextVerticalLocation
+) {
 	var height = 0;
 	var width = 0;
 
 	// pixels per millimeter density
 	var ppmm = 11.8110;
 
-	var canvas = document.getElementById("badge_preview");
+	var canvas = document.getElementById(targetCanvasId);
 	ctx = canvas.getContext("2d");
 
-	var badgeSize = $j("#badge_size").val();
+	// var badgeSize = $j("#badge_size").val();
 	switch (badgeSize) {
 		case "A4":
 			width = 210 * ppmm;
@@ -376,15 +589,15 @@ function drawBadge(background) {
 		ctx.fillRect(0, 0, width, height);
 	}
 
-	var primaryText = $j("#badge_primary_test_text").val();
-	var primaryTextBreakDistance = parseFloat($j("#badge_primary_text_break_distance").val());
-	var primaryTextFontSize = parseFloat($j("#badge_primary_text_fontsize").val());
-	var primaryTextFontColor = $j("#badge_primary_text_color").val();
+	// var primaryText = $j("#badge_primary_test_text").val();
+	// var primaryTextBreakDistance = parseFloat($j("#badge_primary_text_break_distance").val());
+	// var primaryTextFontSize = parseFloat($j("#badge_primary_text_fontsize").val());
+	// var primaryTextFontColor = $j("#badge_primary_text_color").val();
 
-	var primaryTextHorizontalOffset = $j("#badge_primary_text_horizontal_offset").val();
-	var primaryTextVerticalOffset = $j("#badge_primary_text_vertical_offset").val();
-	var primaryTextHorizontalLocation = $j("#badge_primary_text_horizontal_location").val();
-	var primaryTextVerticalLocation = $j("#badge_primary_text_vertical_location").val();
+	// var primaryTextHorizontalOffset = $j("#badge_primary_text_horizontal_offset").val();
+	// var primaryTextVerticalOffset = $j("#badge_primary_text_vertical_offset").val();
+	// var primaryTextHorizontalLocation = $j("#badge_primary_text_horizontal_location").val();
+	// var primaryTextVerticalLocation = $j("#badge_primary_text_vertical_location").val();
 
 	var font = primaryTextFontSize + 'pt  Arial';
 	ctx.font = font;
@@ -423,15 +636,15 @@ function drawBadge(background) {
 		ctx.fillText(primaryText, coordinates.x, coordinates.y);
 	}
 	
-	var secondaryText = $j("#badge_secondary_test_text").val();
-	var secondaryTextBreakDistance = parseFloat($j("#badge_secondary_text_break_distance").val());
-	var secondaryTextFontSize = parseFloat($j("#badge_secondary_text_fontsize").val());
-	var secondaryTextFontColor = $j("#badge_secondary_text_color").val();
+	// var secondaryText = $j("#badge_secondary_test_text").val();
+	// var secondaryTextBreakDistance = parseFloat($j("#badge_secondary_text_break_distance").val());
+	// var secondaryTextFontSize = parseFloat($j("#badge_secondary_text_fontsize").val());
+	// var secondaryTextFontColor = $j("#badge_secondary_text_color").val();
 
-	var secondaryTextHorizontalOffset = $j("#badge_secondary_text_horizontal_offset").val();
-	var secondaryTextVerticalOffset = $j("#badge_secondary_text_vertical_offset").val();
-	var secondaryTextHorizontalLocation = $j("#badge_secondary_text_horizontal_location").val();
-	var secondaryTextVerticalLocation = $j("#badge_secondary_text_vertical_location").val();
+	// var secondaryTextHorizontalOffset = $j("#badge_secondary_text_horizontal_offset").val();
+	// var secondaryTextVerticalOffset = $j("#badge_secondary_text_vertical_offset").val();
+	// var secondaryTextHorizontalLocation = $j("#badge_secondary_text_horizontal_location").val();
+	// var secondaryTextVerticalLocation = $j("#badge_secondary_text_vertical_location").val();
 
 	var font = secondaryTextFontSize + 'pt  Arial';
 	ctx.font = font;
@@ -472,7 +685,16 @@ function drawBadge(background) {
 	}
 }
 
-function getTextCoordinates(ctx, text, width, height, textHorizontalLocation, textVerticalLocation, textHorizontalOffset, textVerticalOffset) {
+function getTextCoordinates(
+	ctx,
+	text,
+	width,
+	height,
+	textHorizontalLocation,
+	textVerticalLocation,
+	textHorizontalOffset,
+	textVerticalOffset
+) {
 	let xCoordinate = 0;
 	let yCoordinate = 0;
 	let textWidthMeasured;
@@ -1061,7 +1283,7 @@ function insertEventForm(
 		$j("#event-request-popup #action_type").attr('value', 'event-change');
 		$j("#event-request-popup #action_type").append(`<input id="event_id" type="hidden" name="event_id" value="${eventId}" />`);
 
-		$j("#generate_preview").click();
+		// $j("#generate_preview").click();
 	}
 	
 	$j(".popups-overlay").show();
