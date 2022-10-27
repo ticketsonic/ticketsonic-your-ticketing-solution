@@ -37,6 +37,7 @@ $raw_tickets = ts_yts_get_event_ticket_data_from_remote( $url, $email, $key, nul
 <div class="remote-data">
 	<h3><div class="dashicons dashicons-admin-settings"></div>&nbsp;List of events</h3>
 
+	<span id="new-event-button" class="button button-primary">Request new event</span>
 	<form method="POST" id="events-list">
 		<table id="events" class="wp-list-table widefat fixed striped table-view-list posts">
 			<thead>
@@ -124,39 +125,14 @@ $raw_tickets = ts_yts_get_event_ticket_data_from_remote( $url, $email, $key, nul
 						</tr>
 					<?php endforeach; ?>
 				<?php endif; ?>
-				<!-- <tr>
-					<td></td>
-					<td></td>
-					<td></td>
-					<td></td>
-					<td></td>
-					<td></td>
-					<td></td>
-					<td></td>
-					<td></td>
-					<td></td>
-					<td></td>
-					<td></td>
-					<td></td>
-					<td></td>
-					<td></td>
-					<td></td>
-					<td></td>
-					<td></td>
-					<td></td>
-					<td></td>
-					<td></td>
-					<td></td>
-					<td></td>
-					<td></td>
-				</tr> -->
 			</tbody>
 		</table>
 		<input type="hidden" name="action" value="event-change" />
 	</form>
-	<span id="new-event-button" class="button button-primary">Request new event</span>
 
 	<h3><div class="dashicons dashicons-admin-settings"></div>&nbsp;List of tickets</h3>
+
+	<span id="new-ticket-button" class="button button-primary">Request new ticket</span>
 
 	<form method="POST" id="tickets-list">
 		<table id="tickets" class="wp-list-table widefat fixed striped table-view-list posts">
@@ -185,15 +161,6 @@ $raw_tickets = ts_yts_get_event_ticket_data_from_remote( $url, $email, $key, nul
 					</tr>
 					<?php endforeach; ?>
 				<?php endif; ?>
-				<tr>
-					<td><span id="new-ticket-button" class="button button-primary">Request new ticket</span></td>
-					<td></td>
-					<td></td>
-					<td></td>
-					<td></td>
-					<td></td>
-					<td></td>
-				</tr>
 			</tbody>
 		</table>
 		<input type="hidden" name="action" value="ticket-change" />
