@@ -258,7 +258,7 @@ $j(function() {
 		var eventRows = $j("table#events tr.event-row");
 		eventRows.each(function(i) {
 			var badgeSize = $j(this).find("td.badge-size").text();
-			var badgeBackgroundFilePath = $j(this).find("td.badge-background").text();
+			var badgeBackgroundFilePath = $j(this).find("img.badge-background").attr("src");
 			var badgePrimaryText = $j(this).find("td.badge-pr-test-text").text();
 			var badgePrimaryTextBreakDistance = $j(this).find("td.badge-pr-br-distance").text();
 			var badgePrimaryTextHorizontalLocation = $j(this).find("td.badge-pr-htext-loc").text();
