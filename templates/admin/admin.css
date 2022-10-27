@@ -221,11 +221,28 @@ canvas {
 	max-width: 100%;
 }
 
-table#events th {
-	border: 1px solid lightgray;
+table#events.bordered-table th {
+	border-left: 1px solid lightgray;
     text-align: center;
 }
 
 table#events .badge-background, #event-request-popup img#badge_file_preview {
 	width: 100%;
+}
+
+.badge-canvas {
+	display: none;
+}
+
+.toggle-badge-details, .badge-show-preview {
+	/* display: block; */
+    font-size: 10px;
+}
+
+#new-event-button, #new-ticket-button {
+	margin: 10px 0;
+}
+
+img.badge-background {
+	border: 1px lightgray solid;
 }
