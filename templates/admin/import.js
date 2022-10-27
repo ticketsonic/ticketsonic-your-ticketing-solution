@@ -301,6 +301,8 @@ $j(function() {
 				badgeSecondaryTextVerticalLocation
 			)
 		});
+
+		$j("#toggle-badge-details").click();
 	});
 
 	setValidators()
