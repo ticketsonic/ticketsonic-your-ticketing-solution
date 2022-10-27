@@ -260,21 +260,21 @@ $j(function() {
 			var badgeSize = $j(this).find("td.badge-size").text();
 			var badgeBackgroundFilePath = $j(this).find("img.badge-background").attr("src");
 			var badgePrimaryText = $j(this).find("td.badge-pr-test-text").text();
-			var badgePrimaryTextBreakDistance = $j(this).find("td.badge-pr-br-distance").text();
+			var badgePrimaryTextBreakDistance = parseInt($j(this).find("td.badge-pr-br-distance").text());
 			var badgePrimaryTextHorizontalLocation = $j(this).find("td.badge-pr-htext-loc").text();
-			var badgePrimaryTextHorizontalOffset = $j(this).find("td.badge-pr-htext-offset").text();
+			var badgePrimaryTextHorizontalOffset = parseInt($j(this).find("td.badge-pr-htext-offset").text());
 			var badgePrimaryTextVerticalLocation = $j(this).find("td.badge-pr-vtext-loc").text();
-			var badgePrimaryTextVerticalOffset = $j(this).find("td.badge-pr-vtext-offset").text();
-			var badgePrimaryTextFontSize = $j(this).find("td.badge-pr-fontsize").text();
+			var badgePrimaryTextVerticalOffset = parseInt($j(this).find("td.badge-pr-vtext-offset").text());
+			var badgePrimaryTextFontSize = parseInt($j(this).find("td.badge-pr-fontsize").text());
 			var badgePrimaryTextFontColor = $j(this).find("td.badge-pr-color").text();
 
 			var badgeSecondaryTextHorizontalLocation = $j(this).find("td.badge-sc-htext-loc").text();
-			var badgeSecondaryTextHorizontalOffset = $j(this).find("td.badge-sc-htext-offset").text();
+			var badgeSecondaryTextHorizontalOffset = parseInt($j(this).find("td.badge-sc-htext-offset").text());
 			var badgeSecondaryTextVerticalLocation = $j(this).find("td.badge-sc-vtext-loc").text();
-			var badgeSecondaryTextVerticalOffset = $j(this).find("td.badge-sc-vtext-offset").text();
-			var badgeSecondaryTextFontSize = $j(this).find("td.badge-sc-fontsize").text();
+			var badgeSecondaryTextVerticalOffset = parseInt($j(this).find("td.badge-sc-vtext-offset").text());
+			var badgeSecondaryTextFontSize = parseInt($j(this).find("td.badge-sc-fontsize").text());
 			var badgeSecondaryTextFontColor = $j(this).find("td.badge-sc-color").text();
-			var badgeSecondaryTextBreakDistance = $j(this).find("td.badge-sc-br-distance").text();
+			var badgeSecondaryTextBreakDistance = parseInt($j(this).find("td.badge-sc-br-distance").text());
 			var badgeSecondaryText = $j(this).find("td.badge-sc-test-text").text();
 
 
