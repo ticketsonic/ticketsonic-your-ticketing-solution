@@ -247,11 +247,24 @@ $j(function() {
 
 	$j("body").on("click", "#toggle-badge-details", function() {
 		$j(".badge-foldable").toggle();
-		var val = parseInt($j(".colspan-18").attr("colspan"));
-		if (val === 18)
-			$j(".colspan-18").attr("colspan", 1);
-		else
-			$j(".colspan-18").attr("colspan", 18);
+		if ($j(".badge-foldable").is(":hidden")) {
+			$j(".heading-badge").attr("colspan", 1);
+			$j("#events-list #events").removeClass("bordered-table");
+			$j(this).text("Show details");
+		} else {
+			$j(".heading-badge").attr("colspan", 19);
+			$j("#events-list #events").addClass("bordered-table");
+			$j(this).text("Hide details");
+		}
+	});
+
+	$j(".badge-show-preview").click(function() {
+		$j(this).parent().find(".badge-canvas").toggle();
+		if ($j(this).parent().find(".badge-canvas").is(":hidden")) {
+			$j(this).text("Show preview");
+		} else {
+			$j(this).text("Hide preview");
+		}
 	});
 
 	$j(document).ready(function() {

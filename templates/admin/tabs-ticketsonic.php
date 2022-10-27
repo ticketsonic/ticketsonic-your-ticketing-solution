@@ -41,16 +41,16 @@ $raw_tickets = ts_yts_get_event_ticket_data_from_remote( $url, $email, $key, nul
 		<table id="events" class="wp-list-table widefat fixed striped table-view-list posts">
 			<thead>
 				<tr>
-					<th class="manage-column" rowspan="3">Event ID</th>
-					<th class="manage-column" rowspan="3">Title</th>
-					<th class="manage-column" rowspan="3">Desc</th>
-					<th class="manage-column" rowspan="3">Date</th>
-					<th class="manage-column" rowspan="3">Loc.</th>
-					<th class="manage-column colspan-18" colspan="18">Badge<a id="toggle-badge-details">Show details</a></th>
-					<th class="manage-column" rowspan="3">Edit</th>
+					<th class="manage-column column-xs heading-event-id" rowspan="3">Event ID</th>
+					<th class="manage-column heading-title" rowspan="3">Title</th>
+					<th class="manage-column heading-description" rowspan="3">Description</th>
+					<th class="manage-column column-xs heading-date" rowspan="3">Date</th>
+					<th class="manage-column heading-location" rowspan="3">Location</th>
+					<th class="manage-column heading-badge" colspan="19">Badge <a class="toggle-badge-details" id="toggle-badge-details" href="#">Show details</a></th>
+					<th class="manage-column column-xs heading-edit" rowspan="3">Edit</th>
 				</tr>
 				<tr>
-					<th class="manage-column" rowspan="2">Preview</th>
+					<th class="manage-column badge-foldable" rowspan="2">Preview</th>
 					<th class="manage-column badge-foldable" rowspan="2">Size</th>
 					<th class="manage-column badge-foldable" rowspan="2">Background</th>
 					<th class="manage-column badge-foldable" colspan="8">Primary text</th>
@@ -86,7 +86,10 @@ $raw_tickets = ts_yts_get_event_ticket_data_from_remote( $url, $email, $key, nul
 							<td class="event-start-time"><?php print ( esc_html( date( 'd M Y', $event['start_time'] ) ) ); ?></td>
 							<td class="event-location"><?php print ( esc_html( $event['location'] ) ); ?></td>
 
-							<td class="badge-preview"><canvas id="badge-preview-<?php print ( esc_html( $key ) ); ?>"></canvas></td>
+							<td class="badge-preview">
+								<a class="badge-show-preview" id="badge-show-preview-<?php print ( esc_html( $key ) ); ?>">Show preview</a>
+								<canvas class="badge-canvas" id="badge-preview-<?php print ( esc_html( $key ) ); ?>"></canvas>
+							</td>
 							<td class="badge-size badge-foldable"><?php print ( esc_html( $badge_data['badge_size'] ) ); ?></td>
 							<?php $badge_background_file = wp_upload_dir()['basedir'] . DIRECTORY_SEPARATOR . TS_YTS_DIRNAME . DIRECTORY_SEPARATOR . $event['event_id'] . '-badge-background.jpg'; ?>
 							<?php $badge_background_url = wp_upload_dir()['baseurl'] . DIRECTORY_SEPARATOR . TS_YTS_DIRNAME . DIRECTORY_SEPARATOR . $event['event_id'] . '-badge-background.jpg'; ?>
