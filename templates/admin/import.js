@@ -257,13 +257,6 @@ $j(function() {
 	$j(document).ready(function() {
 		var eventRows = $j("table#events tr.event-row");
 		eventRows.each(function(i) {
-			// var eventData = eventRow.find("td.event-id").val();
-			var eventId = $j(this).find("td.event-id").text();
-			var eventTitle = $j(this).find("td.event-primary").text();
-			var eventDescription = $j(this).find("td.event-secondary").text();
-			var eventStarttime = $j(this).find("td.event-start-time").text();
-			var eventLocation = $j(this).find("td.event-location").text();
-			
 			var badgeSize = $j(this).find("td.badge-size").text();
 			var badgeBackgroundFilePath = $j(this).find("td.badge-background").text();
 			var badgePrimaryText = $j(this).find("td.badge-pr-test-text").text();
