@@ -795,10 +795,10 @@ function insertEventForm(
 
 							<tr>
 								<th>
-									<label for="event_description">Description</label>
+									<label for="event_secondary_text_pl">Description</label>
 								</th>
 								<td>
-									<input type="text" size="50" id="event_description" name="event_description" value="" class="text" />
+									<input type="text" size="50" id="event_secondary_text_pl" name="event_secondary_text_pl" value="" class="text" />
 								</td>
 							</tr>
 
@@ -1258,7 +1258,7 @@ function insertEventForm(
 		$j("#event-request-popup #popup-title").text('Request event change');
 		$j("#event-request-popup #new-event-request").val('Request event change');
 		$j("#event-request-popup #event_primary_text_pl").attr('value', eventTitle);
-		$j("#event-request-popup #event_description").attr('value', eventDescription);
+		$j("#event-request-popup #event_secondary_text_pl").attr('value', eventDescription);
 		$j("#event-request-popup #event_date").attr('value', eventStarttime);
 		$j("#event-request-popup #event_location").attr('value', eventLocation);
 

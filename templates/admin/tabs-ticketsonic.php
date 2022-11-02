@@ -213,7 +213,7 @@ $raw_tickets = ts_yts_get_event_ticket_data_from_remote( $url, $email, $key, nul
 								<select name="ticket_eventid" id="ticket_eventid">
 									<?php if ( count( $raw_events['events'] ) > 0 ) : ?>
 										<?php foreach ( $raw_events['events'] as $key => $event ) : ?>
-											<option value="<?php print ( esc_html( $event['event_id'] ) ); ?>"><?php print ( esc_html( $event['title'] ) ); ?></option>
+											<option value="<?php print ( esc_html( $event['event_id'] ) ); ?>"><?php print ( esc_html( $event['primary_text_pl'] ) ); ?></option>
 										<?php endforeach; ?>
 									<?php endif; ?>
 								</select>

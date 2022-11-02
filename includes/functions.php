@@ -96,15 +96,15 @@ if ( is_admin() ) {
 					return;
 				}
 
-				$event_title = ts_yts_sanitize_or_default( $_POST['event_primary_text_pl'] );
-				if ( empty( $event_title ) ) {
+				$event_primary_text_pl = ts_yts_sanitize_or_default( $_POST['event_primary_text_pl'] );
+				if ( empty( $event_primary_text_pl ) ) {
 					ts_yts_admin_notice_html( 'Event title field have to set', 'error' );
 					return;
 				}
 
-				$event_description = ts_yts_sanitize_or_default( $_POST['event_secondary_text_pl'] );
-				$event_location    = ts_yts_sanitize_or_default( $_POST['event_location'] );
-				$event_date        = ts_yts_sanitize_or_default( $_POST['event_date'] );
+				$event_secondary_text_pl = ts_yts_sanitize_or_default( $_POST['event_secondary_text_pl'] );
+				$event_location          = ts_yts_sanitize_or_default( $_POST['event_location'] );
+				$event_date              = ts_yts_sanitize_or_default( $_POST['event_date'] );
 
 				$badge_size                             = ts_yts_sanitize_or_default( $_POST['badge_size'] );
 				$badge_primary_text_horizontal_location = ts_yts_sanitize_or_default( $_POST['badge_primary_text_horizontal_location'] );
@@ -136,8 +136,8 @@ if ( is_admin() ) {
 					$email,
 					$key,
 					$event_id,
-					$event_title,
-					$event_description,
+					$event_primary_text_pl,
+					$event_secondary_text_pl,
 					$event_location,
 					$event_date,
 					$uploaded_badge_file_path,
@@ -290,7 +290,7 @@ if ( is_admin() ) {
 					return;
 				}
 
-				$event_description = ts_yts_sanitize_or_default( $_POST['event_description'] );
+				$event_secondary_text_pl = ts_yts_sanitize_or_default( $_POST['event_secondary_text_pl'] );
 				$event_date        = ts_yts_sanitize_or_default( $_POST['event_date'] );
 				$event_location    = ts_yts_sanitize_or_default( $_POST['event_location'] );
 
@@ -472,7 +472,7 @@ if ( is_admin() ) {
 					$email,
 					$key,
 					$event_title,
-					$event_description,
+					$event_secondary_text_pl,
 					$event_date,
 					$event_location,
 					$tickets_data,

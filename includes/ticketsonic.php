@@ -8,7 +8,7 @@ function ts_yts_request_create_new_event(
 	$email,
 	$key,
 	$event_title,
-	$event_description,
+	$event_secondary_text_pl,
 	$event_datetime,
 	$event_location,
 	$tickets_data,
@@ -38,7 +38,7 @@ function ts_yts_request_create_new_event(
 
 	$body = array(
 		'primary_text_pl'   => $event_title,
-		'secondary_text_pl' => $event_description,
+		'secondary_text_pl' => $event_secondary_text_pl,
 		'start_datetime'    => strtotime( $event_datetime ),
 		'location'          => $event_location,
 		'tickets'           => $tickets_data,
