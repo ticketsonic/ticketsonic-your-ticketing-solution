@@ -15,10 +15,17 @@
 		<?php _e( 'Status', 'ts_yts' ); ?>
 	</h3>
 	<?php 
-	if ( ! is_writable( TS_YTS_UPLOADPATH ) ) {
-		print '<span class="dashicons dashicons-no"></span><span> Ensure the plugin upload folder ' . esc_html( TS_YTS_UPLOADPATH ) . ' is writable</span>';
+	if ( 'success' === $health ) {
+		print '<div><span class="dashicons dashicons-yes"></span><span> TicketSonic connection ok</span></div>';
 	} else {
-		print '<span class="dashicons dashicons-yes"></span><span> Plugin upload folder is writable</span>';
+		print '<div><span class="dashicons dashicons-no"></span><span> Error contacting TicketSonic</span></div>';
+	}
+	?>
+	<?php 
+	if ( ! is_writable( TS_YTS_UPLOADPATH ) ) {
+		print '<div><span class="dashicons dashicons-no"></span><span> Ensure the plugin upload folder ' . esc_html( TS_YTS_UPLOADPATH ) . ' is writable</span></div>';
+	} else {
+		print '<div><span class="dashicons dashicons-yes"></span><span> Plugin upload folder is writable</span></div>';
 	}
 	?>
 </div>

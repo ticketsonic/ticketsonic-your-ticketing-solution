@@ -181,6 +181,7 @@ if ( is_admin() ) {
 				ts_yts_update_option( 'new_ticket_endpoint', ts_yts_sanitize_or_default( $_POST['new_ticket_endpoint'] ) );
 				ts_yts_update_option( 'change_ticket_endpoint', ts_yts_sanitize_or_default( $_POST['change_ticket_endpoint'] ) );
 				ts_yts_update_option( 'external_order_endpoint', ts_yts_sanitize_or_default( $_POST['external_order_endpoint'] ) );
+				ts_yts_update_option( 'health_check_endpoint', ts_yts_sanitize_or_default( $_POST['health_check_endpoint'] ) );
 				ts_yts_update_option( 'event_id', ts_yts_sanitize_or_default( $_POST['event_id'] ) );
 
 				$message = __( 'Settings saved.', 'woo-ts' );

@@ -144,6 +144,16 @@
 					<p class="description"><?php _e( 'Order Endpoint', 'ts_yts' ); ?>.</p>
 				</td>
 			</tr>
+
+			<tr>
+				<th>
+					<label for="health_check_endpoint"><?php _e( 'Health Check Endpoint', 'ts_yts' ); ?></label>
+				</th>
+				<td>
+					<input type="text" size="50" id="health_check_endpoint" name="health_check_endpoint" value="<?php print ( esc_attr( $health_check_endpoint ) ); ?>" class="text" />
+					<p class="description"><?php _e( 'Health Check Endpoint', 'ts_yts' ); ?>.</p>
+				</td>
+			</tr>
 		</tbody>
 	</table>
 	<!-- .form-table -->

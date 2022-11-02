@@ -84,6 +84,27 @@ function ts_yts_tab_template( $tab = '' ) {
 	switch ( $tab ) {
 		case 'overview':
 			$skip_overview = ts_yts_get_option( 'skip_overview', false );
+
+			$url = ts_yts_get_option( 'health_check_endpoint', 'https://www.ticketsonic.com:9507/v1/health' );
+			if ( empty( $url ) ) {
+				ts_yts_admin_notice_html( 'Ticket Info Endpoint have to set in Settings', 'error' );
+				return;
+			}
+
+			$email = ts_yts_get_option( 'api_userid', '' );
+			if ( empty( $email ) ) {
+				ts_yts_admin_notice_html( 'API E-mail have to set in Settings', 'error' );
+				return;
+			}
+
+			$key = ts_yts_get_option( 'api_key', '' );
+			if ( empty( $key ) ) {
+				ts_yts_admin_notice_html( 'API Key have to set in Settings', 'error' );
+				return;
+			}
+
+			$response = ts_yts_get_remote_health( $url, $email, $key );
+			$health   = $response['status'];
 			break;
 
 		case 'import':
@@ -103,6 +124,7 @@ function ts_yts_tab_template( $tab = '' ) {
 			$change_ticket_endpoint  = ts_yts_get_option( 'change_ticket_endpoint', 'https://www.ticketsonic.com:9507/v1/ticket/edit' );
 			$change_event_endpoint   = ts_yts_get_option( 'change_event_endpoint', 'https://www.ticketsonic.com:9507/v1/event/edit' );
 			$external_order_endpoint = ts_yts_get_option( 'external_order_endpoint', 'https://www.ticketsonic.com:9507/v1/order/new' );
+			$health_check_endpoint   = ts_yts_get_option( 'health_check_endpoint', 'https://www.ticketsonic.com:9507/v1/health' );
 			$event_id                = ts_yts_get_option( 'event_id', '' );
 			$email_subject           = ts_yts_get_option( 'email_subject', 'Ticket #[ticket_number] - [ticket_title] for the Your Event is ready' );
 			$email_body              = ts_yts_get_option(

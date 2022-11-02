@@ -387,6 +387,17 @@ function ts_yts_prepare_order_tickets_request_body( $order_id, $email, $key ) {
 	return $body;
 }
 
+function ts_yts_get_remote_health( $url, $email, $key ) {
+	$headers = array(
+		'x-api-userid'  => $email,
+		'x-api-key'     => $key,
+	);
+
+	$response = ts_yts_get_request_from_remote( $url, $headers, null );
+
+	return $response;
+}
+
 function ts_yts_get_request_from_remote( $url, $headers, $body ) {
 	$http     = new GuzzleHttp\Client( array( 'base_uri' => $url, 'verify' => false ) );
 	$response = array();
