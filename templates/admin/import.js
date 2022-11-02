@@ -445,27 +445,32 @@ function badgeBuilder(
 	if (file) {
 		let reader = new FileReader();
 		reader.onload = function(event) {
-			drawBadge(
-				targetCanvasId,
-				event.target.result,
-				badgeSize,
-				primaryText,
-				primaryTextBreakDistance,
-				primaryTextFontSize,
-				primaryTextFontColor,
-				primaryTextHorizontalOffset,
-				primaryTextVerticalOffset,
-				primaryTextHorizontalLocation,
-				primaryTextVerticalLocation,
-				secondaryText,
-				secondaryTextBreakDistance,
-				secondaryTextFontSize,
-				secondaryTextFontColor,
-				secondaryTextHorizontalOffset,
-				secondaryTextVerticalOffset,
-				secondaryTextHorizontalLocation,
-				secondaryTextVerticalLocation
-			);
+			var image = new Image();
+			image.onload = function() {
+				drawBadge(
+					targetCanvasId,
+					a,
+					badgeSize,
+					primaryText,
+					primaryTextBreakDistance,
+					primaryTextFontSize,
+					primaryTextFontColor,
+					primaryTextHorizontalOffset,
+					primaryTextVerticalOffset,
+					primaryTextHorizontalLocation,
+					primaryTextVerticalLocation,
+					secondaryText,
+					secondaryTextBreakDistance,
+					secondaryTextFontSize,
+					secondaryTextFontColor,
+					secondaryTextHorizontalOffset,
+					secondaryTextVerticalOffset,
+					secondaryTextHorizontalLocation,
+					secondaryTextVerticalLocation
+				);
+			};
+
+			image.src = event.target.result;
 		}
 
 		reader.readAsDataURL(file);
