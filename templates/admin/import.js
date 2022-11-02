@@ -1234,6 +1234,8 @@ function insertEventForm(
 								</th>
 								<td>
 									<canvas id="badge_preview"></canvas>
+									<p class="description">This is a demo and the results may slightly vary on the mobile device that will actually send the badge for printing.</p>
+									<p class="description">To get 100% accurate results check the badge preview on your mobile scanner device.</p>
 								</td>
 							</tr>
 						</tbody>
