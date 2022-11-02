@@ -34,7 +34,7 @@ $j(function() {
 	});
 
 	i = 1;
-	$j("#new-event-ticket-button").click(function () {
+	$j("body").on("click", "#new-event-ticket-button", function () {
 		$j("#new-ticket-anchor").before(`<table class="form-table table-ticket"><tbody>
 			<tr id="new-event-ticket-settings">
 				<td colspan="2">
