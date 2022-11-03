@@ -1,7 +1,7 @@
 === TicketSonic - your Ticketing Solution ===
 Contributors: ticketsonic
 Requires at least: 4.7
-Tested up to: 5.9.3
+Tested up to: 6.1
 Stable tag: 1.1.3
 Requires PHP: 7.0
 License: GPLv2 or later
@@ -10,7 +10,7 @@ License URI: https://www.gnu.org/licenses/gpl-2.0.html
 **TicketSonic** is the ticketing engine that integrates with your platform behind the scenes enabling you to become a full featured ticket seller.
 
 == Description ==
-TicketSonic brings together everything required for you to become a standalone ticket seller and have a successful event. TicketSonic's products provide solutions for every scenario. Electronic tickets, free scanner mobile app, auto printed badge for accelerated reception and many more to support all kinds of events and venues like conferences, museums, city tours, staduims, etc.
+TicketSonic brings together everything required for you to become a standalone ticket seller and have a successful event. TicketSonic's products provide solutions for every scenario. Electronic tickets, free scanner mobile app, auto printed badge for accelerated reception and many more to support all kinds of events and venues like conferences, museums, city tours, stadiums, etc.
 
 This is a WooCommerce based plugin for integrating the TicketSonic Engine with your WooCommerce platform.
 
