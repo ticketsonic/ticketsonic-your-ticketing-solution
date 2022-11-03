@@ -685,7 +685,7 @@ function ts_yts_generate_new_ticket_files_from_existing_ticket_data( $order ) {
 
 	$order = wc_get_order( $order_id );
 	if ( ! $order->meta_exists( 'ts_response' ) ) {
-		$order->add_order_note( 'No ticket files generated because there is no data.' );
+		$order->add_order_note( 'No ticket data found to generate and store ticket files.' );
 
 		return;
 	}

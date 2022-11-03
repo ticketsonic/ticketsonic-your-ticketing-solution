@@ -27,7 +27,7 @@
 				</th>
 				<td>
 					<input type="text" size="50" id="event_id" name="event_id" value="<?php print ( esc_attr( $event_id ) ); ?>" class="text" />
-					<p class="description"><?php _e( 'Only the tickets related to the designated event will be synced', 'ts_yts' ); ?></p>
+					<p class="description"><?php _e( 'Only the tickets related to the designated event will be synced. Leave empty to sync all tickets created by you', 'ts_yts' ); ?></p>
 				</td>
 			</tr>
 
