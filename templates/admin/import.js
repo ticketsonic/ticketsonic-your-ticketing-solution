@@ -449,7 +449,7 @@ function badgeBuilder(
 			image.onload = function() {
 				drawBadge(
 					targetCanvasId,
-					a,
+					image,
 					badgeSize,
 					primaryText,
 					primaryTextBreakDistance,
