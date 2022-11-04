@@ -212,7 +212,7 @@ function ts_yts_request_change_event(
 		'badge'             => array(),
 	);
 
-	if ( ! empty( $badge_size ) ) {
+	if ( isset( $badge_size ) ) {
 		$body['badge']['badge_size'] = $badge_size;
 	}
 
@@ -220,67 +220,67 @@ function ts_yts_request_change_event(
 		$body['badge']['badge_background'] = base64_encode( file_get_contents( $uploaded_badge_file_path ) );
 	}
 
-	if ( ! empty( $badge_primary_text_horizontal_location ) ) {
+	if ( isset( $badge_primary_text_horizontal_location ) ) {
 		$body['badge']['badge_primary_text_horizontal_location'] = $badge_primary_text_horizontal_location;
 	}
 
-	if ( ! empty( $badge_primary_text_horizontal_offset ) ) {
+	if ( isset( $badge_primary_text_horizontal_offset ) ) {
 		$body['badge']['badge_primary_text_horizontal_offset'] = $badge_primary_text_horizontal_offset;
 	}
 
-	if ( ! empty( $badge_primary_text_vertical_location ) ) {
+	if ( isset( $badge_primary_text_vertical_location ) ) {
 		$body['badge']['badge_primary_text_vertical_location'] = $badge_primary_text_vertical_location;
 	}
 
-	if ( ! empty( $badge_primary_text_vertical_offset ) ) {
+	if ( isset( $badge_primary_text_vertical_offset ) ) {
 		$body['badge']['badge_primary_text_vertical_offset'] = $badge_primary_text_vertical_offset;
 	}
 
-	if ( ! empty( $badge_primary_text_fontsize ) ) {
+	if ( isset( $badge_primary_text_fontsize ) ) {
 		$body['badge']['badge_primary_text_fontsize'] = $badge_primary_text_fontsize;
 	}
 
-	if ( ! empty( $badge_primary_text_color ) ) {
+	if ( isset( $badge_primary_text_color ) ) {
 		$body['badge']['badge_primary_text_color'] = $badge_primary_text_color;
 	}
 
-	if ( ! empty( $badge_primary_test_text ) ) {
+	if ( isset( $badge_primary_test_text ) ) {
 		$body['badge']['badge_primary_test_text'] = $badge_primary_test_text;
 	}
 
-	if ( ! empty( $badge_primary_text_break_distance ) ) {
+	if ( isset( $badge_primary_text_break_distance ) ) {
 		$body['badge']['badge_primary_text_break_distance'] = $badge_primary_text_break_distance;
 	}
 
-	if ( ! empty( $badge_secondary_text_horizontal_location ) ) {
+	if ( isset( $badge_secondary_text_horizontal_location ) ) {
 		$body['badge']['badge_secondary_text_horizontal_location'] = $badge_secondary_text_horizontal_location;
 	}
 
-	if ( ! empty( $badge_secondary_text_horizontal_offset ) ) {
+	if ( isset( $badge_secondary_text_horizontal_offset ) ) {
 		$body['badge']['badge_secondary_text_horizontal_offset'] = $badge_secondary_text_horizontal_offset;
 	}
 
-	if ( ! empty( $badge_secondary_text_vertical_location ) ) {
+	if ( isset( $badge_secondary_text_vertical_location ) ) {
 		$body['badge']['badge_secondary_text_vertical_location'] = $badge_secondary_text_vertical_location;
 	}
 
-	if ( ! empty( $badge_secondary_text_vertical_offset ) ) {
+	if ( isset( $badge_secondary_text_vertical_offset ) ) {
 		$body['badge']['badge_secondary_text_vertical_offset'] = $badge_secondary_text_vertical_offset;
 	}
 
-	if ( ! empty( $badge_secondary_text_fontsize ) ) {
+	if ( isset( $badge_secondary_text_fontsize ) ) {
 		$body['badge']['badge_secondary_text_fontsize'] = $badge_secondary_text_fontsize;
 	}
 
-	if ( ! empty( $badge_secondary_text_color ) ) {
+	if ( isset( $badge_secondary_text_color ) ) {
 		$body['badge']['badge_secondary_text_color'] = $badge_secondary_text_color;
 	}
 
-	if ( ! empty( $badge_secondary_test_text ) ) {
+	if ( isset( $badge_secondary_test_text ) ) {
 		$body['badge']['badge_secondary_test_text'] = $badge_secondary_test_text;
 	}
 
-	if ( ! empty( $badge_secondary_text_break_distance ) ) {
+	if ( isset( $badge_secondary_text_break_distance ) ) {
 		$body['badge']['badge_secondary_text_break_distance'] = $badge_secondary_text_break_distance;
 	}
 
