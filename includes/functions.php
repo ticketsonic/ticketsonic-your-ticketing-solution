@@ -766,7 +766,7 @@ function ts_yts_display_ticket_links_in_order_details( $order ) {
 	}
 
 	$generated_tickets = $order->get_meta( 'ts_paths' );
-	if ( !empty( $generated_tickets ) && array_key_exists( 'ticket_file_url_path', $generated_tickets ) ) {
+	if ( ! empty( $generated_tickets ) && array_key_exists( 'ticket_file_url_path', $generated_tickets ) ) {
 		print '<br class="clear" />';
 		print '<h4>Ticket Files</h4>';
 
