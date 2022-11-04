@@ -120,7 +120,7 @@ function ts_yts_request_create_new_event(
 
 	$response = ts_yts_post_request_to_remote( $url, $headers, $body );
 
-	if ( 'success' === $response['status'] ) {
+	if ( 'success' === $response['status'] && file_exists( $uploaded_badge_file_path ) ) {
 		$pi	= pathinfo( $uploaded_badge_file_path );
 		$badge_file_path = $pi['dirname'] . DIRECTORY_SEPARATOR . $response['event_id'] . '-badge-background' . '.' . $pi['extension'];
 		rename( $uploaded_badge_file_path, $badge_file_path );
@@ -286,7 +286,7 @@ function ts_yts_request_change_event(
 
 	$response = ts_yts_post_request_to_remote( $url, $headers, $body );
 
-	if ( 'success' === $response['status'] ) {
+	if ( 'success' === $response['status'] && file_exists( $uploaded_badge_file_path ) ) {
 		$pi	= pathinfo( $uploaded_badge_file_path );
 		$badge_file_path = $pi['dirname'] . DIRECTORY_SEPARATOR . $event_id . '-badge-background' . '.' . $pi['extension'];
 		rename( $uploaded_badge_file_path, $badge_file_path );
